@@ -13,6 +13,7 @@ import com.example.universityschedule.screens.calendar.Calendar
 import com.example.universityschedule.screens.lessons.Lessons
 import com.example.universityschedule.screens.tasks.Tasks
 import com.example.universityschedule.screens.calendar.DayScreen
+import com.example.universityschedule.screens.tasks.AddNewTask
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -21,17 +22,20 @@ fun NavGraph(
 
     ) {
 
-    NavHost(navController = navHostController, startDestination = "calendar") {
+    NavHost(navController = navHostController, startDestination = "addNewTask") {
 
         composable("calendar") {
             Calendar(navHostController)
         }
 
         composable("tasks") {
-            Tasks()
+            Tasks(navHostController)
         }
         composable("lessons") {
             Lessons()
+        }
+        composable("addNewTask") {
+            AddNewTask()
         }
         composable(
             "day/{dayId}",
