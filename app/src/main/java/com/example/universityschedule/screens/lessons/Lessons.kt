@@ -1,9 +1,8 @@
 package com.example.universityschedule.screens.lessons
 
 import androidx.compose.runtime.Composable
-import com.example.universityschedule.castom_components.AddTaskButton
+import com.example.universityschedule.castom_components.IconButton.AddTaskButton
 import com.example.universityschedule.screens.ScrollableTabRowPager
-import com.example.universityschedule.screens.TabRowPager
 import com.example.universityschedule.screens.lessons.lessons_tabs.AllTabLessons
 import com.example.universityschedule.screens.lessons.lessons_tabs.FridayTabLessons
 import com.example.universityschedule.screens.lessons.lessons_tabs.MondayTabLessons

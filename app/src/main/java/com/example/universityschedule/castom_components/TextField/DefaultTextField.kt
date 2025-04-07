@@ -1,9 +1,6 @@
-package com.example.universityschedule.castom_components
+package com.example.universityschedule.castom_components.TextField
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -18,13 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 
 @Composable
-fun DescriptionTextField(
+fun DefaultTextField(
     onTitleChanged: (String) -> Unit
 ) {
     var focusManager = LocalFocusManager.current
@@ -44,17 +38,15 @@ fun DescriptionTextField(
         keyboardActions = KeyboardActions(
             onDone = { focusManager.clearFocus() }
         ),
-        maxLines = 5,  // Максимум видимых строк
         label = { Text(
-            text = "Enter task description",
-            color = colorResource(R.color.textFieldFont)
-            ) },
-        placeholder = { Text("Enter task description") },
+            "Enter task title",
+            color = colorResource(R.color.textFieldFont),
+        ) },
+        placeholder = { Text("Enter task title") },
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 150.dp, max = 300.dp)
             ,
-        singleLine = false, //многострочный ввод
+        singleLine = true,
         isError = isError,
         supportingText = {
             if (isError) {
@@ -62,6 +54,4 @@ fun DescriptionTextField(
             }
         }
     )
-
-
 }

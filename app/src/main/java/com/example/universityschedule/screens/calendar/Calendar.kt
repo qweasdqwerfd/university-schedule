@@ -14,7 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.universityschedule.castom_components.AddTaskButton
+import com.example.universityschedule.castom_components.IconButton.AddTaskButton
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -50,7 +50,7 @@ fun Calendar(navController: NavController) {
         // Контент текущего дня
         DayContent(day = selectedDay)
         AddTaskButton {
-
+            navController.navigate("addNewTask")
         }
     }
 

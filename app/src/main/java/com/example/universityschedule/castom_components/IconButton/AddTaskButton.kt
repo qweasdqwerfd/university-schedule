@@ -1,16 +1,14 @@
-package com.example.universityschedule.castom_components
+package com.example.universityschedule.castom_components.IconButton
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,9 +25,9 @@ fun AddTaskButton(onClick: () -> Unit) {
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
-            containerColor = colorResource(R.color.selectedBottom), // Цвет кнопки
-            contentColor = Color.White,   // Цвет иконки
-            shape = CircleShape, // Круглая форма
+            containerColor = colorResource(R.color.selectedBottom),
+            contentColor = Color.White,
+            shape = CircleShape,
             elevation = FloatingActionButtonDefaults.elevation(8.dp)
         ) {
             Icon(

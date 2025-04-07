@@ -3,6 +3,7 @@ package com.example.universityschedule.screens.tasks
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,18 +11,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.universityschedule.castom_components.DefaultTextField
-import com.example.universityschedule.castom_components.DescriptionTextField
-import com.example.universityschedule.castom_components.IconTextField
-import com.example.universityschedule.castom_components.PriorityButtons
+import com.example.universityschedule.castom_components.Chips.ChipsLessons
+import com.example.universityschedule.castom_components.Chips.ChipsLvL
+import com.example.universityschedule.castom_components.TextField.DefaultTextField
+import com.example.universityschedule.castom_components.TextField.DescriptionTextField
+import com.example.universityschedule.castom_components.TextField.IconTextField
 
 @Preview(showBackground = true)
 @Composable
 fun AddNewTask() {
+    var selectedPriority by remember { mutableStateOf("Medium") }
+    var selectedLessons by remember { mutableStateOf("None") }
+    var titleText: String
+    var descriptionText: String
+    var dueDate: String
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -29,48 +35,61 @@ fun AddNewTask() {
 
     ) {
         Text(
-
-            text = "Title",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
+            "Title",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
         )
-        DefaultTextField {}
+        DefaultTextField { it: String ->
+            titleText = it
+        }
 
         Text(
-            text = "Description",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
+            "Description",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
+
         )
-        DescriptionTextField{}
+        DescriptionTextField { it: String ->
+            descriptionText = it
+
+        }
 
         Text(
-            text = "Due Date",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
+            "Due Date",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
         )
-        IconTextField{}
+        IconTextField { it: String ->
+            dueDate = it
+        }
 
         Text(
-            text = "Priority",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
+            "Priority",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
         )
 
-        var selectedPriority by remember { mutableStateOf("Medium") }
 
-        PriorityButtons(
+        ChipsLvL(
             selectedPriority = selectedPriority,
             onPrioritySelected = { priority ->
                 selectedPriority = priority
             }
         )
 
+        Text(
+            "Related Lesson (Optional)",
+            modifier = Modifier.padding(top = 10.dp),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
 
-
-
-
-
-
-
+        ChipsLessons(
+            selectedLessons = selectedLessons,
+            selectLessons = { lesson ->
+                selectedLessons = lesson
+            }
+        )
     }
+
 }

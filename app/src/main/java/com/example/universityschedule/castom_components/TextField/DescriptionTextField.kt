@@ -1,7 +1,7 @@
-package com.example.universityschedule.castom_components
+package com.example.universityschedule.castom_components.TextField
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 
 @Composable
-fun DefaultTextField(
+fun DescriptionTextField(
     onTitleChanged: (String) -> Unit
 ) {
     var focusManager = LocalFocusManager.current
@@ -40,15 +40,17 @@ fun DefaultTextField(
         keyboardActions = KeyboardActions(
             onDone = { focusManager.clearFocus() }
         ),
+        maxLines = 5,  // Максимум видимых строк
         label = { Text(
-            "Enter task title",
-            color = colorResource(R.color.textFieldFont),
-        ) },
-        placeholder = { Text("Enter task title") },
+            text = "Enter task description",
+            color = colorResource(R.color.textFieldFont)
+            ) },
+        placeholder = { Text("Enter task description") },
         modifier = Modifier
             .fillMaxWidth()
+            .heightIn(min = 150.dp, max = 300.dp)
             ,
-        singleLine = true,
+        singleLine = false, //многострочный ввод
         isError = isError,
         supportingText = {
             if (isError) {
@@ -56,4 +58,6 @@ fun DefaultTextField(
             }
         }
     )
+
+
 }
