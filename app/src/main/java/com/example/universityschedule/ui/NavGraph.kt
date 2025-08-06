@@ -14,7 +14,7 @@ import com.example.universityschedule.data.TaskViewModel
 import com.example.universityschedule.ui.screens.calendar.Calendar
 import com.example.universityschedule.ui.screens.calendar.DayScreen
 import com.example.universityschedule.ui.screens.lessons.Lessons
-import com.example.universityschedule.ui.screens.tasks.AddNewTask
+import com.example.universityschedule.ui.screens.tasks.NewTaskScreen
 import com.example.universityschedule.ui.screens.tasks.Tasks
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -35,12 +35,10 @@ fun NavGraph(
             Lessons()
         }
         composable("addTask") {
-            AddNewTask(
-                onSave = { task ->
-                    taskViewModel.addTask(task)
-                    navHostController.navigate("tasks")
+            NewTaskScreen(
+                onSave = {
+
                 },
-                onCancel = { navHostController.popBackStack() }
             )
         }
 

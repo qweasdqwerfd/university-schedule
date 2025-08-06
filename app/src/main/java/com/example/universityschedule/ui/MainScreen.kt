@@ -26,7 +26,7 @@ fun MainScreen() {
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             NavGraph(
-                navController,
+                navController
 
 
             )
