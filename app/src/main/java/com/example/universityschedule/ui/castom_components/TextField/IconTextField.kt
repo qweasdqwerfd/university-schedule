@@ -27,7 +27,6 @@ fun IconTextField(
 ) {
 
     var focusManager = LocalFocusManager.current
-    var title by remember { mutableStateOf("") }
     var isError by remember { mutableStateOf(false) }
 
     OutlinedTextField(

@@ -22,8 +22,7 @@ fun DefaultTextField(
     value: String,
     onValueChange: (String) -> Unit
 ) {
-    var focusManager = LocalFocusManager.current
-    var title by remember { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
     var isError by remember { mutableStateOf(false) }
 
     OutlinedTextField(

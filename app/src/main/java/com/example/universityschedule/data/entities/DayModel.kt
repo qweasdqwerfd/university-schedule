@@ -1,4 +1,4 @@
-package com.example.universityschedule.data.models
+package com.example.universityschedule.data.entities
 
 data class DayModel(
     val id: String,       // Уникальный идентификатор (например "2024-03-25")

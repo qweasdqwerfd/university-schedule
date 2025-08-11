@@ -6,28 +6,32 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.universityschedule.data.TaskViewModel
+import androidx.navigation.NavHostController
+import com.example.universityschedule.data.view_models.TaskViewModel
 import com.example.universityschedule.ui.castom_components.Chips.ChipsLessons
 import com.example.universityschedule.ui.castom_components.Chips.ChipsLvL
 import com.example.universityschedule.ui.castom_components.TextField.DefaultTextField
 import com.example.universityschedule.ui.castom_components.TextField.DescriptionTextField
 import com.example.universityschedule.ui.castom_components.TextField.IconTextField
-import com.example.universityschedule.data.models.TaskModel
 
 @Composable
-fun NewTaskScreen(
-    viewModel: TaskViewModel = viewModel(),
-    onSave: (TaskModel) -> Unit,
-) {
+fun NewTaskScreen(navHostController: NavHostController) {
 
 
+    val viewModel: TaskViewModel = viewModel(factory = TaskViewModel.factory)
+
+    val isSaved = viewModel.isSaved
+
+    // 👉 следим за изменением этого флага
+    LaunchedEffect(isSaved) {
+        if (isSaved) {
+            navHostController.popBackStack()
+        }
+    }
 
 
     Column(

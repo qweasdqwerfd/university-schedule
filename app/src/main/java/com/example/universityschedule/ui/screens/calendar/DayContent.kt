@@ -9,20 +9,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.universityschedule.data.models.DayModel
 
-@Composable
-fun DayContent(day: DayModel) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(300.dp)
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "Контент для ${day.date} ${day.month}",
-//            style = MaterialTheme.typography.
-        )
-    }
-}
+//@Composable
+//fun DayContent(day: DayModel) {
+//    Box(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height(300.dp)
+//            .padding(16.dp),
+//        contentAlignment = Alignment.Center
+//    ) {
+//        Text(
+//            text = "Контент для ${day.date} ${day.month}",
+////            style = MaterialTheme.typography.
+//        )
+//    }
+//}
