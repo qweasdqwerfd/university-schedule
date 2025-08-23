@@ -1,4 +1,4 @@
-package com.example.universityschedule.ui.castom_components
+package com.example.universityschedule.ui.custom_components
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

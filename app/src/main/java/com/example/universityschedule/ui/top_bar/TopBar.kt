@@ -16,20 +16,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.universityschedule.data.view_models.TaskViewModel
-import com.example.universityschedule.ui.castom_components.IconButton.CancelIconButton
-import com.example.universityschedule.ui.castom_components.IconButton.SaveIconButton
-import kotlinx.coroutines.launch
+import com.example.universityschedule.ui.custom_components.IconButton.CancelIconButton
+import com.example.universityschedule.ui.custom_components.IconButton.SaveIconButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    navController: NavHostController
+    navController: NavHostController,
+    taskViewModel: TaskViewModel = hiltViewModel()
 ) {
 
-    val taskViewModel: TaskViewModel = viewModel(factory = TaskViewModel.factory)
     val coroutineScope = rememberCoroutineScope()
 
 

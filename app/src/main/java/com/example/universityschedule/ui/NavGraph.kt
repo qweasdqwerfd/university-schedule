@@ -1,14 +1,11 @@
 package com.example.universityschedule.ui
 
-//import com.example.universityschedule.ui.screens.calendar.DayScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.universityschedule.data.view_models.TaskViewModel
 import com.example.universityschedule.ui.screens.lessons.Lessons
 import com.example.universityschedule.ui.screens.tasks.NewTaskScreen
 import com.example.universityschedule.ui.screens.tasks.Tasks
@@ -19,7 +16,6 @@ fun NavGraph(
     navHostController: NavHostController,
 ) {
 
-    val taskViewModel: TaskViewModel = viewModel(factory = TaskViewModel.factory)
 
 
     NavHost(navController = navHostController, startDestination = "tasks") {
@@ -32,12 +28,14 @@ fun NavGraph(
             Lessons()
         }
         composable("addTask") {
-            NewTaskScreen(navHostController)
+            NewTaskScreen(
+                navHostController = navHostController
+            )
         }
 
 
         composable("tasks") {
-            Tasks(navHostController, taskViewModel)
+            Tasks(navHostController)
         }
 
 

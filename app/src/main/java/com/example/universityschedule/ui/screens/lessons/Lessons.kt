@@ -1,7 +1,7 @@
 package com.example.universityschedule.ui.screens.lessons
 
 import androidx.compose.runtime.Composable
-import com.example.universityschedule.ui.castom_components.IconButton.AddTaskButton
+import com.example.universityschedule.ui.custom_components.IconButton.AddTaskButton
 import com.example.universityschedule.ui.screens.ScrollableTabRowPager
 import com.example.universityschedule.ui.screens.lessons.lessons_tabs.AllTabLessons
 import com.example.universityschedule.ui.screens.lessons.lessons_tabs.FridayTabLessons

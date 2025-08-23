@@ -1,4 +1,4 @@
-package com.example.universityschedule.ui.castom_components.TextField
+package com.example.universityschedule.ui.custom_components.TextField
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions

@@ -1,9 +1,12 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.kapt")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+
+    id ("com.google.dagger.hilt.android")
+    id ("kotlin-kapt")
 }
+
 
 android {
     namespace = "com.example.universityschedule"
@@ -41,12 +44,27 @@ android {
 }
 
 dependencies {
-    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
+//fix bug CreationExtras must have a value by `SAVED_STATE_REGISTRY_OWNER_KEY`
+    implementation("androidx.navigation:navigation-compose:2.9.3")
 
+    //room
     implementation("androidx.room:room-ktx:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
-
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0")
+
+    //dagger
+
+    implementation ("com.google.dagger:hilt-android:2.56.2")
+    implementation(libs.material)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.activity)
+    kapt ("com.google.dagger:hilt-compiler:2.56.2")
+
+    //another
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -56,9 +74,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.runtime.android)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.generativeai)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

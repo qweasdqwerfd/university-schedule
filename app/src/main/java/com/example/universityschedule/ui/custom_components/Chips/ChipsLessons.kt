@@ -1,4 +1,4 @@
-package com.example.universityschedule.ui.castom_components.Chips
+package com.example.universityschedule.ui.custom_components.Chips
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement

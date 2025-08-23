@@ -1,4 +1,4 @@
-package com.example.universityschedule.ui.castom_components.IconButton
+package com.example.universityschedule.ui.custom_components.IconButton
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

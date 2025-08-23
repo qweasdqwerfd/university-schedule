@@ -1,10 +1,9 @@
-package com.example.universityschedule.ui.castom_components.TextField
+package com.example.universityschedule.ui.custom_components.TextField
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -15,24 +14,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 
 @Composable
-fun IconTextField(
+fun DescriptionTextField(
     value: String,
-    onValueChanged: (String) -> Unit
+    onValueChange: (String) -> Unit
 ) {
-
     var focusManager = LocalFocusManager.current
+    var title by remember { mutableStateOf("") }
     var isError by remember { mutableStateOf(false) }
 
     OutlinedTextField(
         value = value,
         onValueChange = {
-            onValueChanged(it)
+            onValueChange(it)
             isError = it.isBlank()
         },
         keyboardOptions = KeyboardOptions(
@@ -41,21 +40,17 @@ fun IconTextField(
         keyboardActions = KeyboardActions(
             onDone = { focusManager.clearFocus() }
         ),
+        maxLines = 5,  // Максимум видимых строк
         label = { Text(
-            "Mon, Mar 31, 09:42 PM",
-        ) },
-        leadingIcon = {
-            Icon(
-                painter = painterResource(R.drawable.calendar),
-                contentDescription = "calendar",
-                Modifier.size(23.dp)
-            )
-        },
-        placeholder = { Text("Enter task due date") },
+            text = "Enter task description",
+            color = colorResource(R.color.textFieldFont)
+            ) },
+        placeholder = { Text("Enter task description") },
         modifier = Modifier
             .fillMaxWidth()
-        ,
-        singleLine = false,
+            .heightIn(min = 150.dp, max = 300.dp)
+            ,
+        singleLine = false, //многострочный ввод
         isError = isError,
         supportingText = {
             if (isError) {
@@ -63,5 +58,6 @@ fun IconTextField(
             }
         }
     )
+
 
 }

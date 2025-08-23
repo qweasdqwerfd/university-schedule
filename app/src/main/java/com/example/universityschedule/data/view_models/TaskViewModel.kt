@@ -1,101 +1,54 @@
 package com.example.universityschedule.data.view_models
 
-import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.universityschedule.data.App
-import com.example.universityschedule.data.MainDB
-import com.example.universityschedule.data.entities.TaskEntity
+import com.example.universityschedule.data.entities.TaskItem
+import com.example.universityschedule.data.repo.TaskRepository
+import com.example.universityschedule.data.view_models.contracts.controllers.Lesson
+import com.example.universityschedule.data.view_models.contracts.controllers.Priority
+import com.example.universityschedule.data.view_models.contracts.controllers.TaskDialogController
+import com.example.universityschedule.data.view_models.contracts.events.DialogEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskViewModel @Inject constructor(
-    private val database: MainDB
-) : ViewModel() {
-
-
-    val itemsList = database.taskDao.getItems()
-    var tempEntity: TaskEntity? = null
-
-
-    var selectedPriority by mutableStateOf("Medium")
+    private val repository: TaskRepository
+) : ViewModel(), TaskDialogController {
+    override var dialogTitle = mutableStateOf("")
         private set
-    var selectedLessons by mutableStateOf("None")
+    override val dialogDescription = mutableStateOf("")
         private set
-    var titleText by mutableStateOf("")
+    override val dialogDueDate = mutableStateOf("")
         private set
-    var descriptionText by mutableStateOf("")
+    override val dialogPriority = mutableStateOf(Priority.MEDIUM)
         private set
-    var dueDate by mutableStateOf("")
-        private set
-
-    var isSaved by mutableStateOf(false)
+    override val dialogRelatedLesson = mutableStateOf(Lesson.NONE)
         private set
 
 
+    override fun onDialogEvent(event: DialogEvent) {
+        when (event) {
+            DialogEvent.OnConfirm -> {
+                viewModelScope.launch { 
+                    repository.insert(
+                        TaskItem(
+                            id = TODO(),
+                            priority = TODO(),
+                            lessons = TODO(),
+                            title = TODO(),
+                            description = TODO(),
+                            dueDate = TODO()
+                        )
+                    )
+                }
+            }
 
+            DialogEvent.OnCancel -> {
 
-    fun onPriorityChange(newValue: String) { selectedPriority = newValue }
-    fun onLessonChange(newValue: String) { selectedLessons = newValue }
-    fun onTitleChange(newValue: String) { titleText = newValue }
-    fun onDescriptionChange(newValue: String) { descriptionText = newValue }
-    fun onDueDateChange(newValue: String) { dueDate = newValue }
-
-
-    fun insertItem() = viewModelScope.launch {
-        isSaved = false // СБРОС перед любыми операциями
-
-        val newEntity = tempEntity?.copy(
-            priority = selectedPriority,
-            lessons = selectedLessons,
-            title = titleText,
-            description = descriptionText,
-            dueDate = dueDate
-        ) ?: TaskEntity(
-            priority = selectedPriority,
-            lessons = selectedLessons,
-            title = titleText,
-            description = descriptionText,
-            dueDate = dueDate
-        )
-
-        Log.d("TAG", newEntity.toString())
-
-        database.taskDao.insertItem(newEntity)
-        isSaved = true
-
-        // очистка полей
-        tempEntity = null
-        selectedPriority = ""
-        selectedLessons = ""
-        titleText = ""
-        descriptionText = ""
-        dueDate = ""
-    }
-
-
-
-    companion object {
-        val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-
-            override fun <T : ViewModel> create(
-                modelClass: Class<T>,
-                extras: CreationExtras
-            ): T {
-                val database = (checkNotNull(extras[APPLICATION_KEY]) as App).dataBase
-                return TaskViewModel(database) as T
             }
         }
     }
-
 }
