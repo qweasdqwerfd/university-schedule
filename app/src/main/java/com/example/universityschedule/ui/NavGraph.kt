@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.universityschedule.ui.screens.calendar.Calendar
 import com.example.universityschedule.ui.screens.lessons.Lessons
 import com.example.universityschedule.ui.screens.tasks.NewTaskScreen
 import com.example.universityschedule.ui.screens.tasks.Tasks
@@ -15,42 +16,20 @@ import com.example.universityschedule.ui.screens.tasks.Tasks
 fun NavGraph(
     navHostController: NavHostController,
 ) {
-
-
-
     NavHost(navController = navHostController, startDestination = "tasks") {
-
-//        composable("calendar") {
-//            Calendar(navHostController)
-//        }
+        composable("calendar") {
+            Calendar(navHostController)
+        }
 
         composable("lessons") {
             Lessons()
         }
         composable("addTask") {
-            NewTaskScreen(
-                navHostController = navHostController
-            )
+            NewTaskScreen()
         }
-
-
         composable("tasks") {
             Tasks(navHostController)
         }
 
-
-//        composable(
-//            "day/{dayId}",
-//            arguments = listOf(navArgument("dayId") { type = NavType.StringType }),
-//
-//            enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
-//            exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) }
-//
-//
-//        ) { backStackEntry ->
-//            val dayId = backStackEntry.arguments?.getString("dayId")
-//            DayScreen(dayId = dayId ?: "")
-//        }
     }
-
 }

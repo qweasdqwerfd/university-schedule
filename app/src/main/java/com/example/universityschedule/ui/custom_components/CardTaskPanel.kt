@@ -1,6 +1,7 @@
 package com.example.universityschedule.ui.custom_components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,14 +27,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
+import com.example.universityschedule.data.entities.TaskItem
 
 @Composable
 fun CardTaskPanel(
-    title: String,
-    description: String,
-    dueDate: String,
-    priority: String,
-    lesson: String
+    item: TaskItem
 ) {
     Card(
         modifier = Modifier
@@ -62,53 +60,65 @@ fun CardTaskPanel(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "$lesson $title",
+                    text = "${item.lessons} ${item.title}",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = description,
+                    text = item.description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Gray
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.clock),
-                        contentDescription = "Time",
-                        modifier = Modifier.size(16.dp),
-                        tint = Color.Gray
-                    )
-                    Text(
-                        text = dueDate,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
+                    Row {
+                        Icon(
+                            painter = painterResource(R.drawable.clock),
+                            contentDescription = "Time",
+                            modifier = Modifier.size(16.dp),
+                            tint = Color.Gray
+                        )
+                        Text(
+                            text = item.dueDate,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+
+
+                    Box(
+                        modifier = Modifier
+                            .padding(
+                                start = 8.dp,
+
+                                )
+                            .background(
+                                color =
+                                    when (item.priority.name) {
+                                        "High" -> Color(0xFFca2244)
+                                        "Medium" -> Color(0xFFf6c610)
+                                        else -> Color(0xFF31b947)
+                                    }, shape = RoundedCornerShape(12.dp)
+                            )
+                            .padding(horizontal = 12.dp, vertical = 6.dp),
+
+                        ) {
+                        Text(
+                            text = item.priority.name,
+                            color = Color.White,
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
                 }
             }
 
-            Box(
-                modifier = Modifier
-                    .padding(start = 8.dp)
-                    .background(color =
-                        when (priority) {
-                            "High" -> Color(0xFFca2244)
-                            "Medium" -> Color(0xFFf6c610)
-                            else -> Color(0xFF31b947)
-                        }
-                            , shape = RoundedCornerShape(12.dp))
-                    .padding(horizontal = 12.dp, vertical = 6.dp)
-            ) {
-                Text(
-                    text = priority,
-                    color = Color.White,
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
+
         }
     }
 }

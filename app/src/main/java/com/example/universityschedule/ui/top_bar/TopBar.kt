@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.universityschedule.data.view_models.TaskViewModel
+import com.example.universityschedule.data.view_models.contracts.events.DialogEvent
 import com.example.universityschedule.ui.custom_components.IconButton.CancelIconButton
 import com.example.universityschedule.ui.custom_components.IconButton.SaveIconButton
 
@@ -65,7 +66,7 @@ fun TopBar(
             actions = {
                 if (currentRoute == "addTask") {
                     SaveIconButton {
-                        taskViewModel.insertItem()
+                        taskViewModel.onDialogEvent(DialogEvent.OnConfirm)
                     }
                 }
             },
@@ -73,7 +74,7 @@ fun TopBar(
                 if (currentRoute == "addTask") {
                     CancelIconButton {
 
-                        navController.popBackStack()
+                        taskViewModel.onDialogEvent(DialogEvent.OnCancel)
 
                     }
 

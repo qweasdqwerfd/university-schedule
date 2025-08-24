@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 
 @Composable
-fun AddTaskButton(onClick: () -> Unit) {
+fun FAB(onClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         FloatingActionButton(
             onClick = onClick,
