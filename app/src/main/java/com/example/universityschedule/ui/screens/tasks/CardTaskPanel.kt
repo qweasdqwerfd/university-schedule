@@ -1,6 +1,7 @@
-package com.example.universityschedule.ui.custom_components
+package com.example.universityschedule.ui.screens.tasks
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,7 +37,10 @@ fun CardTaskPanel(
     Card(
         modifier = Modifier
             .padding(16.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+
+            },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(8.dp),
         colors = CardDefaults.cardColors(
@@ -100,8 +104,8 @@ fun CardTaskPanel(
                             .background(
                                 color =
                                     when (item.priority.name) {
-                                        "High" -> Color(0xFFca2244)
-                                        "Medium" -> Color(0xFFf6c610)
+                                        "HIGH" -> Color(0xFFca2244)
+                                        "MEDIUM" -> Color(0xFFf6c610)
                                         else -> Color(0xFF31b947)
                                     }, shape = RoundedCornerShape(12.dp)
                             )

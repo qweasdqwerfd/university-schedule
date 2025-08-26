@@ -26,7 +26,7 @@ fun IconTextField(
     onValueChanged: (String) -> Unit
 ) {
 
-    var focusManager = LocalFocusManager.current
+    val focusManager = LocalFocusManager.current
     var isError by remember { mutableStateOf(false) }
 
     OutlinedTextField(

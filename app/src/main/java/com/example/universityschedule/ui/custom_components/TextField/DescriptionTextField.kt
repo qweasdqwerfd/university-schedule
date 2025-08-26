@@ -1,5 +1,6 @@
 package com.example.universityschedule.ui.custom_components.TextField
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.text.KeyboardActions
@@ -24,8 +25,7 @@ fun DescriptionTextField(
     value: String,
     onValueChange: (String) -> Unit
 ) {
-    var focusManager = LocalFocusManager.current
-    var title by remember { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
     var isError by remember { mutableStateOf(false) }
 
     OutlinedTextField(

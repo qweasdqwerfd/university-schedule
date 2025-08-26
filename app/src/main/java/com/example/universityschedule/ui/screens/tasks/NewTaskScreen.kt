@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.universityschedule.data.view_models.TaskViewModel
+import com.example.universityschedule.data.view_models.contracts.controllers.Lesson
+import com.example.universityschedule.data.view_models.contracts.controllers.Priority
 import com.example.universityschedule.ui.custom_components.Chips.ChipsLessons
 import com.example.universityschedule.ui.custom_components.Chips.ChipsLvL
 import com.example.universityschedule.ui.custom_components.TextField.DefaultTextField
@@ -18,7 +20,7 @@ import com.example.universityschedule.ui.custom_components.TextField.IconTextFie
 
 @Composable
 fun NewTaskScreen(
-    viewModel: TaskViewModel = hiltViewModel()
+    viewModel: TaskViewModel
 ) {
     Column(
         modifier = Modifier
@@ -66,7 +68,10 @@ fun NewTaskScreen(
 
         ChipsLvL(
             selectedPriority = viewModel.dialogPriority.value.name,
-            onPrioritySelected = { viewModel.dialogPriority.value  }
+            onPrioritySelected = { priorityName ->
+                val priority = Priority.valueOf(priorityName.uppercase())
+                viewModel.dialogPriority.value = priority
+            }
         )
 
         Text(
@@ -78,7 +83,10 @@ fun NewTaskScreen(
 
         ChipsLessons(
             selectedLessons = viewModel.dialogRelatedLesson.value.name,
-            selectLessons = { viewModel.dialogRelatedLesson.value }
+            selectLessons = { lessonName ->
+                val lesson = Lesson.valueOf(lessonName.uppercase())
+                viewModel.dialogRelatedLesson.value = lesson
+            }
         )
     }
 }

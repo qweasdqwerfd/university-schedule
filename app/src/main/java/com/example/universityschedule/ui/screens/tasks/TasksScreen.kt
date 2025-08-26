@@ -1,19 +1,21 @@
 package com.example.universityschedule.ui.screens.tasks
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.universityschedule.data.view_models.TaskViewModel
-import com.example.universityschedule.ui.custom_components.CardTaskPanel
 import com.example.universityschedule.ui.custom_components.IconButton.FAB
 
 @Composable
-fun Tasks(
+fun TasksScreen(
     navHostController: NavHostController,
-    viewModel: TaskViewModel = hiltViewModel()
+    viewModel: TaskViewModel
 ) {
 
     val itemsList = viewModel.itemsList.collectAsState(emptyList())
@@ -29,7 +31,12 @@ fun Tasks(
 //        )
 
 
-    LazyColumn {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+        ,
+        contentPadding = PaddingValues(bottom = 100.dp)
+    ) {
         items(itemsList.value) { task ->
             CardTaskPanel(task)
         }
@@ -37,7 +44,6 @@ fun Tasks(
 
 
     FAB {
-        viewModel.openDialogForTask()
         navHostController.navigate("addTask")
     }
 

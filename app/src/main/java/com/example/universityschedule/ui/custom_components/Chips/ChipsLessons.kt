@@ -29,14 +29,14 @@ fun ChipsLessons(
     enabled: Boolean = true,
 ) {
 
-    val lessonsList = listOf("None", "Calculus", "Physics", "Math", "Programming", "Sport")
+    val lessonsList = listOf("NONE", "CALCULUS", "PHYSICS", "MATH", "PROGRAMMING", "SPORT")
     val lessonsColors = mapOf(
-        "None" to Color.Blue,
-        "Calculus" to Color(0xFFF0A62B),
-        "Physics" to Color(0xFF31b947),
-        "Math" to Color(0xFF24afb5),
-        "Programming" to Color(0xFFf6c610),
-        "Sport" to Color(0xFFca2244)
+        "NONE" to Color.Blue,
+        "CALCULUS" to Color(0xFFF0A62B),
+        "CALCULUS" to Color(0xFF31b947),
+        "MATH" to Color(0xFF24afb5),
+        "PROGRAMMING" to Color(0xFFf6c610),
+        "SPORT" to Color(0xFFca2244)
     )
 
 

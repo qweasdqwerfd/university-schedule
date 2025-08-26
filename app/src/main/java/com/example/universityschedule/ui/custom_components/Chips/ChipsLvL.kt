@@ -29,16 +29,16 @@ fun ChipsLvL(
     onPrioritySelected: (String) -> Unit,
     enabled: Boolean = true,
 ) {
-    val priorities = listOf("Low", "Medium", "High")
+    val priorities = listOf("LOW", "MEDIUM", "HIGH")
     val priorityColors = mapOf(
-        "Low" to Color(0xFF4CAF50),
-        "Medium" to Color(0xFF506EA8),
-        "High" to Color(0xFFF44336)
+        "LOW" to Color(0xFF4CAF50),
+        "MEDIUM" to Color(0xFF506EA8),
+        "HIGH" to Color(0xFFF44336)
     )
 
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween, // Равномерное распределение
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         priorities.forEach { priority ->
             val isSelected = priority == selectedPriority
@@ -67,7 +67,11 @@ fun ChipsLvL(
 
                             Text(
                                 text = priority,
-                                color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface,
+                                color =
+                                    if (isSelected) Color.White
+                                    else
+                                        MaterialTheme.colorScheme.onSurface,
+
                                 fontSize = 16.sp,
                                 maxLines = 1,
                                 overflow = TextOverflow.Visible

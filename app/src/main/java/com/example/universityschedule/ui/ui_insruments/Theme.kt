@@ -35,6 +35,8 @@ val DarkColorScheme = darkColorScheme(
     errorContainer = Color(0xFF8C1D18),
     onErrorContainer = Color(0xFFF9DEDC),
 
+
+
     scrim = Color(0xFF000000).copy(alpha = 0.5f)
 )
 

@@ -10,4 +10,5 @@
     <color name="selectedBottom">#506ea8</color>
     <color name="DM">#353436</color>
     <color name="textFieldFont">#b1b0b5</color>
+    <color name="onChipYellow">#FF5722</color>
 </resources>
