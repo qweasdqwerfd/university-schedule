@@ -1,5 +1,6 @@
 package com.example.universityschedule.ui.screens.tasks
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,7 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.universityschedule.R
 import com.example.universityschedule.R.drawable
 import com.example.universityschedule.ui.custom_components.IconButton.def.DetailsButton
 import com.example.universityschedule.ui.custom_components.UniversityScheduleTheme
@@ -36,7 +36,7 @@ import com.example.universityschedule.ui.custom_components.UniversityScheduleThe
 @Composable
 fun TaskDetailsScreen() {
     UniversityScheduleTheme(
-        darkTheme = true,
+        darkTheme = false,
         content = {
             Column(
                 modifier = Modifier
@@ -70,18 +70,18 @@ fun TaskDetailsScreen() {
                     modifier = Modifier
                         .padding(top = 4.dp)
                         .background(
-                            color = Color(0xFFB7960B),
-                            shape = RoundedCornerShape(10.dp)
+                            color = Color(0xFFf7c602),
+                            shape = RoundedCornerShape(13.dp)
                         )
                         .padding(
                             horizontal = 10.dp,
-                            vertical = 5.dp
+                            vertical = 8.dp
                         ),
 
                     ) {
                     Row(
                         modifier = Modifier
-                            .width(120.dp),
+                            .width(127.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -89,20 +89,17 @@ fun TaskDetailsScreen() {
                             painter = painterResource(drawable.warn),
                             contentDescription = "ward",
                             modifier = Modifier
-                                .size(13.dp),
-                            tint = MaterialTheme.colorScheme.onSurface
+                                .size(14.dp),
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
-
 
                         Text(
                             text = "Medium Priority",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.Bold
                         )
-
                     }
-
                 }
 
                 Card(
@@ -113,7 +110,8 @@ fun TaskDetailsScreen() {
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                         contentColor = MaterialTheme.colorScheme.onSurface
-                    )
+                    ),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
 
                     Column(
@@ -159,7 +157,8 @@ fun TaskDetailsScreen() {
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                         contentColor = MaterialTheme.colorScheme.onSurface
-                    )
+                    ),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
 
                     Column(
@@ -243,7 +242,8 @@ fun TaskDetailsScreen() {
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                         contentColor = MaterialTheme.colorScheme.onSurface
-                    )
+                    ),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
 
                     Column(
@@ -279,23 +279,19 @@ fun TaskDetailsScreen() {
                     DetailsButton(
                         modifier = Modifier.weight(1f),
                         text = "Edit Task",
-                        color = Color.Blue,
+                        color = Color(0xFF4f6fa7),
                         icon = drawable.edit,
                         sizeIcon = 25,
                     )
                     DetailsButton(
                         modifier = Modifier.weight(1f),
                         text = "Delete Task",
-                        color = Color.Red,
+                        color = Color(0xFFE01C42),
                         icon = drawable.trash,
                         sizeIcon = 21,
                     )
                 }
-
-
             }
         }
     )
-
 }
-

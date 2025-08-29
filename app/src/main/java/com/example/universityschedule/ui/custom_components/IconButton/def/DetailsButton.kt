@@ -34,12 +34,12 @@ fun DetailsButton(
     Button(
         onClick = {},
         modifier = modifier
-            .height(48.dp) // Фиксированная высота
+            .height(48.dp)
             .padding(horizontal = 4.dp),
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = color,
-            contentColor = MaterialTheme.colorScheme.onSurface
+            contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 2.dp,
@@ -55,7 +55,6 @@ fun DetailsButton(
             Icon(
                 painter = painterResource(icon),
                 contentDescription = "edit",
-                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .size(sizeIcon.dp),
             )
@@ -63,7 +62,6 @@ fun DetailsButton(
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.ExtraBold
             )
         }
