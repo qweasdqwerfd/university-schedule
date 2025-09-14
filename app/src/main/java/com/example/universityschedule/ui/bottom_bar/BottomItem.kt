@@ -1,4 +1,4 @@
-package com.example.universityschedule.ui.bottom_navigation
+package com.example.universityschedule.ui.bottom_bar
 
 import com.example.universityschedule.R
 

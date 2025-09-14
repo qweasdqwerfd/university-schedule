@@ -1,11 +1,8 @@
-package com.example.universityschedule.ui.custom_components
+package com.example.universityschedule.ui.ui_insruments
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.example.universityschedule.ui.ui_insruments.DarkColorScheme
-import com.example.universityschedule.ui.ui_insruments.LightColorScheme
-import com.example.universityschedule.ui.ui_insruments.MyTypography
 
 @Composable
 fun UniversityScheduleTheme(

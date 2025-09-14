@@ -22,6 +22,7 @@ import com.example.universityschedule.data.view_models.TaskViewModel
 import com.example.universityschedule.data.view_models.contracts.events.DialogEvent
 import com.example.universityschedule.ui.custom_components.IconButton.CancelIconButton
 import com.example.universityschedule.ui.custom_components.IconButton.SaveIconButton
+import com.example.universityschedule.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,7 +34,7 @@ fun TopBar(
     val coroutineScope = rememberCoroutineScope()
 
 
-    var currentRoute by remember { mutableStateOf("calendar") }
+    var currentRoute by remember { mutableStateOf(Screen.CALENDAR.route) }
 
     LaunchedEffect(navController) {
         navController.currentBackStackEntryFlow.collect { backStackEntry ->
@@ -50,13 +51,13 @@ fun TopBar(
             title = {
                 Text(
                     text = when (currentRoute) {
-                        "calendar" -> "University Schedule"
-                        "tasks" -> "Tasks"
-                        "addTask" -> "Add New Task"
+                        Screen.CALENDAR.route -> "University Schedule"
+                        Screen.TASKS.route -> "Tasks"
+                        Screen.ADD_TASK.route -> "Add New Task"
                         else -> "Lessons"
                     },
                     modifier = when (currentRoute) {
-                        "addTask" -> Modifier.padding(start = 10.dp)
+                        Screen.ADD_TASK.route -> Modifier.padding(start = 10.dp)
                         else -> Modifier
                     },
                     color = MaterialTheme.colorScheme.onSurface,
@@ -64,14 +65,14 @@ fun TopBar(
                 )
             },
             actions = {
-                if (currentRoute == "addTask") {
+                if (currentRoute == Screen.ADD_TASK.route) {
                     SaveIconButton {
                         taskViewModel.onDialogEvent(DialogEvent.OnConfirm)
                     }
                 }
             },
             navigationIcon = {
-                if (currentRoute == "addTask") {
+                if (currentRoute == Screen.ADD_TASK.route) {
                     CancelIconButton {
 
                         taskViewModel.onDialogEvent(DialogEvent.OnCancel)

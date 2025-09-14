@@ -25,7 +25,9 @@ object AppModule {
             context,
             MainDB::class.java,
             "university_schedule_db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

@@ -1,7 +1,7 @@
 package com.example.universityschedule.data.view_models.contracts
 
 import androidx.room.TypeConverter
-import com.example.universityschedule.data.view_models.contracts.controllers.Lesson
+import com.example.universityschedule.data.view_models.contracts.controllers.LessonChip
 import com.example.universityschedule.data.view_models.contracts.controllers.Priority
 
 class Converters {
@@ -16,13 +16,13 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromLesson(lesson: Lesson): String {
+    fun fromLesson(lesson: LessonChip): String {
         return lesson.name
     }
 
     @TypeConverter
-    fun toLesson(lesson: String): Lesson {
-        return Lesson.valueOf(lesson)
+    fun toLesson(lesson: String): LessonChip {
+        return LessonChip.valueOf(lesson)
     }
 }
 
@@ -32,12 +32,12 @@ fun Priority.toDisplayName() = when (this) {
     Priority.HIGH -> "High"
 }
 
-fun Lesson.toDisplayName() = when (this) {
-    Lesson.NONE -> "None"
-    Lesson.CALCULUS -> "Calculus"
-    Lesson.PHYSICS -> "Physics"
-    Lesson.MATH -> "Math"
-    Lesson.PROGRAMMING -> "Programming"
-    Lesson.SPORT -> "Sport"
-    Lesson.CHEMISTRY -> "Chemistry" // Добавьте при необходимости
+fun LessonChip.toDisplayName() = when (this) {
+    LessonChip.NONE -> "None"
+    LessonChip.CALCULUS -> "Calculus"
+    LessonChip.PHYSICS -> "Physics"
+    LessonChip.MATH -> "Math"
+    LessonChip.PROGRAMMING -> "Programming"
+    LessonChip.SPORT -> "Sport"
+    LessonChip.CHEMISTRY -> "Chemistry" // Добавьте при необходимости
 }

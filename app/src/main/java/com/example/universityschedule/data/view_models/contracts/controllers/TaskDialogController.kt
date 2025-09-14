@@ -7,7 +7,7 @@ enum class Priority {
     LOW, MEDIUM, HIGH
 }
 
-enum class Lesson {
+enum class LessonChip {
     NONE, CALCULUS, PHYSICS, CHEMISTRY, MATH, PROGRAMMING, SPORT
 }
 
@@ -16,6 +16,6 @@ interface TaskDialogController {
     val dialogDescription: MutableState<String>
     val dialogDueDate: MutableState<String>
     val dialogPriority: MutableState<Priority>
-    val dialogRelatedLesson: MutableState<Lesson>
+    val dialogRelatedLesson: MutableState<LessonChip>
     fun onDialogEvent(event: DialogEvent)
 }

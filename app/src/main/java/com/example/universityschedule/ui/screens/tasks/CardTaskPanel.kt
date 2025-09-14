@@ -29,10 +29,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 import com.example.universityschedule.data.entities.TaskItem
+import com.example.universityschedule.data.view_models.TaskViewModel
+import com.example.universityschedule.data.view_models.contracts.events.DialogEvent
+import com.example.universityschedule.ui.navigation.Screen
 
 @Composable
 fun CardTaskPanel(
-    item: TaskItem
+    item: TaskItem,
 ) {
     Card(
         modifier = Modifier

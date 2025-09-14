@@ -8,7 +8,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.example.universityschedule.ui.bottom_navigation.BottomNavigation
+import com.example.universityschedule.ui.bottom_bar.BottomNavigation
+import com.example.universityschedule.ui.navigation.NavGraph
 import com.example.universityschedule.ui.top_bar.TopBar
 
 @RequiresApi(Build.VERSION_CODES.O)

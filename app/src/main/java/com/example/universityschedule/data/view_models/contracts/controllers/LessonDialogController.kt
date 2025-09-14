@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.Color
 import com.example.universityschedule.data.view_models.contracts.events.DialogEvent
 
-enum class DayOfWeek { Mon, Tue, Wed, Thu, Fri, Sat, Sun }
 enum class LessonColor(val color: Color) {
     BLUE(Color(0xFF3F51B5)),
     ORANGE(Color(0xFFFFA726)),

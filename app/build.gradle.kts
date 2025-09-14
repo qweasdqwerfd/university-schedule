@@ -44,6 +44,15 @@ android {
 }
 
 dependencies {
+
+    // The view calendar library for Android
+    implementation("com.kizitonwose.calendar:view:2.0.0")
+
+    // The compose calendar library for Android
+    implementation("com.kizitonwose.calendar:compose:2.0.0")
+
+
+
     //fix bug CreationExtras must have a value by `SAVED_STATE_REGISTRY_OWNER_KEY`
     implementation("androidx.navigation:navigation-compose:2.9.3")
 
@@ -74,6 +83,8 @@ dependencies {
     kapt(libs.androidx.room.compiler)
 
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
+    implementation("com.google.accompanist:accompanist-pager:0.28.0")
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

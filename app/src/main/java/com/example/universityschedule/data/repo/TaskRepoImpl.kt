@@ -18,4 +18,8 @@ class TaskRepoImpl(
     override fun getItems(): Flow<List<TaskItem>> {
         return dao.getItems()
     }
+
+    override suspend fun getItemById(id: Int): TaskItem {
+        return dao.getItemById(id)
+    }
 }

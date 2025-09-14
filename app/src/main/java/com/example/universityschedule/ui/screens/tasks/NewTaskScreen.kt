@@ -8,9 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.universityschedule.data.view_models.TaskViewModel
-import com.example.universityschedule.data.view_models.contracts.controllers.Lesson
+import com.example.universityschedule.data.view_models.contracts.controllers.LessonChip
 import com.example.universityschedule.data.view_models.contracts.controllers.Priority
 import com.example.universityschedule.ui.custom_components.Chips.ChipsLessons
 import com.example.universityschedule.ui.custom_components.Chips.ChipsLvL
@@ -84,7 +83,7 @@ fun NewTaskScreen(
         ChipsLessons(
             selectedLessons = viewModel.dialogRelatedLesson.value.name,
             selectLessons = { lessonName ->
-                val lesson = Lesson.valueOf(lessonName.uppercase())
+                val lesson = LessonChip.valueOf(lessonName.uppercase())
                 viewModel.dialogRelatedLesson.value = lesson
             }
         )

@@ -10,7 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.universityschedule.data.view_models.TaskViewModel
+import com.example.universityschedule.data.view_models.contracts.events.DialogEvent
 import com.example.universityschedule.ui.custom_components.IconButton.FAB
+import com.example.universityschedule.ui.navigation.Screen
 
 @Composable
 fun TasksScreen(
@@ -33,18 +35,19 @@ fun TasksScreen(
 
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
-        ,
+            .fillMaxSize(),
         contentPadding = PaddingValues(bottom = 100.dp)
     ) {
-        items(itemsList.value) { task ->
-            CardTaskPanel(task)
+        items(itemsList.value) {
+            CardTaskPanel(
+                item = it,
+            )
         }
     }
 
 
     FAB {
-        navHostController.navigate("addTask")
+        navHostController.navigate(Screen.ADD_TASK.route)
     }
 
 }

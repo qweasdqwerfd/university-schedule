@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import com.example.universityschedule.ui.custom_components.UniversityScheduleTheme
+import com.example.universityschedule.ui.ui_insruments.UniversityScheduleTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

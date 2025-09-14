@@ -1,4 +1,4 @@
-package com.example.universityschedule.ui.bottom_navigation
+package com.example.universityschedule.ui.bottom_bar
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
