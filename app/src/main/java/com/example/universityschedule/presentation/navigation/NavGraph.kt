@@ -34,7 +34,7 @@ fun NavGraph(
 
     NavHost(navController = navHostController, startDestination = Screen.CALENDAR.route) {
         composable(Screen.CALENDAR.route) {
-            CalendarScreen(navHostController)
+            CalendarScreen()
         }
 
         composable(Screen.LESSONS.route) {

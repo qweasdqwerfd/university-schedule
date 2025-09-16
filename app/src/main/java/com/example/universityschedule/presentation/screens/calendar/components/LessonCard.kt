@@ -26,7 +26,10 @@ fun LessonCard(
     textStyle: TextStyle = MaterialTheme.typography.titleMedium
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = MediumPadding1)
+        ,
         shape = RoundedCornerShape(MediumShape1),
         elevation = CardDefaults.cardElevation(defaultElevation = SmallElevation)
     ) {

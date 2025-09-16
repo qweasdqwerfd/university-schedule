@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.example.universityschedule.presentation.Dimens.LargePadding1
 import com.example.universityschedule.presentation.Dimens.MediumPadding3
 import com.example.universityschedule.presentation.Dimens.MediumPadding4
@@ -36,7 +38,7 @@ fun WeekCalendar(
     selectedDate: LocalDate,
     onDateSelected: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
-    colorText: Color = MaterialTheme.colorScheme.onPrimary,
+    colorText: Color = MaterialTheme.colorScheme.onSurface,
     fontText: FontWeight = FontWeight.Bold
 ) {
     LazyRow(
@@ -95,3 +97,4 @@ fun WeekCalendar(
         }
     }
 }
+
