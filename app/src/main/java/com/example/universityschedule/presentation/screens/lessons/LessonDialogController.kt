@@ -2,7 +2,7 @@ package com.example.universityschedule.presentation.screens.lessons
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.Color
-import com.example.universityschedule.presentation.common.components.DialogEvent
+import com.example.universityschedule.presentation.common.DialogEvent
 
 enum class LessonColor(val color: Color) {
     BLUE(Color(0xFF3F51B5)),

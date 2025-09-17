@@ -1,4 +1,4 @@
-package com.example.universityschedule.presentation.common.components
+package com.example.universityschedule.presentation.common
 
 sealed class DialogEvent {
     object OnCancel: DialogEvent()

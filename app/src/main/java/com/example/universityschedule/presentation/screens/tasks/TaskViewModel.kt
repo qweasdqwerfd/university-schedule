@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.universityschedule.domain.model.TaskItem
 import com.example.universityschedule.domain.repository.TaskRepository
-import com.example.universityschedule.presentation.common.components.DialogEvent
+import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel

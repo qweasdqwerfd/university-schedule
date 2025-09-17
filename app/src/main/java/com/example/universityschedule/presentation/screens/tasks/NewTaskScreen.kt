@@ -13,6 +13,7 @@ import com.example.universityschedule.presentation.screens.tasks.components.Chip
 import com.example.universityschedule.presentation.common.components.TextField.DefaultTextField
 import com.example.universityschedule.presentation.common.components.TextField.DescriptionTextField
 import com.example.universityschedule.presentation.common.components.TextField.IconTextField
+import com.example.universityschedule.presentation.util.dimens
 
 @Composable
 fun NewTaskScreen(
@@ -21,7 +22,11 @@ fun NewTaskScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 17.dp, top = 15.dp, end = 17.dp)
+            .padding(
+                start = MaterialTheme.dimens.space16,
+                top = MaterialTheme.dimens.space14,
+                end = MaterialTheme.dimens.space16
+            )
 
     ) {
         Text(
@@ -72,7 +77,7 @@ fun NewTaskScreen(
 
         Text(
             "Related Lesson (Optional)",
-            modifier = Modifier.padding(top = 10.dp),
+            modifier = Modifier.padding(top = MaterialTheme.dimens.space10),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )

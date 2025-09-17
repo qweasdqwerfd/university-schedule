@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -23,10 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.universityschedule.presentation.Dimens.LargePadding1
-import com.example.universityschedule.presentation.Dimens.MediumPadding3
-import com.example.universityschedule.presentation.Dimens.MediumPadding4
-import com.example.universityschedule.presentation.Dimens.MediumPadding5
+import com.example.universityschedule.presentation.util.dimens
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
@@ -42,8 +40,10 @@ fun WeekCalendar(
     fontText: FontWeight = FontWeight.Bold
 ) {
     LazyRow(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier.padding(vertical = MaterialTheme.dimens.space8),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
         items(days.size) { index ->
             val date = days[index]
@@ -52,14 +52,14 @@ fun WeekCalendar(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier = modifier
-                    .padding(vertical = MediumPadding3, horizontal = MediumPadding5)
+                modifier = Modifier
                     .clickable { onDateSelected(date) }
+                    .padding(horizontal = MaterialTheme.dimens.space8)
             ) {
                 if (isSelected) {
                     Box(
-                        modifier = modifier
-                            .size(LargePadding1)
+                        modifier = Modifier
+                            .size(MaterialTheme.dimens.space48)
                             .clip(CircleShape)
                             .background(Color(0xFF3F51B5)),
                         contentAlignment = Alignment.Center
@@ -71,30 +71,23 @@ fun WeekCalendar(
                         )
                     }
                 } else {
-
                     Text(
-                        text = date.dayOfWeek
-                            .getDisplayName(TextStyle.SHORT, Locale("ru")),
+                        text = date.dayOfWeek.getDisplayName(java.time.format.TextStyle.SHORT, Locale("ru")),
                         color = colorText
                     )
-                    Spacer(modifier.height(MediumPadding4))
+                    Spacer(modifier = Modifier.height(MaterialTheme.dimens.space10))
                     Text(
                         text = date.dayOfMonth.toString(),
                         color = colorText,
                         fontWeight = fontText
-
                     )
-                    Spacer(modifier.height(MediumPadding4))
+                    Spacer(modifier = Modifier.height(MaterialTheme.dimens.space10))
                     Text(
-                        text = date.month
-                            .getDisplayName(TextStyle.SHORT_STANDALONE, Locale("ru")),
+                        text = date.month.getDisplayName(java.time.format.TextStyle.SHORT_STANDALONE, Locale("ru")),
                         color = colorText
                     )
                 }
-
             }
-
         }
     }
 }
-

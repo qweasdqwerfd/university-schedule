@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.example.universityschedule.presentation.Dimens.MediumPadding1
 import com.example.universityschedule.presentation.common.components.MainDivider
+import com.example.universityschedule.presentation.util.dimens
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -28,16 +28,17 @@ fun TitleDate(
     val formatter = remember {
         DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale("ru"))
     }
-
+    MainDivider()
     Text(
         modifier = modifier
-            .padding(horizontal = MediumPadding1)
+            .padding(horizontal = MaterialTheme.dimens.space20)
         ,
         text = formatter.format(selectedDate)
             .replaceFirstChar { it.uppercase() },
         style = textStyle,
         fontWeight = textWeight
     )
+    MainDivider()
 
 
 }

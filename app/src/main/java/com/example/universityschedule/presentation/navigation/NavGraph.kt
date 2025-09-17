@@ -32,7 +32,7 @@ fun NavGraph(
         }
     }
 
-    NavHost(navController = navHostController, startDestination = Screen.CALENDAR.route) {
+    NavHost(navController = navHostController, startDestination = Screen.TASKS.route) {
         composable(Screen.CALENDAR.route) {
             CalendarScreen()
         }
@@ -41,7 +41,7 @@ fun NavGraph(
             LessonsScreen()
         }
         composable(Screen.TASKS.route) {
-            TasksScreen(navHostController, taskViewModel)
+            TasksScreen(taskViewModel)
         }
         composable(Screen.ADD_TASK.route) {
             NewTaskScreen(taskViewModel)

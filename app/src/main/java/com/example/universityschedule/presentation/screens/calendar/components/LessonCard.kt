@@ -13,11 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
-import com.example.universityschedule.presentation.Dimens.MediumPadding1
-import com.example.universityschedule.presentation.Dimens.MediumShape1
-import com.example.universityschedule.presentation.Dimens.SmallElevation
-import com.example.universityschedule.presentation.Dimens.SmallPadding1
 import com.example.universityschedule.presentation.screens.lessons.Lesson
+import com.example.universityschedule.presentation.util.dimens
 
 @Composable
 fun LessonCard(
@@ -28,14 +25,14 @@ fun LessonCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = MediumPadding1)
+            .padding(horizontal = MaterialTheme.dimens.space20)
         ,
-        shape = RoundedCornerShape(MediumShape1),
-        elevation = CardDefaults.cardElevation(defaultElevation = SmallElevation)
+        shape = RoundedCornerShape(MaterialTheme.dimens.cornerLarge),
+        elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.dimens.elevationMedium)
     ) {
-        Column(modifier = modifier.padding(MediumPadding1)) {
+        Column(modifier = modifier.padding(MaterialTheme.dimens.space20)) {
             Text(lesson.subject, style = textStyle)
-            Spacer(modifier.height(SmallPadding1))
+            Spacer(modifier.height(MaterialTheme.dimens.space4))
             Text("⏰ ${lesson.time}")
             Text("📍 ${lesson.place}")
             Text("👨‍🏫 ${lesson.teacher}")

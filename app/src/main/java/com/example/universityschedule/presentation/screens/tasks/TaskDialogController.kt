@@ -1,7 +1,7 @@
 package com.example.universityschedule.presentation.screens.tasks
 
 import androidx.compose.runtime.MutableState
-import com.example.universityschedule.presentation.common.components.DialogEvent
+import com.example.universityschedule.presentation.common.DialogEvent
 
 enum class Priority {
     LOW, MEDIUM, HIGH

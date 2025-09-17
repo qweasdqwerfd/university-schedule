@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.universityschedule.presentation.common.components.DialogEvent
+import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.custom_components.IconButton.CancelIconButton
 import com.example.universityschedule.presentation.custom_components.IconButton.SaveIconButton
 import com.example.universityschedule.presentation.navigation.Screen

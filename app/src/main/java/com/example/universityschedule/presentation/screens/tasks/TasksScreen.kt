@@ -11,14 +11,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.universityschedule.presentation.common.components.DialogEvent
+import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.custom_components.IconButton.FAB
 import com.example.universityschedule.presentation.navigation.Screen
 import com.example.universityschedule.presentation.screens.tasks.components.CardTaskPanel
 
 @Composable
 fun TasksScreen(
-    navHostController: NavHostController,
     viewModel: TaskViewModel
 ) {
 

@@ -1,4 +1,4 @@
-package com.example.universityschedule.presentation.ui_insruments
+package com.example.universityschedule.presentation.util
 
 import androidx.compose.ui.graphics.Color
 
