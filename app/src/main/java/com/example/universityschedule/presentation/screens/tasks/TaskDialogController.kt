@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import com.example.universityschedule.presentation.common.DialogEvent
 
 enum class Priority {
-    LOW, MEDIUM, HIGH
+    Low, Medium, High
 }
 
 enum class LessonChip {

@@ -70,7 +70,7 @@ fun NewTaskScreen(
         ChipsLvL(
             selectedPriority = viewModel.dialogPriority.value.name,
             onPrioritySelected = { priorityName ->
-                val priority = Priority.valueOf(priorityName.uppercase())
+                val priority = Priority.valueOf(priorityName)
                 viewModel.dialogPriority.value = priority
             }
         )
@@ -85,7 +85,7 @@ fun NewTaskScreen(
         ChipsLessons(
             selectedLessons = viewModel.dialogRelatedLesson.value.name,
             selectLessons = { lessonName ->
-                val lesson = LessonChip.valueOf(lessonName.uppercase())
+                val lesson = LessonChip.valueOf(lessonName)
                 viewModel.dialogRelatedLesson.value = lesson
             }
         )

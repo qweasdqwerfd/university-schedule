@@ -25,7 +25,7 @@ class TaskViewModel @Inject constructor(
     override var dialogTitle = mutableStateOf("")
     override var dialogDescription = mutableStateOf("")
     override var dialogDueDate = mutableStateOf("")
-    override var dialogPriority = mutableStateOf(Priority.MEDIUM)
+    override var dialogPriority = mutableStateOf(Priority.Medium)
     override var dialogRelatedLesson = mutableStateOf(LessonChip.NONE)
 
 
@@ -48,7 +48,7 @@ class TaskViewModel @Inject constructor(
                     dialogTitle.value = ""
                     dialogDescription.value = ""
                     dialogDueDate.value = ""
-                    dialogPriority.value = Priority.MEDIUM
+                    dialogPriority.value = Priority.Medium
                     dialogRelatedLesson.value = LessonChip.NONE
 
 

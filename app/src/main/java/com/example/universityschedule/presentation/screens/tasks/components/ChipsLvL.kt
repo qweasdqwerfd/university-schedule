@@ -29,11 +29,11 @@ fun ChipsLvL(
     onPrioritySelected: (String) -> Unit,
     enabled: Boolean = true,
 ) {
-    val priorities = listOf("LOW", "MEDIUM", "HIGH")
+    val priorities = listOf("Low", "Medium", "High")
     val priorityColors = mapOf(
-        "LOW" to Color(0xFF4CAF50),
-        "MEDIUM" to Color(0xFF506EA8),
-        "HIGH" to Color(0xFFF44336)
+        "Low" to Color(0xFF4CAF50),
+        "Medium" to Color(0xFF506EA8),
+        "High" to Color(0xFFF44336)
     )
 
     Row(

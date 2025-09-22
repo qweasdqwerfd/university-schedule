@@ -26,10 +26,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 import com.example.universityschedule.domain.model.TaskItem
 import com.example.universityschedule.presentation.common.DialogEvent
+import com.example.universityschedule.presentation.util.dimens
 
 @Composable
 fun CardTaskPanel(
@@ -38,13 +38,13 @@ fun CardTaskPanel(
 ) {
     Card(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(MaterialTheme.dimens.space16)
             .fillMaxWidth()
             .clickable {
                 onEvent(DialogEvent.OnItemClick(item.id))
             },
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(8.dp),
+        shape = RoundedCornerShape(MaterialTheme.dimens.cornerExtraLarge),
+        elevation = CardDefaults.cardElevation(MaterialTheme.dimens.elevationHigh),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             contentColor = MaterialTheme.colorScheme.onSurface
@@ -52,17 +52,20 @@ fun CardTaskPanel(
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp),
+                .padding(MaterialTheme.dimens.space16),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(MaterialTheme.dimens.iconSizeMedium)
                     .clip(CircleShape)
                     .background(Color.LightGray)
+                    .clickable {
+
+                    }
             )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimens.widthSmallPlus))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -75,7 +78,7 @@ fun CardTaskPanel(
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Gray
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(MaterialTheme.dimens.heightExtraSmall))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -85,14 +88,14 @@ fun CardTaskPanel(
                         Icon(
                             painter = painterResource(R.drawable.clock),
                             contentDescription = "Time",
-                            modifier = Modifier.size(16.dp),
+                            modifier = Modifier.size(MaterialTheme.dimens.iconSizeSmall),
                             tint = Color.Gray
                         )
                         Text(
                             text = item.dueDate,
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Gray,
-                            modifier = Modifier.padding(start = 4.dp)
+                            modifier = Modifier.padding(start = MaterialTheme.dimens.space4)
                         )
                     }
 
@@ -100,18 +103,21 @@ fun CardTaskPanel(
                     Box(
                         modifier = Modifier
                             .padding(
-                                start = 8.dp,
+                                start = MaterialTheme.dimens.space8,
 
                                 )
                             .background(
                                 color =
                                     when (item.priority.name) {
-                                        "HIGH" -> Color(0xFFca2244)
-                                        "MEDIUM" -> Color(0xFFf6c610)
+                                        "High" -> Color(0xFFca2244)
+                                        "Medium" -> Color(0xFFf6c610)
                                         else -> Color(0xFF31b947)
-                                    }, shape = RoundedCornerShape(12.dp)
+                                    }, shape = RoundedCornerShape(MaterialTheme.dimens.cornerLarge)
                             )
-                            .padding(horizontal = 12.dp, vertical = 6.dp),
+                            .padding(
+                                horizontal = MaterialTheme.dimens.space12,
+                                vertical = MaterialTheme.dimens.space6
+                            ),
 
                         ) {
                         Text(

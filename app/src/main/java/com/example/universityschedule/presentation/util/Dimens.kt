@@ -45,7 +45,7 @@ data class Dimens(
     val fabSize: Dp = 56.dp,
 
     val heightSmall: Dp = 16.dp,
-    val heightExtraSmall: Dp = 7.dp,
+    val heightExtraSmall: Dp = 8.dp,
     val heightMedium: Dp = 32.dp,
     val heightLarge: Dp = 44.dp,
     val heightLargePlus: Dp = 48.dp,
@@ -84,7 +84,8 @@ data class Dimens(
 
     // ----- Width (ширина) -----
     val widthLarge: Dp = 127.dp,
-    val widthSmallPlus: Dp = 16.dp,
+    val widthSmallExtra: Dp = 16.dp,
+    val widthSmallPlus: Dp = 12.dp,
     val widthSmall: Dp = 8.dp,
     val widthSmallMinus: Dp = 5.dp,
     val widthOne: Dp = 1.dp,
@@ -94,7 +95,7 @@ data class Dimens(
     val thicknessExtraSmall: Dp = 4.dp,
 
 
-)
+    )
 
 val LocalDimens = staticCompositionLocalOf { Dimens() }
 

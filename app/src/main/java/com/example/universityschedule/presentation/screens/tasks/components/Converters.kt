@@ -25,19 +25,3 @@ class Converters {
         return LessonChip.valueOf(lesson)
     }
 }
-
-fun Priority.toDisplayName() = when (this) {
-    Priority.LOW -> "Low"
-    Priority.MEDIUM -> "Medium"
-    Priority.HIGH -> "High"
-}
-
-fun LessonChip.toDisplayName() = when (this) {
-    LessonChip.NONE -> "None"
-    LessonChip.CALCULUS -> "Calculus"
-    LessonChip.PHYSICS -> "Physics"
-    LessonChip.MATH -> "Math"
-    LessonChip.PROGRAMMING -> "Programming"
-    LessonChip.SPORT -> "Sport"
-    LessonChip.CHEMISTRY -> "Chemistry" // Добавьте при необходимости
-}

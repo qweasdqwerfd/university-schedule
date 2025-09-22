@@ -33,15 +33,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTaskRepo(db: MainDB): TaskRepository {
-        return TaskRepositoryImpl(db.taskDao)
-    }
+    fun provideTaskRepo(db: MainDB): TaskRepository = TaskRepositoryImpl(db.taskDao)
 
     @Provides
     @Singleton
-    fun provideLessonRepo(db: MainDB): LessonRepository {
-        return LessonRepositoryImpl(db.lessonDao)
-    }
+    fun provideLessonRepo(db: MainDB): LessonRepository = LessonRepositoryImpl(db.lessonDao)
 
     @Provides
     @Singleton
