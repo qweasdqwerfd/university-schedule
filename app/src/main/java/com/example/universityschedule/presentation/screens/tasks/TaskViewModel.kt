@@ -17,7 +17,7 @@ import javax.inject.Inject
 class TaskViewModel @Inject constructor(
     private val repository: TaskRepository,
 ) : ViewModel(), TaskDialogController {
-    private val _navigation = Channel<Screen>()
+    private val _navigation = Channel<String>()
     val navigation = _navigation.receiveAsFlow()
 
 
@@ -44,25 +44,33 @@ class TaskViewModel @Inject constructor(
 
                     repository.insert(task)
 
-                    navigateTo(Screen.TASKS)
+                    navigateTo(Screen.TASKS.route)
+
+                    dialogTitle.value = ""
+                    dialogDescription.value = ""
+                    dialogDueDate.value = ""
+                    dialogPriority.value = Priority.MEDIUM
+                    dialogRelatedLesson.value = LessonChip.NONE
+
+
                 }
             }
 
             DialogEvent.OnCancel -> {
-                navigateTo(Screen.TASKS)
+                navigateTo(Screen.TASKS.route)
             }
 
             is DialogEvent.OnItemClick -> {
-                navigateTo(Screen.TASK_DETAILS)
+                navigateTo(Screen.TASK_DETAILS.createRoute(event.id))
             }
 
             is DialogEvent.onFABClick -> {
-                navigateTo(Screen.ADD_TASK)
+                navigateTo(Screen.ADD_TASK.route)
             }
         }
     }
 
-    fun navigateTo(screen: Screen) {
+    fun navigateTo(screen: String) {
         viewModelScope.launch {
             _navigation.send(screen)
         }

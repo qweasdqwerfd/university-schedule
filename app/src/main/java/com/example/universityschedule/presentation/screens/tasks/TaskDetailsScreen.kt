@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -21,28 +22,38 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.universityschedule.R.drawable
 import com.example.universityschedule.presentation.common.components.IconButton.def.DetailsButton
+import com.example.universityschedule.presentation.navigation.Screen
+import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
+import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsViewModel
+import com.example.universityschedule.presentation.util.dimens
 
-@Preview
 @Composable
 fun TaskDetailsScreen(
-
+    taskId: Int,
+    viewModel: TaskDetailsViewModel,
 ) {
+
+    val task by viewModel.task.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(
-                horizontal = 20.dp,
-                vertical = 20.dp
+                horizontal = MaterialTheme.dimens.space20,
+                vertical = MaterialTheme.dimens.space20
             ),
     ) {
         Row(
@@ -51,7 +62,7 @@ fun TaskDetailsScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Essay Draft",
+                text = task?.title.toString(),
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.ExtraBold
@@ -60,42 +71,46 @@ fun TaskDetailsScreen(
                 painter = painterResource(drawable.circle),
                 contentDescription = "circle or tick",
                 modifier = Modifier
-                    .size(30.dp),
+                    .size(MaterialTheme.dimens.iconSizeLarge),
                 tint = MaterialTheme.colorScheme.onBackground
             )
         }
         Box(
             modifier = Modifier
-                .padding(top = 4.dp)
+                .padding(top = MaterialTheme.dimens.space4)
                 .background(
                     color = Color(0xFFf7c602),
-                    shape = RoundedCornerShape(13.dp)
+                    shape = RoundedCornerShape(MaterialTheme.dimens.cornerLarge)
                 )
                 .padding(
-                    horizontal = 10.dp,
-                    vertical = 8.dp
+                    horizontal = MaterialTheme.dimens.space10,
+                    vertical = MaterialTheme.dimens.space8
                 ),
 
             ) {
             Row(
                 modifier = Modifier
-                    .width(127.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                    .wrapContentWidth()
+                    .padding(horizontal = MaterialTheme.dimens.space4),
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     painter = painterResource(drawable.warn),
-                    contentDescription = "ward",
+                    contentDescription = "warning",
                     modifier = Modifier
-                        .size(14.dp),
+                        .size(MaterialTheme.dimens.iconSizeSmall),
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
 
+                Spacer(modifier = Modifier.width(MaterialTheme.dimens.space8))
+
                 Text(
-                    text = "Medium Priority",
+                    text = "${task?.priority} Priority",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onPrimary,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.CenterVertically)
                 )
             }
         }
@@ -103,20 +118,23 @@ fun TaskDetailsScreen(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 27.dp),
-            shape = RoundedCornerShape(10.dp),
+                .padding(top = MaterialTheme.dimens.space28),
+            shape = RoundedCornerShape(MaterialTheme.dimens.cornerLarge),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                 contentColor = MaterialTheme.colorScheme.onSurface
             ),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+            border = BorderStroke(
+                MaterialTheme.dimens.widthOne,
+                MaterialTheme.colorScheme.outlineVariant
+            )
         ) {
 
             Column(
                 modifier = Modifier
                     .padding(
-                        horizontal = 15.dp,
-                        vertical = 13.dp
+                        horizontal = MaterialTheme.dimens.space16,
+                        vertical = MaterialTheme.dimens.space14
                     ),
             ) {
                 Row {
@@ -124,11 +142,11 @@ fun TaskDetailsScreen(
                         painter = painterResource(drawable.calendar),
                         contentDescription = "calendar",
                         Modifier
-                            .size(18.dp)
+                            .size(MaterialTheme.dimens.iconSizeSmall)
                             .align(Alignment.CenterVertically),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
-                    Spacer(Modifier.width(8.dp))
+                    Spacer(Modifier.width(MaterialTheme.dimens.widthSmall))
                     Text(
                         text = "Due Date",
                         style = MaterialTheme.typography.titleMedium,
@@ -137,10 +155,10 @@ fun TaskDetailsScreen(
                     )
                 }
 
-                Spacer(Modifier.height(15.dp))
+                Spacer(Modifier.height(MaterialTheme.dimens.heightSmall))
 
                 Text(
-                    text = "Wednesday, April 2 at 09:34 PM",
+                    text = task?.dueDate.toString(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -150,20 +168,23 @@ fun TaskDetailsScreen(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 27.dp),
-            shape = RoundedCornerShape(10.dp),
+                .padding(top = MaterialTheme.dimens.space28),
+            shape = RoundedCornerShape(MaterialTheme.dimens.cornerLarge),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                 contentColor = MaterialTheme.colorScheme.onSurface
             ),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+            border = BorderStroke(
+                MaterialTheme.dimens.widthOne,
+                MaterialTheme.colorScheme.outlineVariant
+            )
         ) {
 
             Column(
                 modifier = Modifier
                     .padding(
-                        horizontal = 15.dp,
-                        vertical = 13.dp
+                        horizontal = MaterialTheme.dimens.space16,
+                        vertical = MaterialTheme.dimens.space14
                     ),
             ) {
                 Row {
@@ -171,11 +192,11 @@ fun TaskDetailsScreen(
                         painter = painterResource(drawable.lessons),
                         contentDescription = "calendar",
                         Modifier
-                            .size(18.dp)
+                            .size(MaterialTheme.dimens.iconSizeSmall)
                             .align(Alignment.CenterVertically),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
-                    Spacer(Modifier.width(8.dp))
+                    Spacer(Modifier.width(MaterialTheme.dimens.widthSmall))
                     Text(
                         text = "Related Lesson",
                         style = MaterialTheme.typography.titleMedium,
@@ -184,40 +205,40 @@ fun TaskDetailsScreen(
                     )
                 }
 
-                Spacer(Modifier.height(15.dp))
+                Spacer(Modifier.height(MaterialTheme.dimens.heightSmall))
 
                 Row {
 
                     VerticalDivider(
                         modifier = Modifier
-                            .height(43.dp)
-                            .width(16.dp),
+                            .height(MaterialTheme.dimens.heightLarge)
+                            .width(MaterialTheme.dimens.widthSmallPlus),
                         color = Color.Green,
-                        thickness = 3.dp
+                        thickness = MaterialTheme.dimens.thicknessExtraSmall
                     )
 
 
                     Column {
 
                         Text(
-                            text = "Literature",
+                            text = task?.lessons.toString(),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurface
                         )
 
-                        Spacer(Modifier.height(7.dp))
+                        Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
 
                         Row {
                             Icon(
                                 painter = painterResource(drawable.clock),
                                 contentDescription = "clock",
                                 modifier = Modifier
-                                    .size(12.dp)
+                                    .size(MaterialTheme.dimens.iconSizeExtraSmall)
                                     .align(Alignment.CenterVertically),
                                 tint = MaterialTheme.colorScheme.onBackground
                             )
 
-                            Spacer(Modifier.width(7.dp))
+                            Spacer(Modifier.width(MaterialTheme.dimens.widthSmall))
 
                             Text(
                                 text = "10:00 - 11:30",
@@ -235,20 +256,23 @@ fun TaskDetailsScreen(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 27.dp),
-            shape = RoundedCornerShape(10.dp),
+                .padding(top = MaterialTheme.dimens.space28),
+            shape = RoundedCornerShape(MaterialTheme.dimens.cornerLarge),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                 contentColor = MaterialTheme.colorScheme.onSurface
             ),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+            border = BorderStroke(
+                MaterialTheme.dimens.widthOne,
+                MaterialTheme.colorScheme.outlineVariant
+            )
         ) {
 
             Column(
                 modifier = Modifier
                     .padding(
-                        horizontal = 15.dp,
-                        vertical = 13.dp
+                        horizontal = MaterialTheme.dimens.space16,
+                        vertical = MaterialTheme.dimens.space14
                     ),
             ) {
                 Text(
@@ -257,36 +281,40 @@ fun TaskDetailsScreen(
                     color = MaterialTheme.colorScheme.onSurface,
                 )
 
-                Spacer(Modifier.height(15.dp))
+                Spacer(Modifier.height(MaterialTheme.dimens.heightSmall))
 
                 Text(
-                    text = "Write first draft of comparative essay",
+                    text = task?.description.toString(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
 
-        Spacer(Modifier.height(33.dp))
+        Spacer(Modifier.height(MaterialTheme.dimens.heightMedium))
 
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.space6),
         ) {
             DetailsButton(
                 modifier = Modifier.weight(1f),
                 text = "Edit Task",
                 color = Color(0xFF4f6fa7),
                 icon = drawable.edit,
-                sizeIcon = 25,
+                sizeIcon = MaterialTheme.dimens.iconSizeMedium,
+                onClick = { TODO() },
             )
             DetailsButton(
                 modifier = Modifier.weight(1f),
                 text = "Delete Task",
                 color = Color(0xFFE01C42),
                 icon = drawable.trash,
-                sizeIcon = 21,
+                sizeIcon = MaterialTheme.dimens.iconSizeSmallPlus,
+                onClick = {
+                    viewModel.onDialogEvent(DetailsEvent.Delete)
+                }
             )
         }
     }

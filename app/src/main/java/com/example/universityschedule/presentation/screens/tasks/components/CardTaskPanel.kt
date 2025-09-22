@@ -29,17 +29,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 import com.example.universityschedule.domain.model.TaskItem
+import com.example.universityschedule.presentation.common.DialogEvent
 
 @Composable
 fun CardTaskPanel(
     item: TaskItem,
+    onEvent: (DialogEvent) -> Unit
 ) {
     Card(
         modifier = Modifier
             .padding(16.dp)
             .fillMaxWidth()
             .clickable {
-
+                onEvent(DialogEvent.OnItemClick(item.id))
             },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(8.dp),

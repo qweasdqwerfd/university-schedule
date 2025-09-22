@@ -20,7 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.universityschedule.presentation.util.dimens
 
 @Composable
 fun DetailsButton(
@@ -28,24 +30,25 @@ fun DetailsButton(
     text: String,
     color: Color,
     icon: Int,
-    sizeIcon: Int
+    sizeIcon: Dp,
+    onClick: () -> Unit
 ) {
 
     Button(
-        onClick = {},
+        onClick = { onClick() },
         modifier = modifier
-            .height(48.dp)
-            .padding(horizontal = 4.dp),
-        shape = RoundedCornerShape(10.dp),
+            .height(MaterialTheme.dimens.heightLargePlus)
+            .padding(horizontal = MaterialTheme.dimens.space4),
+        shape = RoundedCornerShape(MaterialTheme.dimens.cornerLarge),
         colors = ButtonDefaults.buttonColors(
             containerColor = color,
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = 2.dp,
-            pressedElevation = 4.dp
+            defaultElevation = MaterialTheme.dimens.elevationMedium,
+            pressedElevation = MaterialTheme.dimens.elevationHigh
         ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+        border = BorderStroke(MaterialTheme.dimens.widthOne, MaterialTheme.colorScheme.outline)
     ) {
         Row(
             modifier = Modifier,
@@ -56,9 +59,9 @@ fun DetailsButton(
                 painter = painterResource(icon),
                 contentDescription = "edit",
                 modifier = Modifier
-                    .size(sizeIcon.dp),
+                    .size(sizeIcon),
             )
-            Spacer(Modifier.width(5.dp))
+            Spacer(Modifier.width(MaterialTheme.dimens.widthSmallMinus))
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyMedium,

@@ -29,6 +29,7 @@ data class Dimens(
     // ----- Размеры иконок -----
     val iconSizeExtraSmall: Dp = 12.dp,
     val iconSizeSmall: Dp = 16.dp,
+    val iconSizeSmallPlus: Dp = 21.dp,
     val iconSizeMedium: Dp = 24.dp,
     val iconSizeLarge: Dp = 32.dp,
     val iconSizeExtraLarge: Dp = 48.dp,
@@ -42,6 +43,12 @@ data class Dimens(
     val topBarHeight: Dp = 64.dp,
     val bottomBarHeight: Dp = 72.dp,
     val fabSize: Dp = 56.dp,
+
+    val heightSmall: Dp = 16.dp,
+    val heightExtraSmall: Dp = 7.dp,
+    val heightMedium: Dp = 32.dp,
+    val heightLarge: Dp = 44.dp,
+    val heightLargePlus: Dp = 48.dp,
 
     // ----- Аватары -----
     val avatarSizeSmall: Dp = 32.dp,
@@ -74,6 +81,18 @@ data class Dimens(
     val elevationHigh: Dp = 6.dp,
     val elevationExtraHigh: Dp = 12.dp,
     val elevationHuge: Dp = 24.dp,
+
+    // ----- Width (ширина) -----
+    val widthLarge: Dp = 127.dp,
+    val widthSmallPlus: Dp = 16.dp,
+    val widthSmall: Dp = 8.dp,
+    val widthSmallMinus: Dp = 5.dp,
+    val widthOne: Dp = 1.dp,
+
+    // ----- Thickness (толщина) -----
+
+    val thicknessExtraSmall: Dp = 4.dp,
+
 
 )
 

@@ -7,14 +7,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.universityschedule.presentation.screens.calendar.CalendarScreen
 import com.example.universityschedule.presentation.screens.lessons.LessonsScreen
 import com.example.universityschedule.presentation.screens.tasks.NewTaskScreen
 import com.example.universityschedule.presentation.screens.tasks.TaskDetailsScreen
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.screens.tasks.TasksScreen
+import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsViewModel
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @RequiresApi(Build.VERSION_CODES.O)
@@ -23,14 +26,17 @@ fun NavGraph(
     navHostController: NavHostController,
 ) {
     val taskViewModel: TaskViewModel = hiltViewModel()
+    val taskDetailsViewModel: TaskDetailsViewModel = hiltViewModel()
 
-    LaunchedEffect(Unit) {
-        taskViewModel.navigation.collect { screen ->
-            navHostController.navigate(screen.route) {
-                launchSingleTop = true
-            }
-        }
-    }
+    HandleNavigation(
+        navController = navHostController,
+        navigationFlow = taskViewModel.navigation
+    )
+
+    HandleNavigation(
+        navController = navHostController,
+        navigationFlow = taskDetailsViewModel.navigation
+    )
 
     NavHost(navController = navHostController, startDestination = Screen.TASKS.route) {
         composable(Screen.CALENDAR.route) {
@@ -41,13 +47,26 @@ fun NavGraph(
             LessonsScreen()
         }
         composable(Screen.TASKS.route) {
-            TasksScreen(taskViewModel)
+            TasksScreen(
+                taskViewModel,
+                navHostController = navHostController,
+            )
         }
         composable(Screen.ADD_TASK.route) {
             NewTaskScreen(taskViewModel)
         }
-        composable(Screen.TASK_DETAILS.route) {
-            TaskDetailsScreen()
+        composable(
+            route = Screen.TASK_DETAILS.route,
+            arguments = listOf(navArgument("taskId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val taskId = backStackEntry.arguments?.getInt("taskId") ?: return@composable
+
+            val taskDetailsViewModel: TaskDetailsViewModel = hiltViewModel()
+
+            TaskDetailsScreen(
+                taskId = taskId,
+                viewModel = taskDetailsViewModel
+            )
         }
 
 

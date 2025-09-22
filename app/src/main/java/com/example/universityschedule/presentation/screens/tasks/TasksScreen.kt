@@ -1,6 +1,5 @@
 package com.example.universityschedule.presentation.screens.tasks
 
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,12 +12,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.custom_components.IconButton.FAB
-import com.example.universityschedule.presentation.navigation.Screen
 import com.example.universityschedule.presentation.screens.tasks.components.CardTaskPanel
 
 @Composable
 fun TasksScreen(
-    viewModel: TaskViewModel
+    viewModel: TaskViewModel,
+    navHostController: NavHostController
 ) {
 
 
@@ -44,6 +43,7 @@ fun TasksScreen(
         items(itemsList.value) {
             CardTaskPanel(
                 item = it,
+                onEvent = { event -> viewModel.onDialogEvent(event) },
             )
         }
     }

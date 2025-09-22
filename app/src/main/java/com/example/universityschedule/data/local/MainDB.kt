@@ -13,7 +13,7 @@ import com.example.universityschedule.domain.model.TaskItem
         LessonItem::class
     ],
 
-    version = 2
+    version = 3
 )
 @TypeConverters(Converters::class)
 abstract class MainDB : RoomDatabase() {

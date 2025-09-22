@@ -24,12 +24,15 @@ import com.example.universityschedule.presentation.custom_components.IconButton.
 import com.example.universityschedule.presentation.custom_components.IconButton.SaveIconButton
 import com.example.universityschedule.presentation.navigation.Screen
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
+import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
+import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
     navController: NavHostController,
-    taskViewModel: TaskViewModel = hiltViewModel()
+    taskViewModel: TaskViewModel = hiltViewModel(),
+    taskDetailsViewModel: TaskDetailsViewModel = hiltViewModel()
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -68,14 +71,13 @@ fun TopBar(
             navigationIcon = {
                 if (currentRoute == Screen.ADD_TASK.route) {
                     CancelIconButton {
-                        Log.d("NAV", "current destination = ${navController.currentDestination?.route}")
-
                         taskViewModel.onDialogEvent(DialogEvent.OnCancel)
-
-                        Log.d("NAV", "before destination = ${navController.currentDestination?.route}")
-
                     }
-
+                }
+                if (currentRoute == Screen.TASK_DETAILS.route) {
+                    CancelIconButton {
+                        taskDetailsViewModel.onDialogEvent(DetailsEvent.OnCancel)
+                    }
                 }
             }
 
