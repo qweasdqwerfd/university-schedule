@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.universityschedule.domain.model.TaskItem
 import com.example.universityschedule.domain.repository.TaskRepository
 import com.example.universityschedule.presentation.common.DialogEvent
+import com.example.universityschedule.presentation.navigation.NavigationManager
 import com.example.universityschedule.presentation.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -16,10 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TaskViewModel @Inject constructor(
     private val repository: TaskRepository,
+    private val navigationManager: NavigationManager,
 ) : ViewModel(), TaskDialogController {
-    private val _navigation = Channel<String>()
-    val navigation = _navigation.receiveAsFlow()
-
 
     val itemsList = repository.getItems()
 
@@ -44,7 +43,7 @@ class TaskViewModel @Inject constructor(
 
                     repository.insert(task)
 
-                    navigateTo(Screen.TASKS.route)
+                    navigationManager.navigateTo(Screen.TASKS.route)
 
                     dialogTitle.value = ""
                     dialogDescription.value = ""
@@ -57,23 +56,25 @@ class TaskViewModel @Inject constructor(
             }
 
             DialogEvent.OnCancel -> {
-                navigateTo(Screen.TASKS.route)
+                viewModelScope.launch {
+                    navigationManager.navigateTo(Screen.TASKS.route)
+                }
+
             }
 
             is DialogEvent.OnItemClick -> {
-                navigateTo(Screen.TASK_DETAILS.createRoute(event.id))
+                viewModelScope.launch {
+                    navigationManager.navigateTo(Screen.TASK_DETAILS.createRoute(event.id))
+                }
             }
 
             is DialogEvent.onFABClick -> {
-                navigateTo(Screen.ADD_TASK.route)
+                viewModelScope.launch {
+                    navigationManager.navigateTo(Screen.ADD_TASK.route)
+                }
             }
         }
     }
 
-    fun navigateTo(screen: String) {
-        viewModelScope.launch {
-            _navigation.send(screen)
-        }
-    }
 
 }
