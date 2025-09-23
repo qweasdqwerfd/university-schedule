@@ -1,5 +1,6 @@
 package com.example.universityschedule.presentation.screens.tasks
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,8 +10,6 @@ import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.navigation.NavigationManager
 import com.example.universityschedule.presentation.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,7 +37,8 @@ class TaskViewModel @Inject constructor(
                         description = dialogDescription.value,
                         dueDate = dialogDueDate.value,
                         priority = dialogPriority.value,
-                        lessons = dialogRelatedLesson.value
+                        lessons = dialogRelatedLesson.value,
+                        check = false
                     )
 
                     repository.insert(task)
@@ -68,9 +68,17 @@ class TaskViewModel @Inject constructor(
                 }
             }
 
-            is DialogEvent.onFABClick -> {
+            is DialogEvent.OnFABClick -> {
                 viewModelScope.launch {
                     navigationManager.navigateTo(Screen.ADD_TASK.route)
+                }
+            }
+            is DialogEvent.OnCircleClick -> {
+                viewModelScope.launch {
+                    val currentTask = repository.getItemById(event.id)
+                    currentTask.let {
+                        repository.insert(it.copy(check = !it.check))
+                    }
                 }
             }
         }

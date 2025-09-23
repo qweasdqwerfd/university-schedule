@@ -31,7 +31,9 @@ data class Dimens(
     val iconSizeSmall: Dp = 16.dp,
     val iconSizeSmallPlus: Dp = 21.dp,
     val iconSizeMedium: Dp = 24.dp,
+    val iconMediumPlus: Dp = 28.dp,
     val iconSizeLarge: Dp = 32.dp,
+    val iconSizeLargePlus: Dp = 38.dp,
     val iconSizeExtraLarge: Dp = 48.dp,
 
     // ----- Высоты компонентов -----
@@ -49,6 +51,7 @@ data class Dimens(
     val heightMedium: Dp = 32.dp,
     val heightLarge: Dp = 44.dp,
     val heightLargePlus: Dp = 48.dp,
+    val heightExtraLarge: Dp = 64.dp,
 
     // ----- Аватары -----
     val avatarSizeSmall: Dp = 32.dp,
@@ -84,6 +87,7 @@ data class Dimens(
 
     // ----- Width (ширина) -----
     val widthLarge: Dp = 127.dp,
+    val widthMedium: Dp = 30.dp,
     val widthSmallExtra: Dp = 16.dp,
     val widthSmallPlus: Dp = 12.dp,
     val widthSmall: Dp = 8.dp,

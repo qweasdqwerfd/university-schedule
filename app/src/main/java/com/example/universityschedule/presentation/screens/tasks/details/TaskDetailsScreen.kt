@@ -1,4 +1,4 @@
-package com.example.universityschedule.presentation.screens.tasks
+package com.example.universityschedule.presentation.screens.tasks.details
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -29,10 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import com.example.universityschedule.R
 import com.example.universityschedule.R.drawable
 import com.example.universityschedule.presentation.common.components.IconButton.def.DetailsButton
-import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
-import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsViewModel
 import com.example.universityschedule.presentation.util.dimens
 
 @Composable
@@ -63,13 +62,24 @@ fun TaskDetailsScreen(
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.ExtraBold
             )
-            Icon(
-                painter = painterResource(drawable.circle),
-                contentDescription = "circle or tick",
-                modifier = Modifier
-                    .size(MaterialTheme.dimens.iconSizeLarge),
-                tint = MaterialTheme.colorScheme.onBackground
-            )
+            if (task?.check == true) {
+                Icon(
+                    painter = painterResource(R.drawable.tick2),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(MaterialTheme.dimens.iconSizeLargePlus),
+                    tint = Color.Green
+                )
+            } else {
+
+                Icon(
+                    painter = painterResource(R.drawable.circle),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(MaterialTheme.dimens.iconSizeLarge)
+
+                )
+            }
         }
         Box(
             modifier = Modifier

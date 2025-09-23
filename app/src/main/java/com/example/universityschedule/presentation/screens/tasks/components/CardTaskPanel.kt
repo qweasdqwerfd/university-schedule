@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -24,8 +27,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 import com.example.universityschedule.domain.model.TaskItem
 import com.example.universityschedule.presentation.common.DialogEvent
@@ -52,18 +58,43 @@ fun CardTaskPanel(
     ) {
         Row(
             modifier = Modifier
-                .padding(MaterialTheme.dimens.space16),
+                .padding(MaterialTheme.dimens.space16)
+
+            ,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(MaterialTheme.dimens.iconSizeMedium)
-                    .clip(CircleShape)
-                    .background(Color.LightGray)
+                    .height(MaterialTheme.dimens.heightExtraLarge)
+                    .width(MaterialTheme.dimens.widthMedium)
                     .clickable {
+                        onEvent(DialogEvent.OnCircleClick(item.id))
+                    },
+            ) {
+                if (item.check) {
+                    Icon(
+                        painter = painterResource(R.drawable.tick2),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(MaterialTheme.dimens.iconSizeLargePlus)
+                            .align(Alignment.Center),
+                        tint = Color.Green
+                    )
+                } else {
 
-                    }
-            )
+                    Icon(
+                        painter = painterResource(R.drawable.circle),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(MaterialTheme.dimens.iconSizeMedium)
+                            .align(Alignment.Center)
+
+                        )
+                }
+            }
+
+
+
 
             Spacer(modifier = Modifier.width(MaterialTheme.dimens.widthSmallPlus))
 
@@ -71,12 +102,14 @@ fun CardTaskPanel(
                 Text(
                     text = "${item.lessons} ${item.title}",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    textDecoration = if (item.check) TextDecoration.LineThrough else TextDecoration.None
                 )
                 Text(
                     text = item.description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    textDecoration = if (item.check) TextDecoration.LineThrough else TextDecoration.None
                 )
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.heightExtraSmall))
                 Row(
@@ -95,7 +128,8 @@ fun CardTaskPanel(
                             text = item.dueDate,
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Gray,
-                            modifier = Modifier.padding(start = MaterialTheme.dimens.space4)
+                            modifier = Modifier.padding(start = MaterialTheme.dimens.space4),
+                            textDecoration = if (item.check) TextDecoration.LineThrough else TextDecoration.None
                         )
                     }
 

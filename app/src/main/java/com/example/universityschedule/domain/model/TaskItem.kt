@@ -13,5 +13,6 @@ data class TaskItem(
     val lessons: LessonChip,
     val title: String,
     val description: String,
-    val dueDate: String
+    val dueDate: String,
+    val check: Boolean
 )
