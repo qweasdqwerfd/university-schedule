@@ -1,6 +1,5 @@
 package com.example.universityschedule.presentation.screens.tasks
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +8,9 @@ import com.example.universityschedule.domain.repository.TaskRepository
 import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.navigation.NavigationManager
 import com.example.universityschedule.presentation.navigation.Screen
+import com.example.universityschedule.presentation.screens.tasks.components.LessonChip
+import com.example.universityschedule.presentation.screens.tasks.components.Priority
+import com.example.universityschedule.presentation.screens.tasks.components.TaskDialogController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

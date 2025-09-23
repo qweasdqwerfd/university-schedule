@@ -7,12 +7,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.example.universityschedule.presentation.screens.lessons.components.ChipsLessons
 import com.example.universityschedule.presentation.screens.tasks.components.ChipsLvL
 import com.example.universityschedule.presentation.common.components.TextField.DefaultTextField
 import com.example.universityschedule.presentation.common.components.TextField.DescriptionTextField
 import com.example.universityschedule.presentation.common.components.TextField.IconTextField
+import com.example.universityschedule.presentation.screens.tasks.components.LessonChip
+import com.example.universityschedule.presentation.screens.tasks.components.Priority
 import com.example.universityschedule.presentation.util.dimens
 
 @Composable

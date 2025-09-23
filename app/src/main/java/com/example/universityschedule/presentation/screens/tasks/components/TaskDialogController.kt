@@ -1,4 +1,4 @@
-package com.example.universityschedule.presentation.screens.tasks
+package com.example.universityschedule.presentation.screens.tasks.components
 
 import androidx.compose.runtime.MutableState
 import com.example.universityschedule.presentation.common.DialogEvent
