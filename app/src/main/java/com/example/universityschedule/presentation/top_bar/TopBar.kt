@@ -3,6 +3,9 @@ package com.example.universityschedule.presentation.top_bar
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,8 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.universityschedule.presentation.common.DialogEvent
-import com.example.universityschedule.presentation.custom_components.IconButton.CancelIconButton
-import com.example.universityschedule.presentation.custom_components.IconButton.SaveIconButton
+import com.example.universityschedule.presentation.common.components.IconTopButton
 import com.example.universityschedule.presentation.navigation.Screen
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
@@ -61,21 +63,34 @@ fun TopBar(
             },
             actions = {
                 if (currentRoute == Screen.ADD_TASK.route) {
-                    SaveIconButton {
-                        taskViewModel.onDialogEvent(DialogEvent.OnConfirm)
-                    }
+                    IconTopButton(
+                        onClick = {
+                            taskViewModel.onDialogEvent(DialogEvent.OnConfirm)
+                        },
+                        icon = Icons.Default.Check,
+                        contentDescription = "ok"
+                    )
                 }
             },
             navigationIcon = {
                 if (currentRoute == Screen.ADD_TASK.route) {
-                    CancelIconButton {
-                        taskViewModel.onDialogEvent(DialogEvent.OnCancel)
-                    }
+                    IconTopButton(
+                        onClick = {
+                            taskViewModel.onDialogEvent(DialogEvent.OnCancel)
+                        },
+                        icon = Icons.Default.ArrowBack,
+                        contentDescription = "back"
+                    )
                 }
                 if (currentRoute == Screen.TASK_DETAILS.route) {
-                    CancelIconButton {
-                        taskDetailsViewModel.onDialogEvent(DetailsEvent.OnCancel)
-                    }
+
+                    IconTopButton(
+                        onClick = {
+                            taskDetailsViewModel.onDialogEvent(DetailsEvent.OnCancel)
+                        },
+                        icon = Icons.Default.ArrowBack,
+                        contentDescription = "back"
+                    )
                 }
             }
 

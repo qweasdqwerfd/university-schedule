@@ -37,6 +37,11 @@ class TaskDetailsViewModel @Inject constructor(
 
     fun onDialogEvent(event: DetailsEvent) {
         when (event) {
+            DetailsEvent.OnCancel -> {
+                viewModelScope.launch {
+                    navigationManager.navigateBack()
+                }
+            }
             DetailsEvent.Delete -> {
                 viewModelScope.launch {
                     _task.value?.let { repository.delete(it) }
@@ -46,11 +51,6 @@ class TaskDetailsViewModel @Inject constructor(
 
             DetailsEvent.Edit -> {
 
-            }
-            DetailsEvent.OnCancel -> {
-                viewModelScope.launch {
-                    navigationManager.navigateBack()
-                }
             }
 
             DetailsEvent.OnConfirm -> {

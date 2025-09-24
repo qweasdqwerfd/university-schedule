@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.ads.mobile.sdk)
     implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.androidx.compose.ui.test)
+    implementation(libs.androidx.compose.testing)
     kapt(libs.androidx.room.compiler)
 
     // Hilt

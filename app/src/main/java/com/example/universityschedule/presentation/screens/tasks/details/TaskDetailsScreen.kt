@@ -31,7 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.universityschedule.R
 import com.example.universityschedule.R.drawable
-import com.example.universityschedule.presentation.common.components.IconButton.def.DetailsButton
+import com.example.universityschedule.presentation.common.components.DetailsButton
 import com.example.universityschedule.presentation.util.dimens
 
 @Composable
