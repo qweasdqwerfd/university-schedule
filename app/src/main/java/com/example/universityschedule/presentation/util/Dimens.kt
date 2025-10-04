@@ -48,7 +48,9 @@ data class Dimens(
 
     val heightSmall: Dp = 16.dp,
     val heightSmallPlus: Dp = 20.dp,
+    val heightSmallExtend: Dp = 25.dp,
     val heightExtraSmall: Dp = 8.dp,
+    val heightExtraSmallPlus: Dp = 14.dp,
     val heightMedium: Dp = 32.dp,
     val heightLarge: Dp = 44.dp,
     val heightLargePlus: Dp = 48.dp,

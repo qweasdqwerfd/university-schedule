@@ -2,9 +2,12 @@ package com.example.universityschedule.presentation.screens.tasks.details.compon
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,7 +22,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.universityschedule.R
+import com.example.universityschedule.presentation.common.components.DetailsButton
+import com.example.universityschedule.presentation.common.components.PriorityChipsRow
+import com.example.universityschedule.presentation.common.components.UniversalDropdown
 import com.example.universityschedule.presentation.common.components.UniversalTextField
 import com.example.universityschedule.presentation.screens.tasks.components.Priority
 import com.example.universityschedule.presentation.util.dimens
@@ -42,6 +51,8 @@ fun ModalBottomSheetDetails() {
         "algorithms"
     )
     var selected by remember { mutableStateOf("Literature") }
+
+    var dialogPriority = remember { mutableStateOf(Priority.Medium) }
 
     LaunchedEffect(Unit) {
         try {
@@ -88,6 +99,23 @@ fun ModalBottomSheetDetails() {
                 maxLines = 3
             )
 
+
+            Text(
+                "Priority",
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+            Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
+
+            PriorityChipsRow(
+                selectedPriority = dialogPriority.value,
+                onPrioritySelected = { dialogPriority.value = it },
+            ) { priority, isSelected, onClick ->
+                PriorityChipCompact(priority, isSelected, onClick)
+            }
+
+            Spacer(Modifier.height(MaterialTheme.dimens.heightSmallPlus))
+
             Text(
                 "Related Lesson",
                 style = MaterialTheme.typography.bodyMedium
@@ -101,6 +129,34 @@ fun ModalBottomSheetDetails() {
                 onItemSelected = { selected = it },
                 label = "Select Lesson"
             )
+
+            Spacer(Modifier.height(MaterialTheme.dimens.heightMedium))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.space6),
+            ) {
+                DetailsButton(
+                    modifier = Modifier.weight(1f),
+                    text = "Cancel",
+                    color = Color.White,
+                    icon = null,
+                    sizeIcon = null,
+                    onClick = { TODO() },
+                    textColor = colorResource(R.color.selectedBottom)
+                )
+                DetailsButton(
+                    modifier = Modifier.weight(1f),
+                    text = "Save Changes",
+                    color = colorResource(R.color.selectedBottom),
+                    icon = null,
+                    sizeIcon = null,
+                    onClick = { TODO() }
+                )
+            }
+
+
         }
     }
 }

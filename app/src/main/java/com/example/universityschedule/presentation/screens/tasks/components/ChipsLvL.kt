@@ -32,7 +32,7 @@ fun ChipsLvL(
     val priorities = listOf("Low", "Medium", "High")
     val priorityColors = mapOf(
         "Low" to Color(0xFF4CAF50),
-        "Medium" to Color(0xFF506EA8),
+        "Medium" to Color(0xFFFFC107),
         "High" to Color(0xFFF44336)
     )
 

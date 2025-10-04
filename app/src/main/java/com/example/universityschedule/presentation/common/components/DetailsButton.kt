@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import com.example.universityschedule.presentation.util.dimens
@@ -28,9 +29,12 @@ fun DetailsButton(
     modifier: Modifier,
     text: String,
     color: Color,
-    icon: Int,
-    sizeIcon: Dp,
-    onClick: () -> Unit
+    icon: Int?,
+    sizeIcon: Dp?,
+    onClick: () -> Unit,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.ExtraBold),
+    textColor: Color = MaterialTheme.colorScheme.onPrimary
+
 ) {
 
     Button(
@@ -54,17 +58,21 @@ fun DetailsButton(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                painter = painterResource(icon),
-                contentDescription = "edit",
-                modifier = Modifier
-                    .size(sizeIcon),
-            )
-            Spacer(Modifier.width(MaterialTheme.dimens.widthSmallMinus))
+            icon?.let { icon ->
+                sizeIcon?.let { size ->
+                    Icon(
+                        painter = painterResource(icon),
+                        contentDescription = "edit",
+                        modifier = Modifier
+                            .size(size),
+                    )
+                }
+                Spacer(Modifier.width(MaterialTheme.dimens.widthSmallMinus))
+            }
             Text(
                 text = text,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.ExtraBold
+                style = textStyle,
+                color = textColor
             )
         }
     }
