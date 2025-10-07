@@ -7,7 +7,7 @@ import com.example.universityschedule.data.repository.LessonRepositoryImpl
 import com.example.universityschedule.domain.repository.LessonRepository
 import com.example.universityschedule.data.repository.TaskRepositoryImpl
 import com.example.universityschedule.domain.repository.TaskRepository
-import com.example.universityschedule.presentation.navigation.NavigationManager
+import com.example.universityschedule.presentation.navigation.UIManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,5 +41,5 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNavigationManager() = NavigationManager()
+    fun provideNavigationManager() = UIManager()
 }

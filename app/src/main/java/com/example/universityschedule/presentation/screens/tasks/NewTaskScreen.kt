@@ -1,28 +1,36 @@
 package com.example.universityschedule.presentation.screens.tasks
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
+import com.example.universityschedule.presentation.common.components.PriorityChipsRow
 import com.example.universityschedule.presentation.screens.lessons.components.ChipsLessons
-import com.example.universityschedule.presentation.screens.tasks.components.ChipsLvL
 import com.example.universityschedule.presentation.common.components.UniversalTextField
-import com.example.universityschedule.presentation.screens.tasks.components.LessonChip
-import com.example.universityschedule.presentation.screens.tasks.components.Priority
+import com.example.universityschedule.presentation.screens.tasks.components.PriorityChipLarge
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
 import com.example.universityschedule.presentation.util.dimens
 
 @Composable
 fun NewTaskScreen(
     viewModel: TaskViewModel
 ) {
+
+    val snackBarHostState = remember { SnackbarHostState() }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,8 +52,11 @@ fun NewTaskScreen(
             onValueChange = { viewModel.dialogTitle.value = it },
             label = "Enter task title",
             placeholder = "Enter task title",
-            singleLine = true
+            singleLine = true,
+            maxChars = 30
         )
+
+        Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
 
         Text(
             "Description",
@@ -63,8 +74,12 @@ fun NewTaskScreen(
             singleLine = false,
             maxLines = 5,
             minHeight = 150.dp,
-            maxHeight = 300.dp
+            maxHeight = 300.dp,
+            maxChars = 100
         )
+
+        Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
+
 
         Text(
             "Due Date",
@@ -85,8 +100,12 @@ fun NewTaskScreen(
                     contentDescription = "calendar",
                     Modifier.size(23.dp)
                 )
-            }
+            },
+            maxChars = 20
         )
+
+        Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
+
 
         Text(
             "Priority",
@@ -94,18 +113,20 @@ fun NewTaskScreen(
             color = MaterialTheme.colorScheme.onSurface
         )
 
+        Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
 
-        ChipsLvL(
-            selectedPriority = viewModel.dialogPriority.value.name,
-            onPrioritySelected = { priorityName ->
-                val priority = Priority.valueOf(priorityName)
-                viewModel.dialogPriority.value = priority
-            }
-        )
+
+        PriorityChipsRow(
+            selectedPriority = viewModel.dialogPriority.value,
+            onPrioritySelected = { viewModel.dialogPriority.value = it },
+        ) { priority, isSelected, onClick ->
+            PriorityChipLarge(priority, isSelected, onClick)
+        }
+
+        Spacer(Modifier.height(MaterialTheme.dimens.heightSmallMinus))
 
         Text(
             "Related Lesson (Optional)",
-            modifier = Modifier.padding(top = MaterialTheme.dimens.space10),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )

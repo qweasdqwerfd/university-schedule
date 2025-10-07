@@ -1,7 +1,8 @@
-package com.example.universityschedule.presentation.screens.tasks.components
+package com.example.universityschedule.presentation.screens.tasks.components.dialog_controller
 
 import androidx.compose.runtime.MutableState
 import com.example.universityschedule.presentation.common.DialogEvent
+import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
 
 enum class Priority {
     Low, Medium, High
@@ -18,4 +19,5 @@ interface TaskDialogController {
     val dialogPriority: MutableState<Priority>
     val dialogRelatedLesson: MutableState<LessonChip>
     fun onDialogEvent(event: DialogEvent)
+    fun onBottomDialogEvent(event: DetailsEvent)
 }

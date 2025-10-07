@@ -35,7 +35,7 @@ fun <T> UniversalDropdown(
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
-            modifier = Modifier.menuAnchor()
+            modifier = Modifier.menuAnchor(),
         )
 
         ExposedDropdownMenu(

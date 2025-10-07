@@ -7,15 +7,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -25,16 +21,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 import com.example.universityschedule.domain.model.TaskItem
 import com.example.universityschedule.presentation.common.DialogEvent
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
 import com.example.universityschedule.presentation.util.dimens
 
 @Composable
@@ -58,9 +52,7 @@ fun CardTaskPanel(
     ) {
         Row(
             modifier = Modifier
-                .padding(MaterialTheme.dimens.space16)
-
-            ,
+                .padding(MaterialTheme.dimens.space16),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -74,7 +66,7 @@ fun CardTaskPanel(
                 if (item.check) {
                     Icon(
                         painter = painterResource(R.drawable.tick2),
-                        contentDescription = "",
+                        contentDescription = "tick",
                         modifier = Modifier
                             .size(MaterialTheme.dimens.iconSizeLargePlus)
                             .align(Alignment.Center),
@@ -84,32 +76,45 @@ fun CardTaskPanel(
 
                     Icon(
                         painter = painterResource(R.drawable.circle),
-                        contentDescription = "",
+                        contentDescription = "circle",
                         modifier = Modifier
                             .size(MaterialTheme.dimens.iconSizeMedium)
                             .align(Alignment.Center)
 
-                        )
+                    )
                 }
             }
-
-
 
 
             Spacer(modifier = Modifier.width(MaterialTheme.dimens.widthSmallPlus))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "${item.lessons} ${item.title}",
+                    text =
+                        if (item.lessons.name != LessonChip.NONE.name) {
+                            "${item.lessons} " +
+                                    if (item.title.length > 15)
+                                        item.title.take(15) + "..."
+                                    else " ${item.title}"
+                        } else {
+                            if (item.title.length > 15)
+                                item.title.take(15) + "..."
+                            else
+                                item.title
+                        },
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     textDecoration = if (item.check) TextDecoration.LineThrough else TextDecoration.None
                 )
                 Text(
-                    text = item.description,
+                    text =
+                        if (item.description.length > 20)
+                            item.description.take(20) + "..."
+                        else
+                            item.description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Gray,
-                    textDecoration = if (item.check) TextDecoration.LineThrough else TextDecoration.None
+                    textDecoration = if (item.check) TextDecoration.LineThrough else TextDecoration.None,
                 )
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.heightExtraSmall))
                 Row(
@@ -125,7 +130,11 @@ fun CardTaskPanel(
                             tint = Color.Gray
                         )
                         Text(
-                            text = item.dueDate,
+                            text =
+                                if (item.dueDate.length > 15)
+                                    item.dueDate.take(15) + "..."
+                                else
+                                    item.dueDate,
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Gray,
                             modifier = Modifier.padding(start = MaterialTheme.dimens.space4),

@@ -3,64 +3,57 @@ package com.example.universityschedule.presentation.screens.tasks.details.compon
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 import com.example.universityschedule.presentation.common.components.DetailsButton
 import com.example.universityschedule.presentation.common.components.PriorityChipsRow
 import com.example.universityschedule.presentation.common.components.UniversalDropdown
 import com.example.universityschedule.presentation.common.components.UniversalTextField
-import com.example.universityschedule.presentation.screens.tasks.components.Priority
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
+import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
+import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsViewModel
 import com.example.universityschedule.presentation.util.dimens
 
-@Preview
-@SuppressLint("RememberReturnType")
+@SuppressLint("RememberReturnType", "UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModalBottomSheetDetails() {
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true
-    )
-    var isSheetOpen by remember { mutableStateOf(false) }
-    val titleState = remember { mutableStateOf("") }
-    val descriptionState = remember { mutableStateOf("") }
-    val priorityState = remember { mutableStateOf(Priority.Medium) }
-    val lessons = listOf(
-        "math",
-        "programming",
-        "algorithms"
-    )
-    var selected by remember { mutableStateOf("Literature") }
+fun ModalBottomSheetDetails(
+    sheetState: SheetState,
+    onDismiss: () -> Unit,
+    title: MutableState<String>,
+    description: MutableState<String>,
+    selectedLesson: MutableState<LessonChip>,
+    dueDate: MutableState<String>,
+    dialogPriority: MutableState<Priority>,
+    check: MutableState<Boolean>,
+    lessonList: MutableState<List<LessonChip>>,
+    viewModel: TaskDetailsViewModel
+) {
 
-    var dialogPriority = remember { mutableStateOf(Priority.Medium) }
-
-    LaunchedEffect(Unit) {
-        try {
-            sheetState.show() // suspend - работает внутри LaunchedEffect
-        } catch (_: Exception) { /* preview может кидать, игнорируем */ }
-    }
-
-    ModalBottomSheet(onDismissRequest = { isSheetOpen = false }, sheetState = sheetState) {
+    ModalBottomSheet(onDismissRequest = { onDismiss }, sheetState = sheetState) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -81,28 +74,34 @@ fun ModalBottomSheetDetails() {
             Spacer(Modifier.height(MaterialTheme.dimens.heightSmallPlus))
 
             UniversalTextField(
-                value = titleState.value,
-                onValueChange = { titleState.value = it },
+                value = title.value,
+                onValueChange = { title.value = it },
                 label = "Title",
                 placeholder = "Enter task title",
                 singleLine = true,
             )
             UniversalTextField(
-                value =
-                    descriptionState.value,
+                value = description.value,
                 onValueChange = {
-                    descriptionState.value = it
+                    description.value = it
                 },
                 label = "Description",
                 placeholder = "Enter task description",
                 singleLine = false,
                 maxLines = 3
             )
-
+            UniversalTextField(
+                value = dueDate.value,
+                onValueChange = { dueDate.value = it },
+                label = "Due Date",
+                placeholder = "Enter due date",
+                singleLine = true
+            )
 
             Text(
                 "Priority",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
@@ -118,19 +117,48 @@ fun ModalBottomSheetDetails() {
 
             Text(
                 "Related Lesson",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
 
             UniversalDropdown(
-                items = lessons,
-                selectedItem = selected,
-                onItemSelected = { selected = it },
+                items = lessonList.value,
+                selectedItem = selectedLesson.value,
+                onItemSelected = { lesson ->
+                    selectedLesson.value = lesson
+                },
                 label = "Select Lesson"
             )
 
-            Spacer(Modifier.height(MaterialTheme.dimens.heightMedium))
+            Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmallPlus))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 0.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Box(modifier = Modifier.offset(x = (-12).dp)) {
+                    Checkbox(
+                        checked = check.value,
+                        onCheckedChange = { check.value = it }
+                    )
+                }
+
+                Text(
+                    "Done",
+                    modifier = Modifier.offset(x = (-10).dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+
+
+            }
+            Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmallPlus))
 
             Row(
                 modifier = Modifier
@@ -143,7 +171,7 @@ fun ModalBottomSheetDetails() {
                     color = Color.White,
                     icon = null,
                     sizeIcon = null,
-                    onClick = { TODO() },
+                    onClick = { viewModel.onBottomDialogEvent(DetailsEvent.OnCancel) },
                     textColor = colorResource(R.color.selectedBottom)
                 )
                 DetailsButton(
@@ -152,7 +180,7 @@ fun ModalBottomSheetDetails() {
                     color = colorResource(R.color.selectedBottom),
                     icon = null,
                     sizeIcon = null,
-                    onClick = { TODO() }
+                    onClick = { viewModel.onBottomDialogEvent(DetailsEvent.OnConfirm) }
                 )
             }
 

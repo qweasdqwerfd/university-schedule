@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.universityschedule.presentation.screens.tasks.components.Priority
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
 
 @Composable
 fun PriorityChipsRow(

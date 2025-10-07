@@ -1,5 +1,8 @@
 package com.example.universityschedule.presentation.top_bar
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,13 +14,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.universityschedule.R
 import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.common.components.IconTopButton
 import com.example.universityschedule.presentation.navigation.Screen
@@ -38,6 +45,12 @@ fun TopBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: ""
 
+
+    val sortByPriority by taskViewModel.sortByPriority.collectAsState()
+    val rotation by animateFloatAsState(
+        targetValue = if (sortByPriority) 180f else 0f,
+        animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing)
+    )
 
 
     Column {
@@ -62,11 +75,28 @@ fun TopBar(
                 )
             },
             actions = {
+                if (currentRoute == Screen.TASKS.route) {
+                    IconTopButton(
+                        onClick = {
+                            taskViewModel.toggleSort()
+                        },
+                        icon = painterResource(R.drawable.voronka),
+                        contentDescription = "voronka",
+                        size = 20.dp,
+                        modifier = Modifier.graphicsLayer {
+                            rotationZ = rotation
+                        }
+                    )
+                }
                 if (currentRoute == Screen.ADD_TASK.route) {
                     IconTopButton(
                         onClick = {
                             taskViewModel.onDialogEvent(DialogEvent.OnConfirm)
                         },
+//                        enabled =
+//                            taskViewModel.dialogTitle.value.isNotBlank() &&
+//                            taskViewModel.dialogDescription.value.isNotBlank() &&
+//                            taskViewModel.dialogDueDate.value.isNotBlank(),
                         icon = Icons.Default.Check,
                         contentDescription = "ok"
                     )
@@ -86,7 +116,7 @@ fun TopBar(
 
                     IconTopButton(
                         onClick = {
-                            taskDetailsViewModel.onDialogEvent(DetailsEvent.OnCancel)
+                            taskDetailsViewModel.onBottomDialogEvent(DetailsEvent.OnCancel)
                         },
                         icon = Icons.Default.ArrowBack,
                         contentDescription = "back"

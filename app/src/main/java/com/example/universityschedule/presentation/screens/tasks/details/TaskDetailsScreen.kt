@@ -17,11 +17,15 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,15 +36,31 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.universityschedule.R
 import com.example.universityschedule.R.drawable
 import com.example.universityschedule.presentation.common.components.DetailsButton
+import com.example.universityschedule.presentation.screens.tasks.details.components.ModalBottomSheetDetails
+import com.example.universityschedule.presentation.util.Constants.lessonsColors
 import com.example.universityschedule.presentation.util.dimens
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskDetailsScreen(
     taskId: Int,
     viewModel: TaskDetailsViewModel,
 ) {
 
+
+
+
     val task by viewModel.task.collectAsState()
+
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+
+    LaunchedEffect(sheetState.currentValue) {                                                //fix bug
+        if (sheetState.currentValue == SheetValue.Hidden) {
+            viewModel.isSheetOpen.value = false
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -219,7 +239,7 @@ fun TaskDetailsScreen(
                         modifier = Modifier
                             .height(MaterialTheme.dimens.heightLarge)
                             .width(MaterialTheme.dimens.widthSmallExtra),
-                        color = Color.Green,
+                        color = lessonsColors[viewModel.dialogRelatedLesson.value.name]!!,
                         thickness = MaterialTheme.dimens.thicknessExtraSmall
                     )
 
@@ -310,8 +330,11 @@ fun TaskDetailsScreen(
                 color = Color(0xFF4f6fa7),
                 icon = drawable.edit,
                 sizeIcon = MaterialTheme.dimens.iconSizeMedium,
-                onClick = { TODO() },
+                onClick = {
+                    viewModel.onBottomDialogEvent(DetailsEvent.Edit)
+                },
             )
+
             DetailsButton(
                 modifier = Modifier.weight(1f),
                 text = "Delete Task",
@@ -319,9 +342,24 @@ fun TaskDetailsScreen(
                 icon = drawable.trash,
                 sizeIcon = MaterialTheme.dimens.iconSizeSmallPlus,
                 onClick = {
-                    viewModel.onDialogEvent(DetailsEvent.Delete)
+                    viewModel.onBottomDialogEvent(DetailsEvent.Delete)
                 }
             )
+
         }
     }
+
+    if (viewModel.isSheetOpen.value)
+        ModalBottomSheetDetails(
+            sheetState = sheetState,
+            onDismiss = { viewModel.onBottomDialogEvent(DetailsEvent.OnCancel) },
+            title = viewModel.dialogTitle,
+            description = viewModel.dialogDescription,
+            selectedLesson = viewModel.dialogRelatedLesson,
+            dueDate = viewModel.dialogDueDate,
+            dialogPriority = viewModel.dialogPriority,
+            check = viewModel.checkState,
+            lessonList = viewModel.listLessons,
+            viewModel = viewModel
+        )
 }

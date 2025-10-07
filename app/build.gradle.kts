@@ -4,9 +4,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     id("org.jetbrains.kotlin.kapt")
     id("org.jetbrains.kotlin.plugin.compose") version "2.0.21"
-
 }
-
 
 android {
     namespace = "com.example.universityschedule"
@@ -31,42 +29,44 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-
-    // The view calendar library for Android
+    // Calendar libraries
     implementation("com.kizitonwose.calendar:view:2.0.0")
-
-    // The compose calendar library for Android
     implementation("com.kizitonwose.calendar:compose:2.0.0")
 
-
-
-    //fix bug CreationExtras must have a value by `SAVED_STATE_REGISTRY_OWNER_KEY`
+    // Navigation
     implementation("androidx.navigation:navigation-compose:2.9.3")
 
-    //additions
+    // Compose
     implementation("androidx.compose.compiler:compiler:1.5.0")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.1")
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
 
     // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.ads.mobile.sdk)
-    implementation(libs.androidx.compose.foundation.layout)
-    implementation(libs.androidx.compose.ui.test)
-    implementation(libs.androidx.compose.testing)
     kapt(libs.androidx.room.compiler)
 
     // Hilt
@@ -74,26 +74,20 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
-    // Compose
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    kapt(libs.androidx.room.compiler)
-
-    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
+    // Accompanist
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
     implementation("com.google.accompanist:accompanist-pager:0.28.0")
 
     // Testing
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+
+    // AndroidX Test (фикс конфликтов)
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.9.1")
+
+    // Debug
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

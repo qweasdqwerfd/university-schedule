@@ -6,5 +6,5 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NavGraphViewModel @Inject constructor(
-    val navigationManager: NavigationManager
+    val UIManager: UIManager
 ) : ViewModel()

@@ -21,6 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
+import com.example.universityschedule.presentation.util.Constants.lessonsColors
+import com.example.universityschedule.presentation.util.Constants.lessonsList
 
 @Composable
 fun ChipsLessons(
@@ -28,18 +30,6 @@ fun ChipsLessons(
     selectLessons: (String) -> Unit,
     enabled: Boolean = true,
 ) {
-
-    val lessonsList = listOf("NONE", "CALCULUS", "PHYSICS", "MATH", "PROGRAMMING", "SPORT")
-    val lessonsColors = mapOf(
-        "NONE" to Color.Blue,
-        "CALCULUS" to Color(0xFFF0A62B),
-        "CALCULUS" to Color(0xFF31b947),
-        "MATH" to Color(0xFF24afb5),
-        "PROGRAMMING" to Color(0xFFf6c610),
-        "SPORT" to Color(0xFFca2244)
-    )
-
-
 
     Row(
         modifier = Modifier

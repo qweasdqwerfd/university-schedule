@@ -47,6 +47,7 @@ data class Dimens(
     val fabSize: Dp = 56.dp,
 
     val heightSmall: Dp = 16.dp,
+    val heightSmallMinus: Dp = 10.dp,
     val heightSmallPlus: Dp = 20.dp,
     val heightSmallExtend: Dp = 25.dp,
     val heightExtraSmall: Dp = 8.dp,
@@ -96,6 +97,7 @@ data class Dimens(
     val widthSmall: Dp = 8.dp,
     val widthSmallMinus: Dp = 5.dp,
     val widthOne: Dp = 1.dp,
+    val widthTwo: Dp = 2.dp,
 
     // ----- Thickness (толщина) -----
 

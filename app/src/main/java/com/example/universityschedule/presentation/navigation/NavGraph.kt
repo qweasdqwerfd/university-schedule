@@ -3,10 +3,9 @@ package com.example.universityschedule.presentation.navigation
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -16,9 +15,9 @@ import androidx.navigation.navArgument
 import com.example.universityschedule.presentation.screens.calendar.CalendarScreen
 import com.example.universityschedule.presentation.screens.lessons.LessonsScreen
 import com.example.universityschedule.presentation.screens.tasks.NewTaskScreen
-import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsScreen
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.screens.tasks.TasksScreen
+import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsScreen
 import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsViewModel
 
 @SuppressLint("UnrememberedGetBackStackEntry")
@@ -26,19 +25,28 @@ import com.example.universityschedule.presentation.screens.tasks.details.TaskDet
 @Composable
 fun NavGraph(
     navHostController: NavHostController,
+    snackBarHostState: SnackbarHostState,
 ) {
 
     val navGraphViewModel: NavGraphViewModel = hiltViewModel()
-    val navigationManager = navGraphViewModel.navigationManager
+    val uiManager = navGraphViewModel.UIManager
 
-    val navCommand by navigationManager.commands.collectAsState(initial = null)
-
-    LaunchedEffect(navCommand) {
-        navCommand?.let {
-            when (it) {
+    LaunchedEffect(Unit) {
+        uiManager.commands.collect { command ->                                                     //collectLatest fix bug
+            when (command) {
                 is NavigationCommand.Back -> navHostController.popBackStack()
-                is NavigationCommand.To -> navHostController.navigate(it.route)
+                is NavigationCommand.To -> navHostController.navigate(command.route)
             }
+        }
+    }
+
+    LaunchedEffect(uiManager.snackBarCommands) {
+        uiManager.snackBarCommands.collect { data ->
+            snackBarHostState.showSnackbar(
+                message = data.message,
+                actionLabel = data.type.name,
+                duration = data.duration
+            )
         }
     }
 

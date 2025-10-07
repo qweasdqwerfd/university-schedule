@@ -30,7 +30,8 @@ fun UniversalTextField(
     minHeight: Dp = Dp.Unspecified,
     maxHeight: Dp = Dp.Unspecified,
     leadingIcon: @Composable (() -> Unit)? = null,
-    errorMessage: String = "Field cannot be empty"
+    errorMessage: String = "Field cannot be empty",
+    maxChars: Int = Int.MAX_VALUE,
 ) {
     val focusManager = LocalFocusManager.current
     var isError by remember { mutableStateOf(false) }
@@ -38,8 +39,10 @@ fun UniversalTextField(
     OutlinedTextField(
         value = value,
         onValueChange = {
-            onValueChange(it)
-            isError = it.isBlank()
+            if (it.length <= maxChars) {
+                onValueChange(it)
+                isError = it.isBlank()
+            }
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
@@ -53,8 +56,9 @@ fun UniversalTextField(
         maxLines = maxLines,
         isError = isError,
         supportingText = {
-            if (isError) {
-                Text(errorMessage, color = MaterialTheme.colorScheme.error)
+            when {
+                isError -> Text(errorMessage, color = MaterialTheme.colorScheme.error)
+                maxChars != Int.MAX_VALUE -> Text("${value.length} / $maxChars")
             }
         }
     )
