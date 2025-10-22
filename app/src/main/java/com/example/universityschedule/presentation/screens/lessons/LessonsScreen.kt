@@ -15,28 +15,33 @@ import com.example.universityschedule.presentation.screens.lessons.components.le
 @Composable
 fun LessonsScreen() {
 
-    ScrollableTabRowPager(
-        tabs = listOf(
-            "All",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday"
-        ),
-        pages = listOf(
-            { AllTabLessons() },
-            { MondayTabLessons() },
-            { TuesdayTabLessons() },
-            { WednesdayTabLessons() },
-            { ThursdayTabLessons() },
-            { FridayTabLessons() },
-            { SaturdayTabLessons() },
-            { SundayTabLessons() },
-        ),
-    )
+//    ScrollableTabRowPager(
+//        tabs = listOf(
+//            "All",
+//            "Monday",
+//            "Tuesday",
+//            "Wednesday",
+//            "Thursday",
+//            "Friday",
+//            "Saturday",
+//            "Sunday"
+//        ),
+//        pages = listOf(
+//            { AllTabLessons() },
+//            { MondayTabLessons() },
+//            { TuesdayTabLessons() },
+//            { WednesdayTabLessons() },
+//            { ThursdayTabLessons() },
+//            { FridayTabLessons() },
+//            { SaturdayTabLessons() },
+//            { SundayTabLessons() },
+//        ),
+//    )
+
+
+
+
+
 
     FAB {
 

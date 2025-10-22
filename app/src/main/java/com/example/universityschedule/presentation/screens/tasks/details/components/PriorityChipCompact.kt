@@ -10,28 +10,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Displayable
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
 
 @Composable
-fun PriorityChipCompact(
-    priority: Priority,
+inline fun <reified T> PriorityChipCompact(
+    item: T,
     isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    val colors = mapOf(
-        Priority.Low to Color(0xFF4CAF50),
-        Priority.Medium to Color(0xFFFFC107),
-        Priority.High to Color(0xFFF44336)
-    )
+    noinline onClick: () -> Unit,
+    noinline colorProvider: (T) -> Color
+) where T : Enum<T>, T : Displayable {
 
-    val containerColor = colors[priority]!!
+    val containerColor = colorProvider(item)
 
     FilterChip(
         selected = isSelected,
         onClick = onClick,
         label = {
             Text(
-                text = priority.name,
+                text = item.displayName,
                 fontSize = 14.sp,
                 color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
             )

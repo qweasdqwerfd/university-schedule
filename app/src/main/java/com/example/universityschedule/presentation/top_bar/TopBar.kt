@@ -19,13 +19,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.universityschedule.R
 import com.example.universityschedule.presentation.common.DialogEvent
+import com.example.universityschedule.presentation.common.components.IconSpec
 import com.example.universityschedule.presentation.common.components.IconTopButton
 import com.example.universityschedule.presentation.navigation.Screen
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
@@ -60,11 +61,11 @@ fun TopBar(
             title = {
                 Text(
                     text = when (currentRoute) {
-                        Screen.CALENDAR.route -> "University Schedule"
-                        Screen.TASKS.route -> "Tasks"
-                        Screen.ADD_TASK.route -> "Add New Task"
-                        Screen.TASK_DETAILS.route -> "Task Details"
-                        else -> "Lessons"
+                        Screen.CALENDAR.route -> "Расписание университета"
+                        Screen.TASKS.route -> "Задачи"
+                        Screen.ADD_TASK.route -> "Добавить задачу"
+                        Screen.TASK_DETAILS.route -> "Детали задачи"
+                        else -> "Пары"
                     },
                     modifier = when (currentRoute) {
                         Screen.ADD_TASK.route -> Modifier.padding(start = MaterialTheme.dimens.space10)
@@ -80,12 +81,13 @@ fun TopBar(
                         onClick = {
                             taskViewModel.toggleSort()
                         },
-                        icon = painterResource(R.drawable.voronka),
+                        iconSpec = IconSpec.PainterRes(R.drawable.voronka),
                         contentDescription = "voronka",
                         size = 20.dp,
                         modifier = Modifier.graphicsLayer {
                             rotationZ = rotation
-                        }
+                        },
+                        buttonSize = 30.dp
                     )
                 }
                 if (currentRoute == Screen.ADD_TASK.route) {
@@ -97,8 +99,8 @@ fun TopBar(
 //                            taskViewModel.dialogTitle.value.isNotBlank() &&
 //                            taskViewModel.dialogDescription.value.isNotBlank() &&
 //                            taskViewModel.dialogDueDate.value.isNotBlank(),
-                        icon = Icons.Default.Check,
-                        contentDescription = "ok"
+                        iconSpec = IconSpec.Vector(Icons.Default.Check),
+                        contentDescription = "ok",
                     )
                 }
             },
@@ -108,8 +110,8 @@ fun TopBar(
                         onClick = {
                             taskViewModel.onDialogEvent(DialogEvent.OnCancel)
                         },
-                        icon = Icons.Default.ArrowBack,
-                        contentDescription = "back"
+                        iconSpec = IconSpec.Vector(Icons.Default.ArrowBack),
+                        contentDescription = "back",
                     )
                 }
                 if (currentRoute == Screen.TASK_DETAILS.route) {
@@ -118,7 +120,7 @@ fun TopBar(
                         onClick = {
                             taskDetailsViewModel.onBottomDialogEvent(DetailsEvent.OnCancel)
                         },
-                        icon = Icons.Default.ArrowBack,
+                        iconSpec = IconSpec.Vector(Icons.Default.ArrowBack),
                         contentDescription = "back"
                     )
                 }

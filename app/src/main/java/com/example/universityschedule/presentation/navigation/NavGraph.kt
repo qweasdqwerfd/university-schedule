@@ -53,7 +53,7 @@ fun NavGraph(
 
     val taskViewModel: TaskViewModel = hiltViewModel()
 
-    NavHost(navController = navHostController, startDestination = Screen.TASKS.route) {
+    NavHost(navController = navHostController, startDestination = Screen.CALENDAR.route) {
         composable(Screen.CALENDAR.route) {
             CalendarScreen()
         }

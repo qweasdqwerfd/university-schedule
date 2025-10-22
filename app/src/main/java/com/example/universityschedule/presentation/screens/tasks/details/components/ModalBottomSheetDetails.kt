@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -28,11 +27,12 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 import com.example.universityschedule.presentation.common.components.DetailsButton
-import com.example.universityschedule.presentation.common.components.PriorityChipsRow
+import com.example.universityschedule.presentation.common.components.EnumChipsRow
 import com.example.universityschedule.presentation.common.components.UniversalDropdown
 import com.example.universityschedule.presentation.common.components.UniversalTextField
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.PriorityColor
 import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
 import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsViewModel
 import com.example.universityschedule.presentation.util.dimens
@@ -67,7 +67,7 @@ fun ModalBottomSheetDetails(
             Spacer(Modifier.height(MaterialTheme.dimens.heightMedium))
 
             Text(
-                "Edit Task",
+                "Изменить задачу",
                 style = MaterialTheme.typography.titleLarge
             )
 
@@ -76,8 +76,8 @@ fun ModalBottomSheetDetails(
             UniversalTextField(
                 value = title.value,
                 onValueChange = { title.value = it },
-                label = "Title",
-                placeholder = "Enter task title",
+                label = "Заголовок",
+                placeholder = "Введите название задачи",
                 singleLine = true,
             )
             UniversalTextField(
@@ -85,38 +85,49 @@ fun ModalBottomSheetDetails(
                 onValueChange = {
                     description.value = it
                 },
-                label = "Description",
-                placeholder = "Enter task description",
+                label = "Описание",
+                placeholder = "Введите описание задачи",
                 singleLine = false,
                 maxLines = 3
             )
             UniversalTextField(
                 value = dueDate.value,
                 onValueChange = { dueDate.value = it },
-                label = "Due Date",
-                placeholder = "Enter due date",
+                label = "Установленный срок",
+                placeholder = "Введите установленный срок",
                 singleLine = true
             )
 
             Text(
-                "Priority",
+                "Приоритет",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
 
-            PriorityChipsRow(
-                selectedPriority = dialogPriority.value,
-                onPrioritySelected = { dialogPriority.value = it },
-            ) { priority, isSelected, onClick ->
-                PriorityChipCompact(priority, isSelected, onClick)
+            EnumChipsRow(
+                selectedItem = dialogPriority.value,
+                onItemSelected = { dialogPriority.value = it },
+            ) { item, isSelected, onClick ->
+                PriorityChipCompact(
+                    item = item,
+                    isSelected = isSelected,
+                    onClick = onClick,
+                    colorProvider = { enumItem ->
+                        when (enumItem) {
+                            Priority.Low -> PriorityColor.LOW.color
+                            Priority.High -> PriorityColor.HIGH.color
+                            else -> PriorityColor.MEDIUM.color
+                        }
+                    },
+                )
             }
 
             Spacer(Modifier.height(MaterialTheme.dimens.heightSmallPlus))
 
             Text(
-                "Related Lesson",
+                "Связанная дисциплина",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -129,7 +140,7 @@ fun ModalBottomSheetDetails(
                 onItemSelected = { lesson ->
                     selectedLesson.value = lesson
                 },
-                label = "Select Lesson"
+                label = "Выбрать дисциплину"
             )
 
             Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmallPlus))
@@ -149,7 +160,7 @@ fun ModalBottomSheetDetails(
                 }
 
                 Text(
-                    "Done",
+                    "Выполнено",
                     modifier = Modifier.offset(x = (-10).dp),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
@@ -167,7 +178,7 @@ fun ModalBottomSheetDetails(
             ) {
                 DetailsButton(
                     modifier = Modifier.weight(1f),
-                    text = "Cancel",
+                    text = "Отменить",
                     color = Color.White,
                     icon = null,
                     sizeIcon = null,
@@ -176,7 +187,7 @@ fun ModalBottomSheetDetails(
                 )
                 DetailsButton(
                     modifier = Modifier.weight(1f),
-                    text = "Save Changes",
+                    text = "Сохранить",
                     color = colorResource(R.color.selectedBottom),
                     icon = null,
                     sizeIcon = null,

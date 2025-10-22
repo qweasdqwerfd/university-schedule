@@ -36,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.universityschedule.R
 import com.example.universityschedule.R.drawable
 import com.example.universityschedule.presentation.common.components.DetailsButton
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.PriorityColor
 import com.example.universityschedule.presentation.screens.tasks.details.components.ModalBottomSheetDetails
 import com.example.universityschedule.presentation.util.Constants.lessonsColors
 import com.example.universityschedule.presentation.util.dimens
@@ -47,10 +49,8 @@ fun TaskDetailsScreen(
     viewModel: TaskDetailsViewModel,
 ) {
 
-
-
-
     val task by viewModel.task.collectAsState()
+
 
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -105,7 +105,11 @@ fun TaskDetailsScreen(
             modifier = Modifier
                 .padding(top = MaterialTheme.dimens.space4)
                 .background(
-                    color = Color(0xFFf7c602),
+                    color = when (task?.priority?.name) {
+                        Priority.Low.name -> PriorityColor.LOW.color
+                        Priority.High.name -> PriorityColor.HIGH.color
+                        else -> PriorityColor.MEDIUM.color
+                    },
                     shape = RoundedCornerShape(MaterialTheme.dimens.cornerLarge)
                 )
                 .padding(
@@ -132,7 +136,7 @@ fun TaskDetailsScreen(
                 Spacer(modifier = Modifier.width(MaterialTheme.dimens.space8))
 
                 Text(
-                    text = "${task?.priority} Priority",
+                    text = "${task?.priority?.displayName} приоритет",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.Bold,
@@ -174,7 +178,7 @@ fun TaskDetailsScreen(
                     )
                     Spacer(Modifier.width(MaterialTheme.dimens.widthSmall))
                     Text(
-                        text = "Due Date",
+                        text = "Установленный срок",
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.align(Alignment.CenterVertically)
@@ -224,7 +228,7 @@ fun TaskDetailsScreen(
                     )
                     Spacer(Modifier.width(MaterialTheme.dimens.widthSmall))
                     Text(
-                        text = "Related Lesson",
+                        text = "Связанный урок",
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.align(Alignment.CenterVertically)
@@ -247,7 +251,7 @@ fun TaskDetailsScreen(
                     Column {
 
                         Text(
-                            text = task?.lessons.toString(),
+                            text = task?.lessons?.displayName.toString(),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -302,7 +306,7 @@ fun TaskDetailsScreen(
                     ),
             ) {
                 Text(
-                    text = "Description",
+                    text = "Описание",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
@@ -326,7 +330,7 @@ fun TaskDetailsScreen(
         ) {
             DetailsButton(
                 modifier = Modifier.weight(1f),
-                text = "Edit Task",
+                text = "Изменить",
                 color = Color(0xFF4f6fa7),
                 icon = drawable.edit,
                 sizeIcon = MaterialTheme.dimens.iconSizeMedium,
@@ -337,7 +341,7 @@ fun TaskDetailsScreen(
 
             DetailsButton(
                 modifier = Modifier.weight(1f),
-                text = "Delete Task",
+                text = "Удалить",
                 color = Color(0xFFE01C42),
                 icon = drawable.trash,
                 sizeIcon = MaterialTheme.dimens.iconSizeSmallPlus,

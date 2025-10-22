@@ -12,15 +12,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Displayable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T> UniversalDropdown(
+inline fun <reified T> UniversalDropdown(
     items: List<T>,
     selectedItem: T,
-    onItemSelected: (T) -> Unit,
-    label: String = ""
-) {
+    noinline onItemSelected: (T) -> Unit,
+    label: String = "",
+    noinline labelProvider: (T) -> String = { it.displayName }
+) where T : Enum<T>, T : Displayable {
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
@@ -28,7 +30,7 @@ fun <T> UniversalDropdown(
         onExpandedChange = { expanded = !expanded }
     ) {
         OutlinedTextField(
-            value = selectedItem.toString(),
+            value = selectedItem.displayName,
             onValueChange = {},
             readOnly = true,
             label = { Text(label) },
@@ -44,7 +46,7 @@ fun <T> UniversalDropdown(
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
-                    text = { Text(item.toString()) },
+                    text = { Text(labelProvider(item)) },
                     onClick = {
                         onItemSelected(item)
                         expanded = false

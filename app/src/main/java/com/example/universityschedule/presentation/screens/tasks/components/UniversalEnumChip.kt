@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -19,25 +18,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.universityschedule.R
+import com.example.universityschedule.presentation.screens.lessons.LessonColor
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Displayable
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
 
 @Composable
-fun PriorityChipLarge(
-    priority: Priority,
+inline fun <reified T> UniversalEnumChip(
+    item: T,
     isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    val priorityColors = mapOf(
-        Priority.Low to Color(0xFF4CAF50),
-        Priority.Medium to Color(0xFF506EA8),
-        Priority.High to Color(0xFFF44336)
-    )
+    noinline onClick: () -> Unit,
+    icon: Int? = null,
+    noinline colorProvider: (T) -> Color ,
+    noinline labelProvider: (T) -> String = { it.displayName }
+) where T : Enum<T>, T : Displayable {
 
-    val containerColor = priorityColors[priority] ?: Color.Gray
+    val containerColor = colorProvider(item)
 
     val chipColors = FilterChipDefaults.filterChipColors(
         containerColor = Color.Transparent,
@@ -52,6 +49,7 @@ fun PriorityChipLarge(
         enabled = true
     )
 
+
     FilterChip(
         selected = isSelected,
         onClick = onClick,
@@ -60,15 +58,17 @@ fun PriorityChipLarge(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.warn),
-                    contentDescription = "Priority icon",
-                    tint = if (isSelected) Color.White else containerColor,
-                    modifier = Modifier.size(14.dp)
-                )
-                Spacer(modifier = Modifier.width(6.dp))
+                icon?.let {
+                    Icon(
+                        painter = painterResource(it),
+                        contentDescription = null,
+                        tint = if (isSelected) Color.White else containerColor,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                }
                 Text(
-                    text = priority.name.replaceFirstChar { it.uppercase() },
+                    text = labelProvider(item),
                     fontSize = 15.sp,
                     color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
                 )

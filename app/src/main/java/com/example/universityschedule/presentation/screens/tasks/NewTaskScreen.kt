@@ -13,23 +13,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
-import com.example.universityschedule.presentation.common.components.PriorityChipsRow
-import com.example.universityschedule.presentation.screens.lessons.components.ChipsLessons
+import com.example.universityschedule.presentation.common.components.EnumChipsRow
 import com.example.universityschedule.presentation.common.components.UniversalTextField
-import com.example.universityschedule.presentation.screens.tasks.components.PriorityChipLarge
+import com.example.universityschedule.presentation.screens.lessons.LessonColor
+import com.example.universityschedule.presentation.screens.tasks.components.UniversalEnumChip
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
+import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.PriorityColor
+import com.example.universityschedule.presentation.util.Blue
 import com.example.universityschedule.presentation.util.dimens
 
 @Composable
 fun NewTaskScreen(
     viewModel: TaskViewModel
 ) {
-
-    val snackBarHostState = remember { SnackbarHostState() }
 
     Column(
         modifier = Modifier
@@ -42,7 +43,7 @@ fun NewTaskScreen(
 
     ) {
         Text(
-            "Title",
+            "Заголовок",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
@@ -50,16 +51,15 @@ fun NewTaskScreen(
         UniversalTextField(
             value = viewModel.dialogTitle.value,
             onValueChange = { viewModel.dialogTitle.value = it },
-            label = "Enter task title",
-            placeholder = "Enter task title",
-            singleLine = true,
+            label = "Введите название задачи",
+            placeholder = "Введите название задачи",
             maxChars = 30
         )
 
         Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
 
         Text(
-            "Description",
+            "Описание",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
 
@@ -69,8 +69,8 @@ fun NewTaskScreen(
         UniversalTextField(
             value = viewModel.dialogDescription.value,
             onValueChange = { viewModel.dialogDescription.value = it },
-            label = "Enter task description",
-            placeholder = "Enter task description",
+            label = "Введите описание задачи",
+            placeholder = "Введите описание задачи",
             singleLine = false,
             maxLines = 5,
             minHeight = 150.dp,
@@ -82,7 +82,7 @@ fun NewTaskScreen(
 
 
         Text(
-            "Due Date",
+            "Установленный срок",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
@@ -91,8 +91,8 @@ fun NewTaskScreen(
         UniversalTextField(
             value = viewModel.dialogDueDate.value,
             onValueChange = { viewModel.dialogDueDate.value = it },
-            label = "Mon, Mar 31, 09:42 PM",
-            placeholder = "Enter task due date",
+            label = "Пон, Март 31, 09:42",
+            placeholder = "Введите установленный срок",
             singleLine = true,
             leadingIcon = {
                 Icon(
@@ -108,7 +108,7 @@ fun NewTaskScreen(
 
 
         Text(
-            "Priority",
+            "Приоритет",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
@@ -116,27 +116,57 @@ fun NewTaskScreen(
         Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
 
 
-        PriorityChipsRow(
-            selectedPriority = viewModel.dialogPriority.value,
-            onPrioritySelected = { viewModel.dialogPriority.value = it },
-        ) { priority, isSelected, onClick ->
-            PriorityChipLarge(priority, isSelected, onClick)
+        EnumChipsRow(
+            selectedItem = viewModel.dialogPriority.value,
+            onItemSelected = { viewModel.dialogPriority.value = it },
+        ) { item, isSelected, onClick ->
+            UniversalEnumChip(
+                item = item,
+                isSelected = isSelected,
+                onClick = onClick,
+                colorProvider = { enumItem ->
+                    when (enumItem) {
+                        Priority.Low -> PriorityColor.LOW.color
+                        Priority.High -> PriorityColor.HIGH.color
+                        else -> PriorityColor.MEDIUM.color
+                    }
+                },
+
+            )
         }
 
         Spacer(Modifier.height(MaterialTheme.dimens.heightSmallMinus))
 
         Text(
-            "Related Lesson (Optional)",
+            "Связанная дисциплина",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        ChipsLessons(
-            selectedLessons = viewModel.dialogRelatedLesson.value.name,
-            selectLessons = { lessonName ->
-                val lesson = LessonChip.valueOf(lessonName)
-                viewModel.dialogRelatedLesson.value = lesson
-            }
-        )
+        Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
+
+
+        EnumChipsRow(
+            selectedItem = viewModel.dialogRelatedLesson.value,
+            onItemSelected = { viewModel.dialogRelatedLesson.value = it }
+        ) { item, isSelected, onClick ->
+            UniversalEnumChip(
+                item = item,
+                isSelected = isSelected,
+                onClick = onClick,
+                icon = R.drawable.lessons,
+                colorProvider = { enumItem ->
+                    when (enumItem) {
+                        LessonChip.MATH -> LessonColor.ORANGE.color
+                        LessonChip.CALCULUS -> LessonColor.RED.color
+                        LessonChip.NONE -> LessonColor.BLUE.color
+                        LessonChip.SPORT -> LessonColor.CYAN.color
+                        LessonChip.PHYSICS -> LessonColor.GREEN.color
+                        LessonChip.CHEMISTRY -> LessonColor.YELLOW.color
+                        else -> Color.Gray
+                    }
+                }
+            )
+        }
     }
 }
