@@ -83,23 +83,6 @@ fun NewTaskScreen(
             color = MaterialTheme.colorScheme.onSurface
         )
 
-
-//        UniversalTextField(
-//            value = viewModel.dialogDueDate.value,
-//            onValueChange = { viewModel.dialogDueDate.value = it },
-//            label = "Пон, Март 31, 09:42",
-//            placeholder = "Введите установленный срок",
-//            singleLine = true,
-//            leadingIcon = {
-//                Icon(
-//                    painter = painterResource(R.drawable.calendar),
-//                    contentDescription = "calendar",
-//                    Modifier.size(23.dp)
-//                )
-//            },
-//            maxChars = 20
-//        )
-
         DateTimePickerField(
             value = viewModel.dialogDueDate.value,
             onValueChange = { viewModel.dialogDueDate.value = it },

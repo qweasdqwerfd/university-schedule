@@ -15,9 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -29,18 +31,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.universityschedule.R
+import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.common.LessonCard
 import com.example.universityschedule.presentation.common.LessonType
 import com.example.universityschedule.presentation.screens.calendar.components.TitleDate
 import com.example.universityschedule.presentation.screens.calendar.components.WeekHeader
+import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
+import com.example.universityschedule.presentation.screens.tasks.components.CardTaskPanel
 import com.example.universityschedule.presentation.util.dimens
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.util.UUID
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalPagerApi::class)
@@ -142,76 +150,3 @@ fun CalendarScreen(
         }
     }
 }
-
-
-@Composable
-fun ScheduleContent(
-    date: LocalDate,
-    titleStyle: TextStyle,
-    titleFont: FontWeight
-) {
-    // демонстрационные пары
-
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 150.dp)
-    ) {
-        item {
-            Text(
-                text = "Пары",
-                modifier = Modifier.padding(horizontal = MaterialTheme.dimens.space20),
-                style = titleStyle,
-                fontWeight = titleFont
-            )
-            Spacer(Modifier.height(MaterialTheme.dimens.space12))
-        }
-
-        item {
-            LessonCard(
-                title = "Calculus",
-                time = "11:00 - 12:30",
-                location = "Math Building, Room 101",
-                teacher = "Dr. Smith",
-                type = LessonType.LECTURE,
-            )
-            Spacer(Modifier.height(MaterialTheme.dimens.space8))
-
-            LessonCard(
-                title = "Physics",
-                time = "12:35 - 14:05",
-                location = "Science Center, Room 205",
-                teacher = "Dr. Johnson",
-                type = LessonType.LAB,
-            )
-            Spacer(Modifier.height(MaterialTheme.dimens.space8))
-        }
-
-        item {
-            Spacer(Modifier.height(MaterialTheme.dimens.space36))
-            Text(
-                text = "Задания, которые нужно выполнить сегодня",
-                modifier = Modifier.padding(horizontal = MaterialTheme.dimens.space20),
-                style = titleStyle,
-                fontWeight = titleFont
-            )
-            Spacer(Modifier.height(MaterialTheme.dimens.space20))
-
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.edit1),
-                    contentDescription = "edit",
-                    modifier = Modifier.size(80.dp),
-                    tint = Color(0xFF3F51B5),
-                )
-                Spacer(Modifier.height(MaterialTheme.dimens.space20))
-                Text(text = "Нет задач на этот день", style = titleStyle)
-            }
-            Spacer(Modifier.height(48.dp))
-        }
-    }
-}
-

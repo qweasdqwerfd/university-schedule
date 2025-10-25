@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 import com.example.universityschedule.domain.model.TaskItem
 import com.example.universityschedule.presentation.common.DialogEvent
@@ -39,11 +42,15 @@ import java.util.Locale
 @Composable
 fun CardTaskPanel(
     item: TaskItem,
-    onEvent: (DialogEvent) -> Unit
+    onEvent: (DialogEvent) -> Unit,
 ) {
     Card(
         modifier = Modifier
-            .padding(MaterialTheme.dimens.space16)
+            .padding(
+                top = MaterialTheme.dimens.space20,
+                start = MaterialTheme.dimens.space16,
+                end = MaterialTheme.dimens.space16,
+            )
             .fillMaxWidth()
             .clickable {
                 onEvent(DialogEvent.OnItemClick(item.id))
