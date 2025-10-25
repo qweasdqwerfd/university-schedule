@@ -1,5 +1,7 @@
 package com.example.universityschedule.presentation.screens.tasks.details
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,7 +43,10 @@ import com.example.universityschedule.presentation.screens.tasks.components.dial
 import com.example.universityschedule.presentation.screens.tasks.details.components.ModalBottomSheetDetails
 import com.example.universityschedule.presentation.util.Constants.lessonsColors
 import com.example.universityschedule.presentation.util.dimens
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskDetailsScreen(
@@ -188,7 +193,9 @@ fun TaskDetailsScreen(
                 Spacer(Modifier.height(MaterialTheme.dimens.heightSmall))
 
                 Text(
-                    text = task?.dueDate.toString(),
+                    text = task?.dueDate?.format(
+                        DateTimeFormatter.ofPattern("EE, MMM d, HH:mm", Locale("ru"))
+                    ).toString(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )

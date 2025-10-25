@@ -18,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,7 +35,7 @@ class TaskDetailsViewModel @Inject constructor(
 
     override var dialogTitle = mutableStateOf("")
     override var dialogDescription = mutableStateOf("")
-    override var dialogDueDate = mutableStateOf("")
+    override var dialogDueDate = mutableStateOf<LocalDateTime?>(null)
     override var dialogPriority = mutableStateOf(Priority.Medium)
     override var dialogRelatedLesson = mutableStateOf(LessonChip.NONE)
 
@@ -90,7 +91,7 @@ class TaskDetailsViewModel @Inject constructor(
                             it.copy(
                                 title = dialogTitle.value,
                                 description = dialogDescription.value,
-                                dueDate = dialogDueDate.value,
+                                dueDate = dialogDueDate.value!!,
                                 priority = dialogPriority.value,
                                 lessons = dialogRelatedLesson.value,
                                 check = checkState.value

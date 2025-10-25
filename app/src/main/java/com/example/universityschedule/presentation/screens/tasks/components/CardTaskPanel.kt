@@ -1,5 +1,7 @@
 package com.example.universityschedule.presentation.screens.tasks.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +32,10 @@ import com.example.universityschedule.domain.model.TaskItem
 import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
 import com.example.universityschedule.presentation.util.dimens
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CardTaskPanel(
     item: TaskItem,
@@ -130,11 +135,9 @@ fun CardTaskPanel(
                             tint = Color.Gray
                         )
                         Text(
-                            text =
-                                if (item.dueDate.length > 15)
-                                    item.dueDate.take(15) + "..."
-                                else
-                                    item.dueDate,
+                            text = item.dueDate.format(
+                                DateTimeFormatter.ofPattern("EE, MMM d, HH:mm", Locale("ru"))
+                            ).toString(),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Gray,
                             modifier = Modifier.padding(start = MaterialTheme.dimens.space4),
@@ -164,7 +167,7 @@ fun CardTaskPanel(
 
                         ) {
                         Text(
-                            text = item.priority.name,
+                            text = item.priority.displayName,
                             color = Color.White,
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.SemiBold

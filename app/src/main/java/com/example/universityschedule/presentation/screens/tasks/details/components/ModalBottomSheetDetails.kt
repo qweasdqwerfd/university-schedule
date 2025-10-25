@@ -1,6 +1,8 @@
 package com.example.universityschedule.presentation.screens.tasks.details.components
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,13 +32,16 @@ import com.example.universityschedule.presentation.common.components.DetailsButt
 import com.example.universityschedule.presentation.common.components.EnumChipsRow
 import com.example.universityschedule.presentation.common.components.UniversalDropdown
 import com.example.universityschedule.presentation.common.components.UniversalTextField
+import com.example.universityschedule.presentation.screens.tasks.DateTimePickerField
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.PriorityColor
 import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
 import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsViewModel
 import com.example.universityschedule.presentation.util.dimens
+import java.time.LocalDateTime
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("RememberReturnType", "UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +51,7 @@ fun ModalBottomSheetDetails(
     title: MutableState<String>,
     description: MutableState<String>,
     selectedLesson: MutableState<LessonChip>,
-    dueDate: MutableState<String>,
+    dueDate: MutableState<LocalDateTime?>,
     dialogPriority: MutableState<Priority>,
     check: MutableState<Boolean>,
     lessonList: MutableState<List<LessonChip>>,
@@ -90,12 +95,10 @@ fun ModalBottomSheetDetails(
                 singleLine = false,
                 maxLines = 3
             )
-            UniversalTextField(
+
+            DateTimePickerField(
                 value = dueDate.value,
                 onValueChange = { dueDate.value = it },
-                label = "Установленный срок",
-                placeholder = "Введите установленный срок",
-                singleLine = true
             )
 
             Text(

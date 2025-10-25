@@ -4,6 +4,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.Color
 import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 interface Displayable { val displayName: String }
 
@@ -31,7 +33,7 @@ enum class LessonChip(override val displayName: String) : Displayable {
 interface TaskDialogController {
     val dialogTitle: MutableState<String>
     val dialogDescription: MutableState<String>
-    val dialogDueDate: MutableState<String>
+    val dialogDueDate: MutableState<LocalDateTime?>
     val dialogPriority: MutableState<Priority>
     val dialogRelatedLesson: MutableState<LessonChip>
     fun onDialogEvent(event: DialogEvent)

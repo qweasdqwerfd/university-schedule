@@ -24,7 +24,7 @@ fun TasksScreen(
 
     Column {
         TabRowPager(
-            tabs = listOf("All", "Active", "Completed"),
+            tabs = listOf("Все", "Активные", "Выполненные"),
             pages = listOf(
                 { AllTabTasks(itemsList.value, viewModel) },
                 { ActiveTabTasks(itemsList.value.filter { !it.check }, viewModel) },

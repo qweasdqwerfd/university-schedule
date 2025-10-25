@@ -1,5 +1,7 @@
 package com.example.universityschedule.presentation.screens.tasks
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -21,6 +23,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,7 +36,8 @@ class TaskViewModel @Inject constructor(
 
     override var dialogTitle = mutableStateOf("")
     override var dialogDescription = mutableStateOf("")
-    override var dialogDueDate = mutableStateOf("")
+    @SuppressLint("NewApi")
+    override var dialogDueDate = mutableStateOf<LocalDateTime?>(null)
     override var dialogPriority = mutableStateOf(Priority.Medium)
     override var dialogRelatedLesson = mutableStateOf(LessonChip.NONE)
 
@@ -43,7 +48,7 @@ class TaskViewModel @Inject constructor(
 
     val sortedTasks = combine(itemsList, sortByPriority) { tasks, sort ->
         if (sort) {
-            tasks.sortedByDescending { it.priority } // descending sort
+            tasks.sortedByDescending { it.priority }                                                // descending sort
         } else {
             tasks
         }
@@ -58,9 +63,9 @@ class TaskViewModel @Inject constructor(
             DialogEvent.OnConfirm -> {
                 val title = dialogTitle.value.trim()
                 val description = dialogDescription.value.trim()
-                val dueDate = dialogDueDate.value.trim()
+                val dueDate = dialogDueDate.value
 
-                if (title.isEmpty() || description.isEmpty() || dueDate.isEmpty()) {
+                if (title.isEmpty() || description.isEmpty() || dialogDueDate.value == null) {
                     viewModelScope.launch {
                         uiManager.sendSnackBar(
                             message = "Не все поля заполнены!",
@@ -75,7 +80,7 @@ class TaskViewModel @Inject constructor(
                     val task = TaskItem(
                         title = title,
                         description = description,
-                        dueDate = dueDate,
+                        dueDate = dueDate!!,
                         priority = dialogPriority.value,
                         lessons = dialogRelatedLesson.value,
                         check = false
@@ -86,7 +91,7 @@ class TaskViewModel @Inject constructor(
 
                     dialogTitle.value = ""
                     dialogDescription.value = ""
-                    dialogDueDate.value = ""
+                    dialogDueDate.value = null
                     dialogPriority.value = Priority.Medium
                     dialogRelatedLesson.value = LessonChip.NONE
                 }

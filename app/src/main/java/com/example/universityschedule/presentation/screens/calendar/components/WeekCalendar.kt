@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,6 +56,12 @@ fun WeekHeader(
     val coroutineScope = rememberCoroutineScope()
     val offsetX = remember { Animatable(0f) }
 
+    LaunchedEffect(days) {
+        currentStart = days.first()
+        currentDays = days
+        offsetX.snapTo(0f)
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -64,10 +71,13 @@ fun WeekHeader(
                         coroutineScope.launch {
                             when {
                                 offsetX.value > 150 -> { // свайп вправо → предыдущая неделя
+                                    // простая анимация "ухода" и возврата
                                     offsetX.animateTo(1000f, tween(200))
                                     currentStart = currentStart.minusWeeks(1)
                                     currentDays = (0..5).map { currentStart.plusDays(it.toLong()) }
+                                    // уведомляем родителя — например, о новом старте недели (понедельник)
                                     onDateSelected(currentStart)
+                                    // подготавливаем "вход" и плавно возвращаемся
                                     offsetX.snapTo(-1000f)
                                     offsetX.animateTo(0f, tween(200))
                                 }
@@ -102,7 +112,7 @@ fun WeekHeader(
                 .offset { IntOffset(offsetX.value.toInt(), 0) }
                 .padding(vertical = 8.dp, horizontal = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly // равномерное распределение
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             currentDays.forEach { date ->
                 DayText(

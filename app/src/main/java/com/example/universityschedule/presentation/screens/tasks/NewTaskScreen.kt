@@ -1,20 +1,17 @@
 package com.example.universityschedule.presentation.screens.tasks
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 import com.example.universityschedule.presentation.common.components.EnumChipsRow
@@ -24,14 +21,13 @@ import com.example.universityschedule.presentation.screens.tasks.components.Univ
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.PriorityColor
-import com.example.universityschedule.presentation.util.Blue
 import com.example.universityschedule.presentation.util.dimens
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewTaskScreen(
     viewModel: TaskViewModel
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -88,20 +84,27 @@ fun NewTaskScreen(
         )
 
 
-        UniversalTextField(
+//        UniversalTextField(
+//            value = viewModel.dialogDueDate.value,
+//            onValueChange = { viewModel.dialogDueDate.value = it },
+//            label = "Пон, Март 31, 09:42",
+//            placeholder = "Введите установленный срок",
+//            singleLine = true,
+//            leadingIcon = {
+//                Icon(
+//                    painter = painterResource(R.drawable.calendar),
+//                    contentDescription = "calendar",
+//                    Modifier.size(23.dp)
+//                )
+//            },
+//            maxChars = 20
+//        )
+
+        DateTimePickerField(
             value = viewModel.dialogDueDate.value,
             onValueChange = { viewModel.dialogDueDate.value = it },
             label = "Пон, Март 31, 09:42",
-            placeholder = "Введите установленный срок",
-            singleLine = true,
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(R.drawable.calendar),
-                    contentDescription = "calendar",
-                    Modifier.size(23.dp)
-                )
-            },
-            maxChars = 20
+            placeholder = ""
         )
 
         Spacer(Modifier.height(MaterialTheme.dimens.heightExtraSmall))
