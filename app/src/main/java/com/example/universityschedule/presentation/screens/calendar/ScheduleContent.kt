@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,8 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.universityschedule.R
-import com.example.universityschedule.presentation.common.LessonCard
-import com.example.universityschedule.presentation.common.LessonType
+import com.example.universityschedule.data.remote.api.RetrofitClient
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.screens.tasks.components.CardTaskPanel
 import com.example.universityschedule.presentation.util.dimens
@@ -40,8 +40,13 @@ fun ScheduleContent(
     date: LocalDate,
     titleStyle: TextStyle,
     titleFont: FontWeight,
-    viewModelTasks: TaskViewModel = hiltViewModel()
+    viewModelTasks: TaskViewModel = hiltViewModel(),
+    viewModelCalendar: CalendarViewModel = hiltViewModel()
 ) {
+
+    LaunchedEffect(Unit) {
+        viewModelCalendar.findTargetGroup()
+    }
 
     val tasks = viewModelTasks.itemsList.collectAsState(listOf(null))
 
@@ -69,7 +74,7 @@ fun ScheduleContent(
                 time = "11:00 - 12:30",
                 location = "Math Building, Room 101",
                 teacher = "Dr. Smith",
-                type = LessonType.LECTURE,
+                type = LessonType.Lecture,
             )
             Spacer(Modifier.height(MaterialTheme.dimens.space8))
 
@@ -78,7 +83,7 @@ fun ScheduleContent(
                 time = "12:35 - 14:05",
                 location = "Science Center, Room 205",
                 teacher = "Dr. Johnson",
-                type = LessonType.LAB,
+                type = LessonType.Lab,
             )
             Spacer(Modifier.height(MaterialTheme.dimens.space8))
         }

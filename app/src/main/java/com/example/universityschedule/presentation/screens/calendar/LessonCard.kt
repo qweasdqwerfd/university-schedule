@@ -1,4 +1,4 @@
-package com.example.universityschedule.presentation.common
+package com.example.universityschedule.presentation.screens.calendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -30,7 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.*
 import androidx.compose.ui.graphics.Brush
@@ -40,42 +39,6 @@ import com.example.universityschedule.presentation.common.components.IconTopButt
 import com.example.universityschedule.presentation.screens.lessons.AllColors
 import com.example.universityschedule.presentation.screens.lessons.LessonColor
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Displayable
-
-enum class LessonType(override val displayName: String) : Displayable {
-    LECTURE("Лек"),
-    PRACTICE("Практ"),
-    LAB("Лаб"),
-    Exam("Экз")
-}
-
-private fun lessonTypeData(type: LessonType): Triple<String, Any, Color> {
-    return when (type) {
-        LessonType.LECTURE -> Triple(
-            LessonType.LECTURE.displayName,
-            IconSpec.PainterRes(R.drawable.lessons),
-            LessonColor.BLUE.color
-        )
-
-        LessonType.PRACTICE -> Triple(
-            LessonType.PRACTICE.displayName,
-            IconSpec.Vector(Icons.Default.Create),
-            LessonColor.GREEN.color
-        )
-
-        LessonType.LAB -> Triple(
-            LessonType.LAB.displayName,
-            IconSpec.PainterRes(R.drawable.lab),
-            AllColors.Purple.color
-        )
-
-        LessonType.Exam -> Triple(
-            LessonType.Exam.displayName,
-            IconSpec.PainterRes(R.drawable.warn),
-            LessonColor.RED.color
-        )
-
-    }
-}
 
 @Composable
 fun LessonCard(
@@ -152,10 +115,22 @@ fun LessonCard(
                                     iconSpec = iconSpec,
                                     contentDescription = label,
                                     size = when (type) {
-                                        LessonType.LECTURE -> 16.dp
-                                        LessonType.PRACTICE -> 18.dp
-                                        LessonType.LAB -> 18.dp
+                                        LessonType.Lecture -> 16.dp
+                                        LessonType.Practice -> 18.dp
+                                        LessonType.Lab -> 18.dp
                                         LessonType.Exam -> 18.dp
+                                        LessonType.Coursework -> 16.dp
+                                        LessonType.CourseProject -> 16.dp
+                                        LessonType.Attestation -> 16.dp
+                                        LessonType.InterimCertification -> 16.dp
+                                        LessonType.RGZ -> 16.dp
+                                        LessonType.IDZ -> 16.dp
+                                        LessonType.SupervisionOfSelfEmployment -> 16.dp
+                                        LessonType.SetOff -> 18.dp
+                                        LessonType.DifferentialSet -> 18.dp
+                                        LessonType.Consultation -> 18.dp
+                                        LessonType.CurrentConsultation -> 18.dp
+
                                     },
                                     tint = MaterialTheme.colorScheme.primary
                                 )
@@ -243,7 +218,7 @@ private fun LessonCardPreview() {
             time = "14:00 — 15:30",
             location = "Tech Building, Room 305",
             teacher = "Prof. Williams",
-            type = LessonType.PRACTICE,
+            type = LessonType.Practice,
             modifier = Modifier.padding(8.dp)
         )
     }

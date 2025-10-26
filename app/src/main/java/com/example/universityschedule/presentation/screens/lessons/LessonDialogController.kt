@@ -23,7 +23,7 @@ enum class AllColors(val color: Color) {
     Purple(Color(0xFF9C27B0)),
     CYAN(Color(0xFF26C6DA)),
     YELLOW(Color(0xFFFFEE58)),
-    WhITE_BLUE(Color(0xFFE57373))
+    WHITE_BLUE(Color(0xFFE57373))
 }
 
 enum class DayOfWeek(override val displayName: String) : Displayable {
