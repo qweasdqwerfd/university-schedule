@@ -11,5 +11,4 @@ sealed class BottomItem(
 
     object UniversitySchedule: BottomItem("Расписание", R.drawable.calendar, Screen.CALENDAR.route)
     object Tasks: BottomItem("Задачи", R.drawable.tasks, Screen.TASKS.route)
-//    object Lessons: BottomItem("Пары", R.drawable.lessons, Screen.LESSONS.route)
 }

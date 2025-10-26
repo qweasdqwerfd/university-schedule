@@ -36,8 +36,6 @@ import androidx.compose.ui.graphics.Brush
 import com.example.universityschedule.R
 import com.example.universityschedule.presentation.common.components.IconSpec
 import com.example.universityschedule.presentation.common.components.IconTopButton
-import com.example.universityschedule.presentation.screens.lessons.AllColors
-import com.example.universityschedule.presentation.screens.lessons.LessonColor
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Displayable
 
 @Composable

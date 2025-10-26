@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.universityschedule.presentation.screens.lessons.LessonColor
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Displayable
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
 

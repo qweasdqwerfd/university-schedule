@@ -27,7 +27,6 @@ fun BottomNavigation(
     val listItems = listOf(
         BottomItem.UniversitySchedule,
         BottomItem.Tasks,
-//        BottomItem.Lessons,
     )
 
     NavigationBar(

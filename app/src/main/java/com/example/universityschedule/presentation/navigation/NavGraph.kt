@@ -13,7 +13,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.universityschedule.presentation.screens.calendar.CalendarScreen
-import com.example.universityschedule.presentation.screens.lessons.LessonsScreen
 import com.example.universityschedule.presentation.screens.tasks.NewTaskScreen
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.screens.tasks.TasksScreen
@@ -58,9 +57,6 @@ fun NavGraph(
             CalendarScreen()
         }
 
-        composable(Screen.LESSONS.route) {
-            LessonsScreen()
-        }
         composable(Screen.TASKS.route) {
             TasksScreen(
                 taskViewModel,

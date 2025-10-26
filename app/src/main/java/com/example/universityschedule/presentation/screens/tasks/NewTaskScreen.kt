@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 import com.example.universityschedule.presentation.common.components.EnumChipsRow
 import com.example.universityschedule.presentation.common.components.UniversalTextField
-import com.example.universityschedule.presentation.screens.lessons.LessonColor
+import com.example.universityschedule.presentation.screens.calendar.components.enums.LessonColor
 import com.example.universityschedule.presentation.screens.tasks.components.UniversalEnumChip
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority

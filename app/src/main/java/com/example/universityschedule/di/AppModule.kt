@@ -3,8 +3,6 @@ package com.example.universityschedule.di
 import android.content.Context
 import androidx.room.Room
 import com.example.universityschedule.data.local.MainDB
-import com.example.universityschedule.data.repository.LessonRepositoryImpl
-import com.example.universityschedule.domain.repository.LessonRepository
 import com.example.universityschedule.data.repository.TaskRepositoryImpl
 import com.example.universityschedule.domain.repository.TaskRepository
 import com.example.universityschedule.presentation.navigation.UIManager
@@ -34,10 +32,6 @@ object AppModule {
     @Provides
     @Singleton
     fun provideTaskRepo(db: MainDB): TaskRepository = TaskRepositoryImpl(db.taskDao)
-
-    @Provides
-    @Singleton
-    fun provideLessonRepo(db: MainDB): LessonRepository = LessonRepositoryImpl(db.lessonDao)
 
     @Provides
     @Singleton

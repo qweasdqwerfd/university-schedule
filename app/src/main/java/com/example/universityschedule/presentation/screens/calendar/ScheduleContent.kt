@@ -45,7 +45,7 @@ fun ScheduleContent(
 ) {
 
     LaunchedEffect(Unit) {
-        viewModelCalendar.findTargetGroup()
+//        viewModelCalendar.findTargetGroup()
     }
 
     val tasks = viewModelTasks.itemsList.collectAsState(listOf(null))
@@ -121,7 +121,7 @@ fun ScheduleContent(
 
             item {
 
-                Spacer(Modifier.height(MaterialTheme.dimens.space20))
+                Spacer(Modifier.height(MaterialTheme.dimens.space32))
 
 
                 Column(
