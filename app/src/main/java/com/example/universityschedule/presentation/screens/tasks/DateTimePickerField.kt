@@ -14,7 +14,6 @@ import com.example.universityschedule.presentation.common.components.UniversalTe
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.time.format.DateTimeFormatter
 import java.util.*
-
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
@@ -121,13 +120,6 @@ fun showMaterialDateThenTime(
             calendar.get(Calendar.MINUTE),
             true
         )
-
-        // Изменяем цвет кнопок, если нужно
-        timePicker.setOnShowListener {
-            val color = activity.getColor(com.google.android.material.R.color.m3_sys_color_light_primary)
-            timePicker.getButton(DialogInterface.BUTTON_POSITIVE)?.setTextColor(color)
-            timePicker.getButton(DialogInterface.BUTTON_NEGATIVE)?.setTextColor(color)
-        }
 
         timePicker.show()
     }

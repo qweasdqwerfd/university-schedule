@@ -30,23 +30,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.*
 import androidx.compose.ui.graphics.Brush
-import com.example.universityschedule.R
-import com.example.universityschedule.presentation.common.components.IconSpec
+import com.example.universityschedule.data.remote.dto.PublicEmployee
+import com.example.universityschedule.data.remote.dto.PublicRoom
 import com.example.universityschedule.presentation.common.components.IconTopButton
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Displayable
+import com.example.universityschedule.presentation.util.Constants.formatTime
 
 @Composable
 fun LessonCard(
     title: String,
-    time: String,
-    location: String,
-    teacher: String,
+    startTime: String,
+    endTime: String,
+    location: List<PublicRoom>,
+    teacher: List<PublicEmployee>,
     type: LessonType,
     modifier: Modifier = Modifier
 ) {
+
+    val startTime = formatTime(startTime)
+    val endTime = formatTime(endTime)
     val corner = 14.dp
 
     Card(
@@ -159,48 +162,50 @@ fun LessonCard(
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = time,
+                            text = startTime + " - " + endTime,
                             style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
                         )
                     }
 
                     Spacer(modifier = Modifier.height(6.dp))
 
-                    // Место
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.LocationOn,
-                            contentDescription = "Location",
-                            modifier = Modifier.size(16.dp),
-                            tint = Color.Gray
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = location,
-                            style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-                        )
+                    if (location.any { it.building_name.isNotEmpty() }) {
+                        // Место
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.LocationOn,
+                                contentDescription = "Location",
+                                modifier = Modifier.size(16.dp),
+                                tint = Color.Gray
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = location.joinToString { it.building_name },
+                                style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(6.dp))
                     }
 
-                    Spacer(modifier = Modifier.height(6.dp))
-
-                    // Преподаватель
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = "Teacher",
-                            modifier = Modifier.size(16.dp),
-                            tint = Color.Gray
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = teacher,
-                            style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-                        )
+                    if (teacher.any { it.short_name.isNotEmpty() }) {
+                        // Преподаватель
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.Person,
+                                contentDescription = "Teacher",
+                                modifier = Modifier.size(16.dp),
+                                tint = Color.Gray
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = teacher.joinToString { it.short_name },
+                                style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.width(12.dp))
         }
     }
 }
@@ -210,15 +215,15 @@ fun LessonCard(
 @Composable
 private fun LessonCardPreview() {
 
-    Column {
-        LessonCard(
-            title = "Computer Science",
-            time = "14:00 — 15:30",
-            location = "Tech Building, Room 305",
-            teacher = "Prof. Williams",
-            type = LessonType.Practice,
-            modifier = Modifier.padding(8.dp)
-        )
-    }
+//    Column {
+//        LessonCard(
+//            title = "Computer Science",
+//            time = "14:00 — 15:30",
+//            location = "Tech Building, Room 305",
+//            teacher = "Prof. Williams",
+//            type = LessonType.Practice,
+//            modifier = Modifier.padding(8.dp)
+//        )
+//    }
 
 }

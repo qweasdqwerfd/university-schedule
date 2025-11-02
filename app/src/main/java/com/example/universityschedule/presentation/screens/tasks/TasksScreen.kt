@@ -18,7 +18,6 @@ fun TasksScreen(
 ) {
 
 
-//    val itemsList = viewModel.itemsList.collectAsState(emptyList())
     val itemsList = viewModel.sortedTasks.collectAsState()
 
 

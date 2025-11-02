@@ -28,7 +28,7 @@ interface LessonsApiService {
     suspend fun getLessonsByPartGroup(
         @Query("start_date") startDate: String,
         @Query("end_date") endDate: String,
-        @Query("semester") semester: Semester? = null,
+        @Query("semester") semester: Int? = null,
         @Query("id") id: Int
     ): LessonsResponse
 

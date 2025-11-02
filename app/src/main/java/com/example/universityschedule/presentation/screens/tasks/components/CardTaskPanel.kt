@@ -104,7 +104,7 @@ fun CardTaskPanel(
                 Text(
                     text =
                         if (item.lessons.name != LessonChip.NONE.name) {
-                            "${item.lessons} " +
+                            "${item.lessons.displayName} " +
                                     if (item.title.length > 15)
                                         item.title.take(15) + "..."
                                     else " ${item.title}"

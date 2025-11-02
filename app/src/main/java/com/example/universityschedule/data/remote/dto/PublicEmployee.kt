@@ -8,6 +8,6 @@ data class PublicEmployee(
     val full_name: String,
     val degree: String?,
     val title: String?,
-    val departments: Boolean,
+    val departments: List<Int>,
     val is_vacancy: Boolean?
 )

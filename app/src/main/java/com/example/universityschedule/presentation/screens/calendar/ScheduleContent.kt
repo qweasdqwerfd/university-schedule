@@ -19,6 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,7 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.universityschedule.R
-import com.example.universityschedule.data.remote.api.RetrofitClient
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.screens.tasks.components.CardTaskPanel
 import com.example.universityschedule.presentation.util.dimens
@@ -44,15 +45,26 @@ fun ScheduleContent(
     viewModelCalendar: CalendarViewModel = hiltViewModel()
 ) {
 
-    LaunchedEffect(Unit) {
-//        viewModelCalendar.findTargetGroup()
+    LaunchedEffect(date) {
+        viewModelCalendar.onPageChanged(date)
     }
 
-    val tasks = viewModelTasks.itemsList.collectAsState(listOf(null))
+
+    val tasks = viewModelTasks.itemsList.collectAsState(emptyList())
 
     val tasksForToday = tasks.value.filter { task ->
-        task?.dueDate?.toLocalDate() == date
+        task.dueDate.toLocalDate() == date
     }
+
+    val lessonsByDate by viewModelCalendar.lessonsByDate.collectAsState()
+
+    val lessonsForToday = lessonsByDate[date].orEmpty()
+
+    val sortedLessons = remember(lessonsForToday) {
+        lessonsForToday.sortedBy { it.startTime }
+    }
+
+
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -68,22 +80,15 @@ fun ScheduleContent(
             Spacer(Modifier.height(MaterialTheme.dimens.space12))
         }
 
-        item {
-            LessonCard(
-                title = "Calculus",
-                time = "11:00 - 12:30",
-                location = "Math Building, Room 101",
-                teacher = "Dr. Smith",
-                type = LessonType.Lecture,
-            )
-            Spacer(Modifier.height(MaterialTheme.dimens.space8))
 
+        items(sortedLessons) { lesson ->
             LessonCard(
-                title = "Physics",
-                time = "12:35 - 14:05",
-                location = "Science Center, Room 205",
-                teacher = "Dr. Johnson",
-                type = LessonType.Lab,
+                title = lesson.subjectName.toString(),
+                startTime = lesson.startTime.toString(),
+                endTime = lesson.endTime.toString(),
+                location = lesson.location,
+                teacher = lesson.teacher,
+                type = lesson.type,
             )
             Spacer(Modifier.height(MaterialTheme.dimens.space8))
         }
@@ -107,7 +112,7 @@ fun ScheduleContent(
                 items = tasksForToday
             ) { task ->
 
-                task?.let {
+                task.let {
                     CardTaskPanel(
                         item = it,
                         onEvent = { viewModelTasks.onDialogEvent(it) },

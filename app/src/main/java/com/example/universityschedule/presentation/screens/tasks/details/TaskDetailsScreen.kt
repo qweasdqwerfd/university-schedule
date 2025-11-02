@@ -250,7 +250,8 @@ fun TaskDetailsScreen(
                         modifier = Modifier
                             .height(MaterialTheme.dimens.heightLarge)
                             .width(MaterialTheme.dimens.widthSmallExtra),
-                        color = lessonsColors[viewModel.dialogRelatedLesson.value.name]!!,
+                        color = lessonsColors[viewModel.dialogRelatedLesson.value.name]
+                            ?: MaterialTheme.colorScheme.outlineVariant,
                         thickness = MaterialTheme.dimens.thicknessExtraSmall
                     )
 
