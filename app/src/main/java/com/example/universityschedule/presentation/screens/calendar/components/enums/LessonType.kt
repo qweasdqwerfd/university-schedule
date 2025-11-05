@@ -1,4 +1,4 @@
-package com.example.universityschedule.presentation.screens.calendar
+package com.example.universityschedule.presentation.screens.calendar.components.enums
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
@@ -6,8 +6,6 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.Color
 import com.example.universityschedule.R
 import com.example.universityschedule.presentation.common.components.IconSpec
-import com.example.universityschedule.presentation.screens.calendar.components.enums.AllColors
-import com.example.universityschedule.presentation.screens.calendar.components.enums.LessonColor
 import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Displayable
 
 enum class LessonType(override val displayName: String) : Displayable {

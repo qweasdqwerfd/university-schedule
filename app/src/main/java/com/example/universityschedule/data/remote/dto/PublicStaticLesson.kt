@@ -1,7 +1,5 @@
 package com.example.universityschedule.data.remote.dto
 
-import com.example.universityschedule.presentation.screens.calendar.LessonType
-
 data class PublicStaticLesson(
     val id: Int?,
     val subject_name: String?,

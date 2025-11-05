@@ -8,12 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.universityschedule.data.remote.api.RetrofitClient
 import com.example.universityschedule.data.remote.dto.PublicPartGroup
 import com.example.universityschedule.data.remote.dto.PublicStaticLesson
-import com.example.universityschedule.data.remote.response.LessonsResponse
 import com.example.universityschedule.data.remote.response.PaginatedResponse
-import com.example.universityschedule.data.remote.service.Semester
 import com.example.universityschedule.domain.model.Lesson
 import com.example.universityschedule.domain.usecase.GetLessonsForRange
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,6 +35,10 @@ class CalendarViewModel @Inject constructor(
     )
     val lessons: MutableState<List<PublicStaticLesson>?> get() = _lessons
 
+    private val _selectedDate = MutableStateFlow(LocalDate.now())
+    val selectedDate = _selectedDate.asStateFlow()
+
+
     private val _groups = mutableStateOf<PaginatedResponse<PublicPartGroup>>(
         PaginatedResponse(
             count = 0,
@@ -54,33 +57,44 @@ class CalendarViewModel @Inject constructor(
 
     private val fetchingWeeks = mutableSetOf<LocalDate>()
 
+    // индикатор загрузки для UI (true при загрузке текущей недели)
+    private val _isLoadingCurrentWeek = MutableStateFlow(false)
+    val isLoadingCurrentWeek: StateFlow<Boolean> = _isLoadingCurrentWeek.asStateFlow()
+
     fun onPageChanged(pageDate: LocalDate) {
         val startOfWeek = pageDate.with(DayOfWeek.MONDAY)
-        fetchWeekIfNeeded(startOfWeek)
-        fetchWeekIfNeeded(startOfWeek.minusWeeks(1))
-        fetchWeekIfNeeded(startOfWeek.plusWeeks(1))
+
+        // 1) Сначала загружаем только текущую неделю (без соседей)
+        fetchWeekIfNeeded(startOfWeek, markAsCurrent = true)
+
+        // 2) Затем в фоне (с небольшой задержкой) подгружаем соседние недели,
+        // чтобы не блокировать первый отклик
+        viewModelScope.launch {
+            // даём UI отрисоваться, затем стартим prefetch
+            delay(700) // можно варьировать: 300..1200 ms
+            fetchWeekIfNeeded(startOfWeek.minusWeeks(1), markAsCurrent = false)
+            fetchWeekIfNeeded(startOfWeek.plusWeeks(1), markAsCurrent = false)
+        }
     }
 
-    private fun fetchWeekIfNeeded(startOfWeek: LocalDate) {
+    private fun fetchWeekIfNeeded(startOfWeek: LocalDate, markAsCurrent: Boolean) {
         if (fetchingWeeks.contains(startOfWeek)) return
 
-        val weekDates = (0..5).map { startOfWeek.plusDays(it.toLong()) }
+        val weekDates = (0..5).map { startOfWeek.plusDays(it.toLong()) } // Mon..Sat
         if (weekDates.all { _lessonsByDate.value.containsKey(it) }) return
 
         fetchingWeeks.add(startOfWeek)
+
         viewModelScope.launch {
+            if (markAsCurrent) _isLoadingCurrentWeek.value = true
             try {
                 val endOfWeek = startOfWeek.plusDays(5)
-                val lessons = getLessonsForRange(startOfWeek, endOfWeek) // тут чистая логика
-                // распихиваем уроки по датам
+                val lessons = getLessonsForRange(startOfWeek, endOfWeek)
+
                 val byDate = lessons
                     .flatMap { lesson ->
                         lesson.dates
-                            .filter { d ->
-                                d.dayOfWeek != DayOfWeek.SUNDAY && !d.isBefore(
-                                    startOfWeek
-                                ) && !d.isAfter(endOfWeek)
-                            }
+                            .filter { d -> d.dayOfWeek != DayOfWeek.SUNDAY && !d.isBefore(startOfWeek) && !d.isAfter(endOfWeek) }
                             .map { date -> date to lesson }
                     }
                     .groupBy({ it.first }, { it.second })
@@ -89,17 +103,21 @@ class CalendarViewModel @Inject constructor(
                 weekDates.forEach { d -> newMap[d] = byDate[d] ?: emptyList() }
                 _lessonsByDate.value = newMap.toMap()
 
-                Log.d("qwe", "${_lessonsByDate.value}")
-
+                Log.d("CalendarVM", "Loaded week $startOfWeek -> ${byDate.values.sumBy { it.size }} lessons")
             } catch (e: Exception) {
-                Log.d("qwe", "${e.message}")
+                Log.e("CalendarVM", "Error loading week $startOfWeek: ${e.message}", e)
             } finally {
+                if (markAsCurrent) _isLoadingCurrentWeek.value = false
                 fetchingWeeks.remove(startOfWeek)
             }
         }
     }
 
     fun lessonsForDate(date: LocalDate) = lessonsByDate.value[date] ?: emptyList()
+
+    fun setSelectedDate(date: LocalDate) {
+        _selectedDate.value = date
+    }
 
 
     fun getLessonsByPartGroup() {

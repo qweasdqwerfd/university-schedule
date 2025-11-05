@@ -1,10 +1,9 @@
 package com.example.universityschedule.data.repository
 
-import com.example.universityschedule.data.remote.dto.PublicEmployee
 import com.example.universityschedule.data.remote.service.LessonsApiService
 import com.example.universityschedule.domain.model.Lesson
 import com.example.universityschedule.domain.repository.LessonsRepository
-import com.example.universityschedule.presentation.screens.calendar.LessonType
+import com.example.universityschedule.presentation.screens.calendar.components.enums.LessonType
 import java.time.LocalDate
 import javax.inject.Inject
 

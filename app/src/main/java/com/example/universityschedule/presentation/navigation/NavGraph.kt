@@ -6,13 +6,16 @@ import androidx.annotation.RequiresApi
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navigation
 import com.example.universityschedule.presentation.screens.calendar.CalendarScreen
+import com.example.universityschedule.presentation.screens.calendar.CalendarViewModel
 import com.example.universityschedule.presentation.screens.tasks.NewTaskScreen
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.screens.tasks.TasksScreen
@@ -51,15 +54,19 @@ fun NavGraph(
 
 
     val taskViewModel: TaskViewModel = hiltViewModel()
+    val calendarViewModel: CalendarViewModel = hiltViewModel()
 
     NavHost(navController = navHostController, startDestination = Screen.CALENDAR.route) {
         composable(Screen.CALENDAR.route) {
-            CalendarScreen()
+            CalendarScreen(
+                calendarViewModel = calendarViewModel,
+                taskViewModel = taskViewModel
+            )
         }
 
         composable(Screen.TASKS.route) {
             TasksScreen(
-                taskViewModel,
+                viewModel = taskViewModel,
                 navHostController = navHostController,
             )
         }

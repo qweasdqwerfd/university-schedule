@@ -3,6 +3,7 @@ package com.example.universityschedule.presentation.screens.calendar
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,8 +30,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.universityschedule.R
+import com.example.universityschedule.presentation.screens.calendar.components.LessonCard
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.screens.tasks.components.CardTaskPanel
 import com.example.universityschedule.presentation.util.dimens
@@ -41,30 +43,26 @@ fun ScheduleContent(
     date: LocalDate,
     titleStyle: TextStyle,
     titleFont: FontWeight,
-    viewModelTasks: TaskViewModel = hiltViewModel(),
-    viewModelCalendar: CalendarViewModel = hiltViewModel()
+    taskViewModel: TaskViewModel,
+    calendarViewModel: CalendarViewModel
 ) {
 
     LaunchedEffect(date) {
-        viewModelCalendar.onPageChanged(date)
+        calendarViewModel.onPageChanged(date)
     }
 
+    val isLoading by calendarViewModel.isLoadingCurrentWeek.collectAsState()
 
-    val tasks = viewModelTasks.itemsList.collectAsState(emptyList())
+    val lessonsByDate by calendarViewModel.lessonsByDate.collectAsState()
+    val lessonsForToday = lessonsByDate[date].orEmpty()
+    val sortedLessons = remember(lessonsForToday) { lessonsForToday.sortedBy { it.startTime } }
+
+
+    val tasks = taskViewModel.itemsList.collectAsState(emptyList())
 
     val tasksForToday = tasks.value.filter { task ->
         task.dueDate.toLocalDate() == date
     }
-
-    val lessonsByDate by viewModelCalendar.lessonsByDate.collectAsState()
-
-    val lessonsForToday = lessonsByDate[date].orEmpty()
-
-    val sortedLessons = remember(lessonsForToday) {
-        lessonsForToday.sortedBy { it.startTime }
-    }
-
-
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -80,17 +78,47 @@ fun ScheduleContent(
             Spacer(Modifier.height(MaterialTheme.dimens.space12))
         }
 
+        if (isLoading) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+        } else {
+            items(sortedLessons) { lesson ->
+                LessonCard(
+                    title = lesson.subjectName.toString(),
+                    startTime = lesson.startTime.toString(),
+                    endTime = lesson.endTime.toString(),
+                    location = lesson.location,
+                    teacher = lesson.teacher,
+                    type = lesson.type,
+                )
+                Spacer(Modifier.height(MaterialTheme.dimens.space8))
+            }
 
-        items(sortedLessons) { lesson ->
-            LessonCard(
-                title = lesson.subjectName.toString(),
-                startTime = lesson.startTime.toString(),
-                endTime = lesson.endTime.toString(),
-                location = lesson.location,
-                teacher = lesson.teacher,
-                type = lesson.type,
-            )
-            Spacer(Modifier.height(MaterialTheme.dimens.space8))
+            if (sortedLessons.isEmpty()) {
+                item {
+                    Spacer(Modifier.height(MaterialTheme.dimens.space32))
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.edit1),
+                            contentDescription = null,
+                            modifier = Modifier.size(80.dp)
+                        )
+                        Spacer(Modifier.height(MaterialTheme.dimens.space20))
+                        Text(text = "Нет пар на этот день", style = titleStyle)
+                    }
+                }
+            }
         }
 
         item {
@@ -115,7 +143,7 @@ fun ScheduleContent(
                 task.let {
                     CardTaskPanel(
                         item = it,
-                        onEvent = { viewModelTasks.onDialogEvent(it) },
+                        onEvent = { taskViewModel.onDialogEvent(it) },
                     )
                 }
 

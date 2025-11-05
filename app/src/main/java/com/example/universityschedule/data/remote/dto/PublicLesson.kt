@@ -1,6 +1,6 @@
 package com.example.universityschedule.data.remote.dto
 
-import com.example.universityschedule.presentation.screens.calendar.LessonType
+import com.example.universityschedule.presentation.screens.calendar.components.enums.LessonType
 
 data class PublicLesson(
     val id: Int?,

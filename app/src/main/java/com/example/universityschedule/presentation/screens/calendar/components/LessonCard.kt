@@ -1,4 +1,4 @@
-package com.example.universityschedule.presentation.screens.calendar
+package com.example.universityschedule.presentation.screens.calendar.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -35,6 +35,8 @@ import androidx.compose.ui.graphics.Brush
 import com.example.universityschedule.data.remote.dto.PublicEmployee
 import com.example.universityschedule.data.remote.dto.PublicRoom
 import com.example.universityschedule.presentation.common.components.IconTopButton
+import com.example.universityschedule.presentation.screens.calendar.components.enums.LessonType
+import com.example.universityschedule.presentation.screens.calendar.components.enums.lessonTypeData
 import com.example.universityschedule.presentation.util.Constants.formatTime
 
 @Composable

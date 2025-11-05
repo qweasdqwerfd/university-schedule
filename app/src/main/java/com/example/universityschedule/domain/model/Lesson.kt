@@ -2,7 +2,7 @@ package com.example.universityschedule.domain.model
 
 import com.example.universityschedule.data.remote.dto.PublicEmployee
 import com.example.universityschedule.data.remote.dto.PublicRoom
-import com.example.universityschedule.presentation.screens.calendar.LessonType
+import com.example.universityschedule.presentation.screens.calendar.components.enums.LessonType
 import java.time.LocalDate
 
 data class Lesson(
