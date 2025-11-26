@@ -1,12 +1,12 @@
-package com.example.universityschedule.presentation.screens.tasks.components.dialog_controller
+package com.example.universityschedule.presentation.common.dialog_controller
 
 import androidx.compose.runtime.mutableStateOf
 import com.example.universityschedule.presentation.common.DialogEvent
-import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
+import com.example.universityschedule.presentation.screens.tasks.details.CRUDEvent
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class TaskDialogControllerImpl @Inject constructor() : TaskDialogController {
+class DialogControllerImpl @Inject constructor() : DialogController {
     override val dialogTitle = mutableStateOf("")
     override val dialogDescription = mutableStateOf("")
     override val dialogDueDate = mutableStateOf<LocalDateTime?>(null)
@@ -15,5 +15,5 @@ class TaskDialogControllerImpl @Inject constructor() : TaskDialogController {
 
     override fun onDialogEvent(event: DialogEvent) {}
 
-    override fun onBottomDialogEvent(event: DetailsEvent) {}
+    override fun onCRUDEvent(event: CRUDEvent) {}
 }

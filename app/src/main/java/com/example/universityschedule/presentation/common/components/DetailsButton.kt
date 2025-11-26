@@ -26,7 +26,7 @@ import com.example.universityschedule.presentation.util.dimens
 
 @Composable
 fun DetailsButton(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     text: String,
     color: Color,
     icon: Int?,
@@ -34,7 +34,6 @@ fun DetailsButton(
     onClick: () -> Unit,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.ExtraBold),
     textColor: Color = MaterialTheme.colorScheme.onPrimary
-
 ) {
 
     Button(

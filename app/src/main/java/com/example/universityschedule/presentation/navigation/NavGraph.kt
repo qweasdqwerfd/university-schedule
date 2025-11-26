@@ -3,19 +3,19 @@ package com.example.universityschedule.presentation.navigation
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import androidx.navigation.navigation
 import com.example.universityschedule.presentation.screens.calendar.CalendarScreen
 import com.example.universityschedule.presentation.screens.calendar.CalendarViewModel
+import com.example.universityschedule.presentation.screens.search.SearchScheduleScreen
 import com.example.universityschedule.presentation.screens.tasks.NewTaskScreen
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.screens.tasks.TasksScreen
@@ -28,6 +28,7 @@ import com.example.universityschedule.presentation.screens.tasks.details.TaskDet
 fun NavGraph(
     navHostController: NavHostController,
     snackBarHostState: SnackbarHostState,
+    innerPadding: PaddingValues,
 ) {
 
     val navGraphViewModel: NavGraphViewModel = hiltViewModel()
@@ -87,6 +88,9 @@ fun NavGraph(
                 taskId = taskId,
                 viewModel = taskDetailsViewModel
             )
+        }
+        composable(Screen.SEARCH_SCHEDULE.route) {
+            SearchScheduleScreen()
         }
 
 

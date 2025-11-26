@@ -19,18 +19,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.universityschedule.R
 import com.example.universityschedule.presentation.common.DialogEvent
+import com.example.universityschedule.presentation.common.components.DetailsButton
 import com.example.universityschedule.presentation.common.components.IconSpec
 import com.example.universityschedule.presentation.common.components.IconTopButton
 import com.example.universityschedule.presentation.navigation.Screen
+import com.example.universityschedule.presentation.screens.search.SearchViewModel
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
-import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
+import com.example.universityschedule.presentation.screens.tasks.details.CRUDEvent
 import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsViewModel
 import com.example.universityschedule.presentation.util.dimens
 
@@ -39,7 +41,9 @@ import com.example.universityschedule.presentation.util.dimens
 fun TopBar(
     navController: NavHostController,
     taskViewModel: TaskViewModel = hiltViewModel(),
-    taskDetailsViewModel: TaskDetailsViewModel = hiltViewModel()
+    taskDetailsViewModel: TaskDetailsViewModel = hiltViewModel(),
+//    calendarViewModel: CalendarViewModel = hiltViewModel(),
+    searchViewModel: SearchViewModel = hiltViewModel()
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -53,6 +57,8 @@ fun TopBar(
         animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing)
     )
 
+//    val group = calendarDetailsViewModel.groups
+
 
     Column {
         TopAppBar(
@@ -61,10 +67,11 @@ fun TopBar(
             title = {
                 Text(
                     text = when (currentRoute) {
-                        Screen.CALENDAR.route -> "Расписание университета"
+                        Screen.CALENDAR.route -> "ИИТУС"
                         Screen.TASKS.route -> "Задачи"
                         Screen.ADD_TASK.route -> "Добавить задачу"
                         Screen.TASK_DETAILS.route -> "Детали задачи"
+                        Screen.SEARCH_SCHEDULE.route -> "Поиск"
                         else -> "Пары"
                     },
                     modifier = when (currentRoute) {
@@ -103,6 +110,17 @@ fun TopBar(
                         contentDescription = "ok",
                     )
                 }
+                if (currentRoute == Screen.CALENDAR.route) {
+                    DetailsButton(
+                        text = "ПВ-242",
+                        color = colorResource(R.color.selectedBottom),
+                        onClick = {
+                            searchViewModel.onDialogEvent(DialogEvent.OnButtonClick)
+                        },
+                        icon = null,
+                        sizeIcon = null
+                    )
+                }
             },
             navigationIcon = {
                 if (currentRoute == Screen.ADD_TASK.route) {
@@ -118,7 +136,16 @@ fun TopBar(
 
                     IconTopButton(
                         onClick = {
-                            taskDetailsViewModel.onBottomDialogEvent(DetailsEvent.OnCancel)
+                            taskDetailsViewModel.onCRUDEvent(CRUDEvent.OnCancel)
+                        },
+                        iconSpec = IconSpec.Vector(Icons.Default.ArrowBack),
+                        contentDescription = "back"
+                    )
+                }
+                if (currentRoute == Screen.SEARCH_SCHEDULE.route) {
+                    IconTopButton(
+                        onClick = {
+                            searchViewModel.onDialogEvent(DialogEvent.OnCancel)
                         },
                         iconSpec = IconSpec.Vector(Icons.Default.ArrowBack),
                         contentDescription = "back"

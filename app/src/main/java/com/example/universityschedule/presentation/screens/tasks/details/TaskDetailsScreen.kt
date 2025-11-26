@@ -38,8 +38,8 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.universityschedule.R
 import com.example.universityschedule.R.drawable
 import com.example.universityschedule.presentation.common.components.DetailsButton
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.PriorityColor
+import com.example.universityschedule.presentation.common.dialog_controller.Priority
+import com.example.universityschedule.presentation.common.dialog_controller.PriorityColor
 import com.example.universityschedule.presentation.screens.tasks.details.components.ModalBottomSheetDetails
 import com.example.universityschedule.presentation.util.Constants.lessonsColors
 import com.example.universityschedule.presentation.util.dimens
@@ -343,7 +343,7 @@ fun TaskDetailsScreen(
                 icon = drawable.edit,
                 sizeIcon = MaterialTheme.dimens.iconSizeMedium,
                 onClick = {
-                    viewModel.onBottomDialogEvent(DetailsEvent.Edit)
+                    viewModel.onCRUDEvent(CRUDEvent.Edit)
                 },
             )
 
@@ -354,7 +354,7 @@ fun TaskDetailsScreen(
                 icon = drawable.trash,
                 sizeIcon = MaterialTheme.dimens.iconSizeSmallPlus,
                 onClick = {
-                    viewModel.onBottomDialogEvent(DetailsEvent.Delete)
+                    viewModel.onCRUDEvent(CRUDEvent.Delete)
                 }
             )
 
@@ -364,7 +364,7 @@ fun TaskDetailsScreen(
     if (viewModel.isSheetOpen.value)
         ModalBottomSheetDetails(
             sheetState = sheetState,
-            onDismiss = { viewModel.onBottomDialogEvent(DetailsEvent.OnCancel) },
+            onDismiss = { viewModel.onCRUDEvent(CRUDEvent.OnCancel) },
             title = viewModel.dialogTitle,
             description = viewModel.dialogDescription,
             selectedLesson = viewModel.dialogRelatedLesson,

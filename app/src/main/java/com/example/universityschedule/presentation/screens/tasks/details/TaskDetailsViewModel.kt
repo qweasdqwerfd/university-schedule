@@ -2,7 +2,6 @@ package com.example.universityschedule.presentation.screens.tasks.details
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,9 +10,9 @@ import com.example.universityschedule.domain.repository.TaskRepository
 import com.example.universityschedule.presentation.common.snack_bar.SnackBarType
 import com.example.universityschedule.presentation.navigation.Screen
 import com.example.universityschedule.presentation.navigation.UIManager
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.TaskDialogController
+import com.example.universityschedule.presentation.common.dialog_controller.LessonChip
+import com.example.universityschedule.presentation.common.dialog_controller.Priority
+import com.example.universityschedule.presentation.common.dialog_controller.DialogController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,9 +24,9 @@ import javax.inject.Inject
 class TaskDetailsViewModel @Inject constructor(
     private val repository: TaskRepository,
     private val uiManager: UIManager,
-    private val dialogController: TaskDialogController,
+    private val dialogController: DialogController,
     savedStateHandle: SavedStateHandle,
-) : ViewModel(), TaskDialogController by dialogController {
+) : ViewModel(), DialogController by dialogController {
 
     private val taskId: Int = savedStateHandle.get<Int>("taskId") ?: -1
     private val _task = MutableStateFlow<TaskItem?>(null)
@@ -60,15 +59,15 @@ class TaskDetailsViewModel @Inject constructor(
         }
     }
 
-    override fun onBottomDialogEvent(event: DetailsEvent) {
+    override fun onCRUDEvent(event: CRUDEvent) {
         when (event) {
-            DetailsEvent.OnCancel -> {
+            CRUDEvent.OnCancel -> {
                 viewModelScope.launch {
                     uiManager.navigateBack()
                 }
             }
 
-            DetailsEvent.Delete -> {
+            CRUDEvent.Delete -> {
                 viewModelScope.launch {
                     _task.value?.let { repository.delete(it) }
                     uiManager.navigateBack()
@@ -80,11 +79,11 @@ class TaskDetailsViewModel @Inject constructor(
                 }
             }
 
-            DetailsEvent.Edit -> {
+            CRUDEvent.Edit -> {
                 isSheetOpen.value = true
             }
 
-            DetailsEvent.OnConfirm -> {
+            CRUDEvent.OnConfirm -> {
                 viewModelScope.launch {
                     _task.value?.let {
                         repository.insert(

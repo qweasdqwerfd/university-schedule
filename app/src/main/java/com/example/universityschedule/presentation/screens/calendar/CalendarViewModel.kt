@@ -5,12 +5,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.universityschedule.data.remote.api.RetrofitClient
 import com.example.universityschedule.data.remote.dto.PublicPartGroup
 import com.example.universityschedule.data.remote.dto.PublicStaticLesson
 import com.example.universityschedule.data.remote.response.PaginatedResponse
 import com.example.universityschedule.domain.model.Lesson
-import com.example.universityschedule.domain.usecase.GetLessonsForRange
+import com.example.universityschedule.domain.usecase.FetchWeekUseCase
+import com.example.universityschedule.presentation.common.dialog_controller.DialogController
+import com.example.universityschedule.presentation.navigation.UIManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,17 +24,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalendarViewModel @Inject constructor(
-    private val getLessonsForRange: GetLessonsForRange
-) : ViewModel() {
-
-    private val lessonsApi = RetrofitClient.lessonsApiService
-    private val dictApi = RetrofitClient.dictApiService
-
+    private val dialogController: DialogController,
+    private val fetchWeekIfNeeded: FetchWeekUseCase,
+    private val uiManager: UIManager,
+) : ViewModel(), DialogController by dialogController {
 
     private val _lessons = mutableStateOf<List<PublicStaticLesson>?>(
         null
     )
     val lessons: MutableState<List<PublicStaticLesson>?> get() = _lessons
+
 
     private val _selectedDate = MutableStateFlow(LocalDate.now())
     val selectedDate = _selectedDate.asStateFlow()
@@ -50,6 +50,10 @@ class CalendarViewModel @Inject constructor(
 
     val groups: MutableState<PaginatedResponse<PublicPartGroup>> get() = _groups
 
+    init {
+        Log.d("qwe", groups.value.toString())
+    }
+
 
     // кэш
     private val _lessonsByDate = MutableStateFlow<Map<LocalDate, List<Lesson>>>(emptyMap())
@@ -57,126 +61,46 @@ class CalendarViewModel @Inject constructor(
 
     private val fetchingWeeks = mutableSetOf<LocalDate>()
 
-    // индикатор загрузки для UI (true при загрузке текущей недели)
     private val _isLoadingCurrentWeek = MutableStateFlow(false)
     val isLoadingCurrentWeek: StateFlow<Boolean> = _isLoadingCurrentWeek.asStateFlow()
+
+
 
     fun onPageChanged(pageDate: LocalDate) {
         val startOfWeek = pageDate.with(DayOfWeek.MONDAY)
 
-        // 1) Сначала загружаем только текущую неделю (без соседей)
-        fetchWeekIfNeeded(startOfWeek, markAsCurrent = true)
-
-        // 2) Затем в фоне (с небольшой задержкой) подгружаем соседние недели,
-        // чтобы не блокировать первый отклик
         viewModelScope.launch {
-            // даём UI отрисоваться, затем стартим prefetch
-            delay(700) // можно варьировать: 300..1200 ms
-            fetchWeekIfNeeded(startOfWeek.minusWeeks(1), markAsCurrent = false)
-            fetchWeekIfNeeded(startOfWeek.plusWeeks(1), markAsCurrent = false)
+
+        fetchWeekIfNeeded(
+            startOfWeek, markAsCurrent = true,
+            lessonsByDate = _lessonsByDate,
+            fetchingWeeks = fetchingWeeks,
+            isLoadingCurrentWeek = _isLoadingCurrentWeek
+        )
+
+            delay(700)
+            fetchWeekIfNeeded(
+                startOfWeek.minusWeeks(1), markAsCurrent = false,
+                lessonsByDate = _lessonsByDate,
+                fetchingWeeks = fetchingWeeks,
+                isLoadingCurrentWeek = _isLoadingCurrentWeek
+            )
+            fetchWeekIfNeeded(
+                startOfWeek.plusWeeks(1), markAsCurrent = false,
+                lessonsByDate = _lessonsByDate,
+                fetchingWeeks = fetchingWeeks,
+                isLoadingCurrentWeek = _isLoadingCurrentWeek
+            )
         }
     }
 
-    private fun fetchWeekIfNeeded(startOfWeek: LocalDate, markAsCurrent: Boolean) {
-        if (fetchingWeeks.contains(startOfWeek)) return
 
-        val weekDates = (0..5).map { startOfWeek.plusDays(it.toLong()) } // Mon..Sat
-        if (weekDates.all { _lessonsByDate.value.containsKey(it) }) return
 
-        fetchingWeeks.add(startOfWeek)
-
-        viewModelScope.launch {
-            if (markAsCurrent) _isLoadingCurrentWeek.value = true
-            try {
-                val endOfWeek = startOfWeek.plusDays(5)
-                val lessons = getLessonsForRange(startOfWeek, endOfWeek)
-
-                val byDate = lessons
-                    .flatMap { lesson ->
-                        lesson.dates
-                            .filter { d -> d.dayOfWeek != DayOfWeek.SUNDAY && !d.isBefore(startOfWeek) && !d.isAfter(endOfWeek) }
-                            .map { date -> date to lesson }
-                    }
-                    .groupBy({ it.first }, { it.second })
-
-                val newMap = _lessonsByDate.value.toMutableMap()
-                weekDates.forEach { d -> newMap[d] = byDate[d] ?: emptyList() }
-                _lessonsByDate.value = newMap.toMap()
-
-                Log.d("CalendarVM", "Loaded week $startOfWeek -> ${byDate.values.sumBy { it.size }} lessons")
-            } catch (e: Exception) {
-                Log.e("CalendarVM", "Error loading week $startOfWeek: ${e.message}", e)
-            } finally {
-                if (markAsCurrent) _isLoadingCurrentWeek.value = false
-                fetchingWeeks.remove(startOfWeek)
-            }
-        }
-    }
-
-    fun lessonsForDate(date: LocalDate) = lessonsByDate.value[date] ?: emptyList()
 
     fun setSelectedDate(date: LocalDate) {
         _selectedDate.value = date
     }
 
-
-    fun getLessonsByPartGroup() {
-        viewModelScope.launch {
-            try {
-                val response = lessonsApi.getLessonsByPartGroup(
-                    startDate = "2025-09-01",
-                    endDate = "2026-01-31",
-                    semester = 0,
-                    id = 969
-                )
-
-                val todayLessons =
-                    response.lessons.filter { it.dates?.contains("2025-10-27") == true }
-
-                todayLessons.forEach { lesson ->
-//                    Log.d("qwe", "Пара: ${lesson.subject_name} в ${lesson.start_time}")
-                    _lessons.value = listOf(lesson)
-//                    Log.d("qwe",_lessons.value.toString())
-                }
-
-
-            } catch (e: Exception) {
-                Log.e("qwe", "Error loading lessons", e)
-            }
-        }
-    }
-
-    fun findTargetGroup() {
-        viewModelScope.launch {
-            var currentPage = 1
-            var foundGroup: PublicPartGroup? = null
-
-            while (foundGroup == null) {
-                try {
-                    val response = dictApi.getPartGroups(page = currentPage)
-                    Log.d("qwe", "Page $currentPage groups: ${response.results.map { it.name }}")
-
-                    foundGroup = response.results.find { it.name == "ПВ-242(1)" }
-
-                    if (foundGroup != null) {
-                        Log.d("qwe", "FOUND on page $currentPage: $foundGroup")
-                        _groups.value = response
-                        break
-                    }
-
-                    if (response.next == null) {
-                        Log.d("qwe", "Group 'ПВ-242' not found in all pages")
-                        break
-                    }
-
-                    currentPage++
-                } catch (e: Exception) {
-                    Log.e("qwe", "Error loading page $currentPage", e)
-                    break
-                }
-            }
-        }
-    }
 
 
 }

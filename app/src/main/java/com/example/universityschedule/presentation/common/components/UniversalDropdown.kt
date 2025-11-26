@@ -12,7 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Displayable
+import com.example.universityschedule.presentation.common.dialog_controller.Displayable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

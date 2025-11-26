@@ -1,14 +1,23 @@
 package com.example.universityschedule.data.repository
 
+import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.example.universityschedule.data.remote.service.LessonsApiService
 import com.example.universityschedule.domain.model.Lesson
 import com.example.universityschedule.domain.repository.LessonsRepository
 import com.example.universityschedule.presentation.screens.calendar.components.enums.LessonType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
+import java.time.DayOfWeek
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlin.collections.forEach
 
 class LessonsRepositoryImpl @Inject constructor(
-    private val api: LessonsApiService
+    private val api: LessonsApiService,
 ) : LessonsRepository {
 
     override suspend fun getLessons(start: LocalDate, end: LocalDate): List<Lesson> {
@@ -31,6 +40,49 @@ class LessonsRepositoryImpl @Inject constructor(
                 teacher = dto.employees
             )
         }
+    }
+
+    override suspend fun fetchWeekIfNeeded(
+        startOfWeek: LocalDate,
+        markAsCurrent: Boolean,
+        lessonsByDate: MutableStateFlow<Map<LocalDate, List<Lesson>>>,
+        fetchingWeeks: MutableSet<LocalDate>,
+        isLoadingCurrentWeek: MutableStateFlow<Boolean>
+    ) {
+        if (fetchingWeeks.contains(startOfWeek)) return
+
+        val weekDates = (0..5).map { startOfWeek.plusDays(it.toLong()) } // Mon..Sat
+        if (weekDates.all { lessonsByDate.value.containsKey(it) }) return
+
+        fetchingWeeks.add(startOfWeek)
+
+        withContext(Dispatchers.IO) {
+            if (markAsCurrent) isLoadingCurrentWeek.value = true
+            try {
+                val endOfWeek = startOfWeek.plusDays(5)
+                val lessons = getLessons(startOfWeek, endOfWeek)
+
+                val byDate = lessons
+                    .flatMap { lesson ->
+                        lesson.dates
+                            .filter { d -> d.dayOfWeek != DayOfWeek.SUNDAY && !d.isBefore(startOfWeek) && !d.isAfter(endOfWeek) }
+                            .map { date -> date to lesson }
+                    }
+                    .groupBy({ it.first }, { it.second })
+
+                val newMap = lessonsByDate.value.toMutableMap()
+                weekDates.forEach { d -> newMap[d] = byDate[d] ?: emptyList() }
+                lessonsByDate.value = newMap.toMap()
+
+                Log.d("CalendarVM", "Loaded week $startOfWeek -> ${byDate.values.sumBy { it.size }} lessons")
+            } catch (e: Exception) {
+                Log.e("CalendarVM", "Error loading week $startOfWeek: ${e.message}", e)
+            } finally {
+                if (markAsCurrent) isLoadingCurrentWeek.value = false
+                fetchingWeeks.remove(startOfWeek)
+            }
+        }
+
     }
 }
 

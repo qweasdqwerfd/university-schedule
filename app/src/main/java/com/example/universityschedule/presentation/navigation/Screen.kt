@@ -7,4 +7,5 @@ sealed class Screen(val route: String) {
     object TASK_DETAILS: Screen("task_details/{taskId}") {
         fun createRoute(taskId: Int) = "task_details/$taskId?ts=${System.currentTimeMillis()}"
     }
+    object SEARCH_SCHEDULE: Screen("search_schedule")
 }

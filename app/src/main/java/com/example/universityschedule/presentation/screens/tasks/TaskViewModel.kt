@@ -1,7 +1,6 @@
 package com.example.universityschedule.presentation.screens.tasks
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -12,9 +11,9 @@ import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.common.snack_bar.SnackBarType
 import com.example.universityschedule.presentation.navigation.Screen
 import com.example.universityschedule.presentation.navigation.UIManager
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.TaskDialogController
+import com.example.universityschedule.presentation.common.dialog_controller.LessonChip
+import com.example.universityschedule.presentation.common.dialog_controller.Priority
+import com.example.universityschedule.presentation.common.dialog_controller.DialogController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,7 +22,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -31,8 +29,8 @@ import javax.inject.Inject
 class TaskViewModel @Inject constructor(
     private val repository: TaskRepository,
     private val uiManager: UIManager,
-    private val dialogController: TaskDialogController,
-) : ViewModel(), TaskDialogController by dialogController {
+    private val dialogController: DialogController,
+) : ViewModel(), DialogController by dialogController {
 
     override var dialogTitle = mutableStateOf("")
     override var dialogDescription = mutableStateOf("")
@@ -124,6 +122,7 @@ class TaskViewModel @Inject constructor(
                     }
                 }
             }
+            else -> {}
         }
     }
 

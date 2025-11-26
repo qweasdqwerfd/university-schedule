@@ -18,9 +18,9 @@ import com.example.universityschedule.presentation.common.components.EnumChipsRo
 import com.example.universityschedule.presentation.common.components.UniversalTextField
 import com.example.universityschedule.presentation.screens.calendar.components.enums.LessonColor
 import com.example.universityschedule.presentation.screens.tasks.components.UniversalEnumChip
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.PriorityColor
+import com.example.universityschedule.presentation.common.dialog_controller.LessonChip
+import com.example.universityschedule.presentation.common.dialog_controller.Priority
+import com.example.universityschedule.presentation.common.dialog_controller.PriorityColor
 import com.example.universityschedule.presentation.util.dimens
 
 @RequiresApi(Build.VERSION_CODES.O)

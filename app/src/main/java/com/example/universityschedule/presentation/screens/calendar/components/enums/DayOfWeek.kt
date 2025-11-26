@@ -1,6 +1,6 @@
 package com.example.universityschedule.presentation.screens.calendar.components.enums
 
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Displayable
+import com.example.universityschedule.presentation.common.dialog_controller.Displayable
 
 enum class DayOfWeek(override val displayName: String) : Displayable {
     Sun("Вс"),

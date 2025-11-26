@@ -34,7 +34,8 @@ fun MainScreen() {
         Box(modifier = Modifier.padding(innerPadding)) {
             NavGraph(
                 navController,
-                snackBarHostState
+                snackBarHostState,
+                innerPadding
 
 
             )

@@ -182,7 +182,7 @@ fun LessonCard(
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
-                                text = location.joinToString { it.building_name },
+                                text = location.joinToString { "${it.full_name}" },
                                 style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
                             )
                         }

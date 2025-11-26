@@ -10,8 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Displayable
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
+import com.example.universityschedule.presentation.common.dialog_controller.Displayable
 
 @Composable
 inline fun <reified T> PriorityChipCompact(

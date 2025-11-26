@@ -1,10 +1,9 @@
-package com.example.universityschedule.presentation.screens.tasks.components.dialog_controller
+package com.example.universityschedule.presentation.common.dialog_controller
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.Color
 import com.example.universityschedule.presentation.common.DialogEvent
-import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
-import java.time.LocalDate
+import com.example.universityschedule.presentation.screens.tasks.details.CRUDEvent
 import java.time.LocalDateTime
 
 interface Displayable { val displayName: String }
@@ -30,12 +29,12 @@ enum class LessonChip(override val displayName: String) : Displayable {
     SPORT("Спорт")
 }
 
-interface TaskDialogController {
+interface DialogController {
     val dialogTitle: MutableState<String>
     val dialogDescription: MutableState<String>
     val dialogDueDate: MutableState<LocalDateTime?>
     val dialogPriority: MutableState<Priority>
     val dialogRelatedLesson: MutableState<LessonChip>
     fun onDialogEvent(event: DialogEvent)
-    fun onBottomDialogEvent(event: DetailsEvent)
+    fun onCRUDEvent(event: CRUDEvent)
 }

@@ -3,8 +3,8 @@ package com.example.universityschedule.data.local
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.room.TypeConverter
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
+import com.example.universityschedule.presentation.common.dialog_controller.LessonChip
+import com.example.universityschedule.presentation.common.dialog_controller.Priority
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

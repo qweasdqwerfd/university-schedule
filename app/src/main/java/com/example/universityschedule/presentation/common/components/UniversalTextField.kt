@@ -21,6 +21,7 @@ import com.example.universityschedule.R
 
 @Composable
 fun UniversalTextField(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
@@ -49,7 +50,7 @@ fun UniversalTextField(
         label = { Text(label, color = colorResource(R.color.textFieldFont)) },
         placeholder = { Text(placeholder) },
         leadingIcon = leadingIcon,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .heightIn(min = minHeight, max = maxHeight),
         singleLine = singleLine,

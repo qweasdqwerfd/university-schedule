@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,12 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 import com.example.universityschedule.domain.model.TaskItem
 import com.example.universityschedule.presentation.common.DialogEvent
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
+import com.example.universityschedule.presentation.common.dialog_controller.LessonChip
 import com.example.universityschedule.presentation.util.dimens
 import java.time.format.DateTimeFormatter
 import java.util.Locale

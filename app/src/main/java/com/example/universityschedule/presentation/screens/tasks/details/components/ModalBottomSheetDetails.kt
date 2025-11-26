@@ -33,10 +33,10 @@ import com.example.universityschedule.presentation.common.components.EnumChipsRo
 import com.example.universityschedule.presentation.common.components.UniversalDropdown
 import com.example.universityschedule.presentation.common.components.UniversalTextField
 import com.example.universityschedule.presentation.screens.tasks.DateTimePickerField
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.LessonChip
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.Priority
-import com.example.universityschedule.presentation.screens.tasks.components.dialog_controller.PriorityColor
-import com.example.universityschedule.presentation.screens.tasks.details.DetailsEvent
+import com.example.universityschedule.presentation.common.dialog_controller.LessonChip
+import com.example.universityschedule.presentation.common.dialog_controller.Priority
+import com.example.universityschedule.presentation.common.dialog_controller.PriorityColor
+import com.example.universityschedule.presentation.screens.tasks.details.CRUDEvent
 import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsViewModel
 import com.example.universityschedule.presentation.util.dimens
 import java.time.LocalDateTime
@@ -185,7 +185,7 @@ fun ModalBottomSheetDetails(
                     color = Color.White,
                     icon = null,
                     sizeIcon = null,
-                    onClick = { viewModel.onBottomDialogEvent(DetailsEvent.OnCancel) },
+                    onClick = { viewModel.onCRUDEvent(CRUDEvent.OnCancel) },
                     textColor = colorResource(R.color.selectedBottom)
                 )
                 DetailsButton(
@@ -194,7 +194,7 @@ fun ModalBottomSheetDetails(
                     color = colorResource(R.color.selectedBottom),
                     icon = null,
                     sizeIcon = null,
-                    onClick = { viewModel.onBottomDialogEvent(DetailsEvent.OnConfirm) }
+                    onClick = { viewModel.onCRUDEvent(CRUDEvent.OnConfirm) }
                 )
             }
 
