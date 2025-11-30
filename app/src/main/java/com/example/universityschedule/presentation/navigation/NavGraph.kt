@@ -72,7 +72,9 @@ fun NavGraph(
             )
         }
         composable(Screen.ADD_TASK.route) {
-            NewTaskScreen(taskViewModel)
+            NewTaskScreen(
+                taskViewModel
+            )
         }
         composable(
             route = Screen.TASK_DETAILS.route,

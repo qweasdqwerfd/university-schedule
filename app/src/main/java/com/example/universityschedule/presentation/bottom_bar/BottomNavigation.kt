@@ -14,15 +14,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.universityschedule.R
+import com.example.universityschedule.presentation.util.dimens
 
 @Composable
 fun BottomNavigation(
     navController: NavHostController,
-    ) {
+    modifier: Modifier = Modifier,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    textStyle: TextStyle = MaterialTheme.typography.bodySmall,
+    selectedIconColor: Color = colorResource(R.color.selectedBottom),
+    selectedTextColor: Color = colorResource(R.color.selectedBottom),
+    unselectedIconColor: Color = Color.Gray,
+    unselectedTextColor: Color = Color.Gray,
+    selectedIndicatorColor: Color = MaterialTheme.colorScheme.surface,
+    disabledIconColor: Color = MaterialTheme.colorScheme.surface,
+    disabledTextColor: Color = MaterialTheme.colorScheme.surface
+) {
 
     val listItems = listOf(
         BottomItem.UniversitySchedule,
@@ -30,8 +42,8 @@ fun BottomNavigation(
     )
 
     NavigationBar(
-        modifier = Modifier.fillMaxWidth(),
-        containerColor = MaterialTheme.colorScheme.surface,
+        modifier = modifier.fillMaxWidth(),
+        containerColor = containerColor,
         contentColor = Color.Gray
     ) {
 
@@ -49,30 +61,29 @@ fun BottomNavigation(
                 icon = {
                     Icon(
                         painter = painterResource(item.icon),
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier.size(MaterialTheme.dimens.space20),
                         contentDescription = "Icon",
-                        
                     )
                 },
-                label = { Text(
-                    text = item.title,
-                    style = MaterialTheme.typography.bodySmall,
-                ) },
+                label = {
+                    Text(
+                        text = item.title,
+                        style = textStyle,
+                    )
+                },
 
                 colors = NavigationBarItemColors(
-                    selectedIconColor = colorResource(R.color.selectedBottom),
-                    selectedTextColor = colorResource(R.color.selectedBottom),
-                    unselectedIconColor = Color.Gray,
-                    unselectedTextColor = Color.Gray,
-                    selectedIndicatorColor = MaterialTheme.colorScheme.surface,
-                    disabledIconColor = MaterialTheme.colorScheme.surface,
-                    disabledTextColor = MaterialTheme.colorScheme.surface
+                    selectedIconColor = selectedIconColor,
+                    selectedTextColor = selectedTextColor,
+                    unselectedIconColor = unselectedIconColor,
+                    unselectedTextColor = unselectedTextColor,
+                    selectedIndicatorColor = selectedIndicatorColor,
+                    disabledIconColor = disabledIconColor,
+                    disabledTextColor = disabledTextColor
                 )
 
             )
         }
-
-
 
 
     }

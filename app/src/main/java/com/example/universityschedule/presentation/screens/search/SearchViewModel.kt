@@ -1,12 +1,11 @@
 package com.example.universityschedule.presentation.screens.search
 
-import androidx.compose.runtime.MutableState
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.universityschedule.data.remote.dto.GroupWithPartGroups
-import com.example.universityschedule.domain.repository.DictRepository
-import com.example.universityschedule.domain.usecase.GetAllGroupsUseCase
+import com.example.universityschedule.domain.usecases.GetAllGroupsUseCase
 import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.common.dialog_controller.DialogController
 import com.example.universityschedule.presentation.navigation.Screen

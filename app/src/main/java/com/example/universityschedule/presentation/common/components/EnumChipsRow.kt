@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.universityschedule.presentation.util.dimens
 
 @Composable
 inline fun <reified T : Enum<T>> EnumChipsRow(
@@ -17,7 +19,7 @@ inline fun <reified T : Enum<T>> EnumChipsRow(
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.space8)
     ) {
         items(enumValues<T>().toList()) { item ->
             val isSelected = item == selectedItem

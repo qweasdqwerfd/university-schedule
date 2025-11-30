@@ -1,4 +1,4 @@
-package com.example.universityschedule.domain.usecase
+package com.example.universityschedule.domain.usecases
 
 import com.example.universityschedule.domain.model.Lesson
 import com.example.universityschedule.domain.repository.LessonsRepository

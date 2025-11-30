@@ -1,4 +1,4 @@
-package com.example.universityschedule.domain.usecase
+package com.example.universityschedule.domain.usecases
 
 import com.example.universityschedule.data.remote.dto.GroupWithPartGroups
 import com.example.universityschedule.domain.repository.DictRepository

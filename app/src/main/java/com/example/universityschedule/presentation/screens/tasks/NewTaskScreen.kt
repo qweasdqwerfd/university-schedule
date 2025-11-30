@@ -16,18 +16,19 @@ import androidx.compose.ui.unit.dp
 import com.example.universityschedule.R
 import com.example.universityschedule.presentation.common.components.EnumChipsRow
 import com.example.universityschedule.presentation.common.components.UniversalTextField
-import com.example.universityschedule.presentation.screens.calendar.components.enums.LessonColor
-import com.example.universityschedule.presentation.screens.tasks.components.UniversalEnumChip
 import com.example.universityschedule.presentation.common.dialog_controller.LessonChip
 import com.example.universityschedule.presentation.common.dialog_controller.Priority
 import com.example.universityschedule.presentation.common.dialog_controller.PriorityColor
+import com.example.universityschedule.presentation.screens.calendar.components.enums.LessonColor
+import com.example.universityschedule.presentation.screens.tasks.components.UniversalEnumChip
 import com.example.universityschedule.presentation.util.dimens
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewTaskScreen(
-    viewModel: TaskViewModel
+    taskViewModel: TaskViewModel,
 ) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,8 +46,8 @@ fun NewTaskScreen(
         )
 
         UniversalTextField(
-            value = viewModel.dialogTitle.value,
-            onValueChange = { viewModel.dialogTitle.value = it },
+            value = taskViewModel.dialogTitle.value,
+            onValueChange = { taskViewModel.dialogTitle.value = it },
             label = "Введите название задачи",
             placeholder = "Введите название задачи",
             maxChars = 30
@@ -63,8 +64,8 @@ fun NewTaskScreen(
 
 
         UniversalTextField(
-            value = viewModel.dialogDescription.value,
-            onValueChange = { viewModel.dialogDescription.value = it },
+            value = taskViewModel.dialogDescription.value,
+            onValueChange = { taskViewModel.dialogDescription.value = it },
             label = "Введите описание задачи",
             placeholder = "Введите описание задачи",
             singleLine = false,
@@ -84,8 +85,8 @@ fun NewTaskScreen(
         )
 
         DateTimePickerField(
-            value = viewModel.dialogDueDate.value,
-            onValueChange = { viewModel.dialogDueDate.value = it },
+            value = taskViewModel.dialogDueDate.value,
+            onValueChange = { taskViewModel.dialogDueDate.value = it },
             label = "Пон, Март 31, 09:42",
             placeholder = ""
         )
@@ -103,8 +104,8 @@ fun NewTaskScreen(
 
 
         EnumChipsRow(
-            selectedItem = viewModel.dialogPriority.value,
-            onItemSelected = { viewModel.dialogPriority.value = it },
+            selectedItem = taskViewModel.dialogPriority.value,
+            onItemSelected = { taskViewModel.dialogPriority.value = it },
         ) { item, isSelected, onClick ->
             UniversalEnumChip(
                 item = item,
@@ -118,7 +119,7 @@ fun NewTaskScreen(
                     }
                 },
 
-            )
+                )
         }
 
         Spacer(Modifier.height(MaterialTheme.dimens.heightSmallMinus))
@@ -133,8 +134,8 @@ fun NewTaskScreen(
 
 
         EnumChipsRow(
-            selectedItem = viewModel.dialogRelatedLesson.value,
-            onItemSelected = { viewModel.dialogRelatedLesson.value = it }
+            selectedItem = taskViewModel.dialogRelatedLesson.value,
+            onItemSelected = { taskViewModel.dialogRelatedLesson.value = it }
         ) { item, isSelected, onClick ->
             UniversalEnumChip(
                 item = item,
@@ -154,5 +155,7 @@ fun NewTaskScreen(
                 }
             )
         }
+
+
     }
 }

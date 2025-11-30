@@ -98,8 +98,8 @@ fun DayText(
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = date.month.getDisplayName(
-                    java.time.format.TextStyle.SHORT_STANDALONE,
-                    Locale("ru")
+                    java.time.format.TextStyle.SHORT,
+                    Locale("ru", "RU")
                 ),
                 color = colorText,
                 maxLines = 1,
