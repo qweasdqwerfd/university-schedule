@@ -7,7 +7,7 @@ import com.example.universityschedule.presentation.common.dialog_controller.Prio
 import java.time.LocalDateTime
 
 @Entity(tableName = "task_table")
-data class TaskItem(
+data class TaskItemEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val priority: Priority,

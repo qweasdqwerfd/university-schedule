@@ -3,6 +3,7 @@ package com.example.universityschedule.presentation.screens.calendar
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.universityschedule.data.remote.dto.PublicPartGroup
@@ -13,6 +14,7 @@ import com.example.universityschedule.domain.usecases.FetchWeekUseCase
 import com.example.universityschedule.domain.usecases.GetLessonsUseCase
 import com.example.universityschedule.presentation.common.dialog_controller.DialogController
 import com.example.universityschedule.presentation.navigation.UIManager
+import com.example.universityschedule.presentation.screens.search.SearchViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +32,6 @@ class CalendarViewModel @Inject constructor(
 //    private val getLessons: GetLessonsUseCase,
     private val uiManager: UIManager,
 ) : ViewModel(), DialogController by dialogController {
-
     private val _lessons = mutableStateOf<List<PublicStaticLesson>?>(
         null
     )

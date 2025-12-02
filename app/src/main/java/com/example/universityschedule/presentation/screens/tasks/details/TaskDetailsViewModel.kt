@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.universityschedule.domain.model.TaskItem
+import com.example.universityschedule.domain.model.TaskItemEntity
 import com.example.universityschedule.domain.repository.TaskRepository
 import com.example.universityschedule.presentation.common.snack_bar.SnackBarType
 import com.example.universityschedule.presentation.navigation.Screen
@@ -29,8 +29,8 @@ class TaskDetailsViewModel @Inject constructor(
 ) : ViewModel(), DialogController by dialogController {
 
     private val taskId: Int = savedStateHandle.get<Int>("taskId") ?: -1
-    private val _task = MutableStateFlow<TaskItem?>(null)
-    val task: StateFlow<TaskItem?> = _task
+    private val _task = MutableStateFlow<TaskItemEntity?>(null)
+    val task: StateFlow<TaskItemEntity?> = _task
 
     override var dialogTitle = mutableStateOf("")
     override var dialogDescription = mutableStateOf("")

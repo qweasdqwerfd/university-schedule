@@ -1,14 +1,14 @@
 package com.example.universityschedule.domain.repository
 
-import com.example.universityschedule.domain.model.TaskItem
+import com.example.universityschedule.domain.model.TaskItemEntity
 import kotlinx.coroutines.flow.Flow
 
 interface TaskRepository {
-    suspend fun insert(item: TaskItem)
+    suspend fun insert(item: TaskItemEntity)
 
-    suspend fun delete(item: TaskItem)
+    suspend fun delete(item: TaskItemEntity)
 
-    fun getItems(): Flow<List<TaskItem>>
-    suspend fun getItemById(id: Int): TaskItem
+    fun getItems(): Flow<List<TaskItemEntity>>
+    suspend fun getItemById(id: Int): TaskItemEntity
 
 }

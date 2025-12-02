@@ -7,12 +7,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.universityschedule.domain.model.TaskItem
+import com.example.universityschedule.domain.model.TaskItemEntity
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.screens.tasks.components.CardTaskPanel
 
 @Composable
-fun CompletedTabTasks(tasks: List<TaskItem>, viewModel: TaskViewModel) {
+fun CompletedTabTasks(tasks: List<TaskItemEntity>, viewModel: TaskViewModel) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),

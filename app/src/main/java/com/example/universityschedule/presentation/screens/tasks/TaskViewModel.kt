@@ -5,7 +5,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.universityschedule.domain.model.TaskItem
+import com.example.universityschedule.domain.model.TaskItemEntity
 import com.example.universityschedule.domain.repository.TaskRepository
 import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.common.snack_bar.SnackBarType
@@ -75,7 +75,7 @@ class TaskViewModel @Inject constructor(
                 }
 
                 viewModelScope.launch {
-                    val task = TaskItem(
+                    val task = TaskItemEntity(
                         title = title,
                         description = description,
                         dueDate = dueDate!!,

@@ -28,7 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import com.example.universityschedule.R
-import com.example.universityschedule.domain.model.TaskItem
+import com.example.universityschedule.domain.model.TaskItemEntity
 import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.common.dialog_controller.LessonChip
 import com.example.universityschedule.presentation.util.dimens
@@ -38,7 +38,7 @@ import java.util.Locale
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CardTaskPanel(
-    item: TaskItem,
+    item: TaskItemEntity,
     onEvent: (DialogEvent) -> Unit,
 ) {
     Card(

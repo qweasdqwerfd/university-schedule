@@ -1,6 +1,5 @@
 package com.example.universityschedule.presentation.screens.search
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -43,11 +42,10 @@ class SearchViewModel @Inject constructor(
             else -> {}
         }
     }
-
     fun getGroups() {
         viewModelScope.launch {
             _groupsList.value = getAllGroups(
-                pageSize = 100,
+                pageSize = 400,
                 name = null,
                 dekanatId = null,
                 isActive = null,
