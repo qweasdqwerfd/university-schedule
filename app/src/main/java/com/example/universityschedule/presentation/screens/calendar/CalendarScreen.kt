@@ -19,9 +19,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
+import androidx.work.WorkManager
+import com.example.universityschedule.data.workmanager.GroupsSyncWorker
 import com.example.universityschedule.presentation.screens.calendar.algsOfSun.nonSundayStepsBetween
 import com.example.universityschedule.presentation.screens.calendar.algsOfSun.pageToDate
 import com.example.universityschedule.presentation.screens.calendar.components.TitleDate
@@ -43,10 +49,26 @@ import java.time.LocalDate
 fun CalendarScreen(
     calendarViewModel: CalendarViewModel,
     searchViewModel: SearchViewModel = hiltViewModel(),
+    workManager: WorkManager = WorkManager.getInstance(LocalContext.current),
     taskViewModel: TaskViewModel,
     titleStyle: TextStyle = MaterialTheme.typography.titleMedium,
     titleFont: FontWeight = FontWeight.ExtraBold,
 ) {
+
+    LaunchedEffect(Unit) {
+        val request = OneTimeWorkRequestBuilder<GroupsSyncWorker>()
+            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST) // быстрее
+            .build()
+
+        workManager.enqueueUniqueWork(
+            "load_all_groups",
+            ExistingWorkPolicy.KEEP, // предотвращает повторы
+            request
+        )
+    }
+
+
+
     val coroutineScope = rememberCoroutineScope()
     val selectedDate by calendarViewModel.selectedDate.collectAsState()
     val today = remember { LocalDate.now() }
@@ -57,7 +79,6 @@ fun CalendarScreen(
     val currentDate by remember {
         derivedStateOf { pageToDate(initialPage, pagerState.currentPage, baseDate) }
     }
-
     // throttle обновления selectedDate
     LaunchedEffect(currentDate) {
         snapshotFlow { currentDate }

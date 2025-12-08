@@ -69,7 +69,7 @@ fun SearchScheduleScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    val groupsList = searchViewModel.groupsList.value.map { it.name }
+    val groupsList = searchViewModel.groupsList.value.collectAsState(initial = emptyList()).value
 
     // активность SearchBar (показывать подсказки)
     var active by remember { mutableStateOf(true) }
@@ -77,18 +77,18 @@ fun SearchScheduleScreen(
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
         keyboardController?.show()
-        searchViewModel.getGroups()
+        searchViewModel.getGroups()  //!!!!!!!!!!
     }
 
-    // Фильтрация списка: при пустом запросе — первые 10, иначе — все совпадающие по вхождению (ignoreCase)
-    val filtered = remember(textState, groupsList) {
-        val q = textState.trim()
-        if (q.isEmpty()) {
-            groupsList.take(10)
-        } else {
-            groupsList.filter { it.contains(q, ignoreCase = true) }
-        }
-    }
+//    // Фильтрация списка: при пустом запросе — первые 10, иначе — все совпадающие по вхождению (ignoreCase)
+//    val filtered = remember(textState, groupsList) {
+//        val q = textState.trim()
+//        if (q.isEmpty()) {
+//            groupsList.take(10)
+//        } else {
+//            groupsList.filter { it.contains(q, ignoreCase = true) }
+//        }
+//    }
 
     Box(
         modifier = modifier
@@ -119,8 +119,8 @@ fun SearchScheduleScreen(
                 onQueryChange = { textState = it },
                 onSearch = {
                     // при нажатии Enter можно выбрать первый результат (если есть)
-                    filtered.firstOrNull()?.let { selected ->
-                        textState = selected
+                    groupsList.firstOrNull()?.let { selected ->
+                        textState = selected.name
                         focusManager.clearFocus()
                         keyboardController?.hide()
                         active = false
@@ -140,7 +140,7 @@ fun SearchScheduleScreen(
                 }
             ) {
                 // Здесь находится выпадающая область подсказок (content у SearchBar)
-                if (filtered.isEmpty()) {
+                if (groupsList.isEmpty()) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -160,14 +160,14 @@ fun SearchScheduleScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         content = {
-                            items(filtered) { item ->
+                            items(groupsList) { item ->
                                 Surface(
                                     modifier = Modifier
                                         .wrapContentWidth()
                                         .heightIn(min = 40.dp)
                                         .clickable {
                                             // клик по чипу — ставим в поле и скрываем подсказки
-                                            textState = item
+                                            textState = item.name
                                             focusManager.clearFocus()
                                             keyboardController?.hide()
                                             active = false
@@ -181,7 +181,7 @@ fun SearchScheduleScreen(
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Text(
-                                            text = item,
+                                            text = item.name,
                                             maxLines = 1,
                                             overflow = TextOverflow.Ellipsis,
                                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium)
@@ -198,7 +198,7 @@ fun SearchScheduleScreen(
 
             // Для отладки / отображения текущего списка — можно убрать если не нужно
             Text(
-                text = "Результатов: ${filtered.size}",
+                text = "Результатов: ${groupsList.size}",
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(start = 4.dp)
             )
@@ -208,14 +208,14 @@ fun SearchScheduleScreen(
             // Если нужно показать полный список (например когда SearchBar не активен), можно показать LazyColumn:
             // в текущем варианте — не обязательно, но оставлю пример, показывающий все элементы (или отфильтрованные)
             LazyColumn {
-                items(filtered) { name ->
+                items(groupsList) { item ->
                     Text(
-                        text = name,
+                        text = item.name,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 6.dp)
                             .clickable {
-                                textState = name
+                                textState = item.name
                                 focusManager.clearFocus()
                                 keyboardController?.hide()
                                 active = false

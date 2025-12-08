@@ -60,6 +60,19 @@ android {
 }
 
 dependencies {
+    // WorkManager (Kotlin Coroutines support)
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.51")
+    kapt("com.google.dagger:hilt-android-compiler:2.51")
+
+    // Hilt + WorkManager
+    implementation("androidx.hilt:hilt-work:1.2.0")
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
+
+
+    implementation(libs.androidx.hilt.common)
     // Core Library Desugaring для поддержки новых Java API
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 

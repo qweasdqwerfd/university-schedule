@@ -2,6 +2,7 @@ package com.example.universityschedule.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.example.universityschedule.data.local.GroupDao
 import com.example.universityschedule.data.local.MainDB
 import com.example.universityschedule.data.remote.service.DictApiService
@@ -39,12 +40,13 @@ object AppProvidesModule {
 
     @Provides
     @Singleton
-    fun provideGroupRepo(
-        db: MainDB,
-        api: DictApiService,
-    ): GroupsRepository = GroupsRepositoryImpl(api = api, dao = db.groupDao)
+    fun provideUIManager() = UIManager()
+
+    @Provides
+    fun provideGroupDao(db: MainDB): GroupDao = db.groupDao
 
     @Provides
     @Singleton
-    fun provideUIManager() = UIManager()
+    fun provideWorkManager(@ApplicationContext context: Context): WorkManager =
+        WorkManager.getInstance(context)
 }

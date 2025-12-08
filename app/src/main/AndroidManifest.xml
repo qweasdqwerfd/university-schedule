@@ -26,6 +26,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Отключаем автoинициализацию WorkManager, чтобы наш Configuration.Provider (Hilt) применился -->
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            android:exported="false"
+            tools:node="remove"
+            tools:ignore="MissingClass" />
+
     </application>
 
 </manifest>
