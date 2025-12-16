@@ -1,6 +1,7 @@
 package com.example.universityschedule.presentation.screens.calendar
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,22 +23,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.universityschedule.R
+import com.example.universityschedule.data.local.datastore.UserPrefsRepository
+import com.example.universityschedule.domain.usecases.GetLessonsUseCase
 import com.example.universityschedule.presentation.screens.calendar.components.LessonCard
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.screens.tasks.components.CardTaskPanel
 import com.example.universityschedule.presentation.util.dimens
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import java.time.LocalDate
+import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -46,14 +55,27 @@ fun ScheduleContent(
     titleStyle: TextStyle,
     titleFont: FontWeight,
     taskViewModel: TaskViewModel,
-    calendarViewModel: CalendarViewModel
+    calendarViewModel: CalendarViewModel,
 ) {
-    // throttle onPageChanged
-    LaunchedEffect(date) {
-        snapshotFlow { date }
-            .distinctUntilChanged()
-            .collect { calendarViewModel.onPageChanged(it) }
+
+    val context = LocalContext.current
+    val userPrefsRepository = remember {
+        UserPrefsRepository(context)
     }
+
+    val selectedGroupId by userPrefsRepository.selectedGroupId.collectAsState(initial = null)
+
+
+
+    LaunchedEffect(date, selectedGroupId) {
+        Log.d("Calendar", "LaunchedEffect run: date=$date group=$selectedGroupId")
+        if (selectedGroupId == null) return@LaunchedEffect
+        calendarViewModel.onPageChanged(date)
+    }
+
+
+
+
 
     val isLoading by calendarViewModel.isLoadingCurrentWeek.collectAsState()
     val lessonsByDate by calendarViewModel.lessonsByDate.collectAsState()
@@ -80,7 +102,9 @@ fun ScheduleContent(
         if (isLoading) {
             item {
                 Box(
-                    modifier = Modifier.fillMaxWidth().height(120.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator()

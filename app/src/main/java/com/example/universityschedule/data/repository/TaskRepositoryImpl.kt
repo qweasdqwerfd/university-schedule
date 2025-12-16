@@ -1,6 +1,6 @@
 package com.example.universityschedule.data.repository
 
-import com.example.universityschedule.data.local.TaskDao
+import com.example.universityschedule.data.local.dao.TaskDao
 import com.example.universityschedule.domain.model.TaskItemEntity
 import com.example.universityschedule.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow

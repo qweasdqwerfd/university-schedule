@@ -1,7 +1,7 @@
 package com.example.universityschedule.data.repository
 
 import android.util.Log
-import com.example.universityschedule.data.local.GroupDao
+import com.example.universityschedule.data.local.dao.GroupDao
 import com.example.universityschedule.data.remote.dto.GroupWithPartGroups
 import com.example.universityschedule.data.remote.service.DictApiService
 import com.example.universityschedule.domain.model.GroupEntity
@@ -24,7 +24,6 @@ class GroupsRepositoryImpl @Inject constructor(
         isActive: String?,
         departmentId: String?
     ) {
-
         val groupsList = mutableListOf<GroupWithPartGroups>()
         var page = 1
 
@@ -42,29 +41,41 @@ class GroupsRepositoryImpl @Inject constructor(
                 groupsList += resp.results
 
                 if (resp.next == null) break
-
                 page++
             }
 
-
-            groupsList.toList().asFlow()
-
-
-            // map to entity
-            val entities = groupsList.map { gw ->
-                GroupEntity(
-                    id = gw.id!!.toLong(),
-                    name = gw.name,
-                    course = gw.course,
-                    studentCount = gw.part_groups.firstOrNull()?.student_count
-                )
+            // flatMap: для каждой записи берём все part_groups, если их нет — fallback на саму запись
+            val entities = groupsList.flatMap { gw ->
+                val partGroups = gw.part_groups
+                if (!partGroups.isNullOrEmpty()) {
+                    partGroups.map { pg ->
+                        GroupEntity(
+                            id = pg.id!!.toLong(),
+                            name = pg.name ?: gw.name,
+                            course = gw.course,
+                            institute = pg.institute.short_name.toString()
+                        )
+                    }
+                } else {
+                    // если part_groups нет, используем сам объект gw
+                    listOf(
+                        GroupEntity(
+                            id = gw.id!!.toLong(),
+                            name = gw.name,
+                            course = gw.course,
+                            institute = gw.institute.short_name.toString()
+                        )
+                    )
+                }
             }
 
-            // atomically replace cache (опционально clearAll)
+            // лог для диагностики
+            Log.d("GroupsRepository", "Fetched total entities = ${entities.size}")
+
+            // atomically replace cache (dao.insertAll должен быть onConflict = REPLACE)
             dao.insertAll(entities)
         } catch (e: Exception) {
-            // логируем — не бросаем, UI не должен крашиться
-            Log.w("GroupsRepository", "fetchAndCache failed: ${e.message}")
+            Log.w("GroupsRepository", "fetchAndCache failed: ${e.message}", e)
         }
     }
 

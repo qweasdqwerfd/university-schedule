@@ -1,5 +1,6 @@
 package com.example.universityschedule.presentation.screens.search
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -54,6 +55,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.universityschedule.domain.model.GroupEntity
+import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.util.UniversityScheduleTheme
 import com.example.universityschedule.presentation.util.dimens
 import kotlinx.coroutines.flow.debounce
@@ -107,7 +109,9 @@ fun SearchScheduleScreen(
     }
 
     fun selectGroup(item: GroupEntity) {
-        textState = item.name
+        searchViewModel.onDialogEvent(DialogEvent.OnItemClick(item.id.toInt()))
+        Log.d("DBG", "UI selectGroup called, item.id=${item.id}")
+
         focusManager.clearFocus()
         keyboardController?.hide()
         active = false
@@ -290,10 +294,10 @@ private fun SearchResultRow(
                         }
                     )
                 }
-                item.studentCount?.let {
+                item.institute?.let {
                     AssistChip(
                         onClick = onClick,
-                        label = { Text("$it студентов") },
+                        label = { Text("$it") },
                         colors = AssistChipDefaults.assistChipColors()
                     )
                 }

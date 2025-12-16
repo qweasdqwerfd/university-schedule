@@ -13,5 +13,5 @@ data class Lesson(
     val location: List<PublicRoom>,
     val teacher: List<PublicEmployee>,
     val type: LessonType,
-    val dates: List<LocalDate> // обязательное поле, которое у тебя использовалось в VM
+    val dates: List<LocalDate>
 )

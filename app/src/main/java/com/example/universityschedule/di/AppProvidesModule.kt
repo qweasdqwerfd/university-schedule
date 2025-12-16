@@ -3,12 +3,10 @@ package com.example.universityschedule.di
 import android.content.Context
 import androidx.room.Room
 import androidx.work.WorkManager
-import com.example.universityschedule.data.local.GroupDao
+import com.example.universityschedule.data.local.dao.GroupDao
 import com.example.universityschedule.data.local.MainDB
-import com.example.universityschedule.data.remote.service.DictApiService
-import com.example.universityschedule.data.repository.GroupsRepositoryImpl
+import com.example.universityschedule.data.local.datastore.UserPrefsRepository
 import com.example.universityschedule.data.repository.TaskRepositoryImpl
-import com.example.universityschedule.domain.repository.GroupsRepository
 import com.example.universityschedule.domain.repository.TaskRepository
 import com.example.universityschedule.presentation.navigation.UIManager
 import dagger.Module
@@ -41,6 +39,10 @@ object AppProvidesModule {
     @Provides
     @Singleton
     fun provideUIManager() = UIManager()
+
+    @Provides
+    @Singleton
+    fun provideUserPrefsRepository(@ApplicationContext context: Context) = UserPrefsRepository(context)
 
     @Provides
     fun provideGroupDao(db: MainDB): GroupDao = db.groupDao

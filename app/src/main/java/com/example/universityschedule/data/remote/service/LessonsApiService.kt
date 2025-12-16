@@ -1,6 +1,7 @@
 package com.example.universityschedule.data.remote.service
 
 import com.example.universityschedule.data.remote.response.LessonsResponse
+import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET
 import retrofit2.http.Query
 

@@ -1,19 +1,14 @@
 package com.example.universityschedule
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
-import androidx.room.Room
 import androidx.work.Configuration
-import com.example.universityschedule.data.local.MainDB
-import com.example.universityschedule.data.remote.service.DictApiService
-import com.example.universityschedule.data.repository.GroupsRepositoryImpl
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import javax.inject.Inject
-import kotlin.getValue
 
 @HiltAndroidApp
 class App : Application(), Configuration.Provider {
@@ -21,9 +16,31 @@ class App : Application(), Configuration.Provider {
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
+    override fun onCreate() {
+        super.onCreate()
+        createSyncChannel()
+    }
+
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
             .setWorkerFactory(workerFactory)
             .setMinimumLoggingLevel(Log.DEBUG)
             .build()
+
+    private fun createSyncChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                SYNC_CHANNEL_ID,
+                "Синхронизация",
+                NotificationManager.IMPORTANCE_LOW
+            )
+
+            getSystemService(NotificationManager::class.java)
+                .createNotificationChannel(channel)
+        }
+    }
+
+    companion object {
+        const val SYNC_CHANNEL_ID = "sync_channel"
+    }
 }

@@ -1,13 +1,14 @@
 package com.example.universityschedule.presentation.screens.search
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.universityschedule.data.remote.dto.GroupWithPartGroups
+import com.example.universityschedule.data.local.datastore.UserPrefsRepository
 import com.example.universityschedule.domain.model.GroupEntity
 import com.example.universityschedule.domain.repository.GroupsRepository
-import com.example.universityschedule.domain.usecases.GetAllGroupsUseCase
+import com.example.universityschedule.domain.usecases.GetLessonsUseCase
 import com.example.universityschedule.presentation.common.DialogEvent
 import com.example.universityschedule.presentation.common.dialog_controller.DialogController
 import com.example.universityschedule.presentation.navigation.Screen
@@ -22,8 +23,9 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val uiManager: UIManager,
     private val dialogController: DialogController,
-//    private val getAllGroups: GetAllGroupsUseCase
-    private val getAllGroups: GroupsRepository
+    private val getAllGroups: GroupsRepository,
+    private val prefs: UserPrefsRepository,
+    private val getAllLessons: GetLessonsUseCase
 ) : ViewModel(), DialogController by dialogController {
 
     private val _groupsList = mutableStateOf<Flow<List<GroupEntity>>>(emptyFlow())
@@ -42,6 +44,16 @@ class SearchViewModel @Inject constructor(
             is DialogEvent.OnCancel -> {
                 viewModelScope.launch {
                     uiManager.navigateBack()
+                }
+            }
+
+            is DialogEvent.OnItemClick -> {
+                Log.d("DBG", "ViewModel got OnItemClick id=${event.id}")
+                viewModelScope.launch {
+                    Log.d("DBG", "ViewModel saving id=${event.id}")
+                    prefs.saveGroupId(event.id)
+                    Log.d("DBG", "ViewModel saved id=${event.id}")
+                    uiManager.navigateTo(Screen.CALENDAR.route)
                 }
             }
 

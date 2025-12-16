@@ -1,9 +1,7 @@
 package com.example.universityschedule.presentation.screens.calendar
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.universityschedule.data.remote.dto.PublicPartGroup
@@ -14,7 +12,6 @@ import com.example.universityschedule.domain.usecases.FetchWeekUseCase
 import com.example.universityschedule.domain.usecases.GetLessonsUseCase
 import com.example.universityschedule.presentation.common.dialog_controller.DialogController
 import com.example.universityschedule.presentation.navigation.UIManager
-import com.example.universityschedule.presentation.screens.search.SearchViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,13 +26,13 @@ import javax.inject.Inject
 class CalendarViewModel @Inject constructor(
     private val dialogController: DialogController,
     private val fetchWeekIfNeeded: FetchWeekUseCase,
-//    private val getLessons: GetLessonsUseCase,
     private val uiManager: UIManager,
+    private val getLessonsUseCase: GetLessonsUseCase
 ) : ViewModel(), DialogController by dialogController {
-    private val _lessons = mutableStateOf<List<PublicStaticLesson>?>(
+    private val _lessons = mutableStateOf<List<Lesson>?>(
         null
     )
-    val lessons: MutableState<List<PublicStaticLesson>?> get() = _lessons
+    val lessons: MutableState<List<Lesson>?> get() = _lessons
 
 
     private val _selectedDate = MutableStateFlow(LocalDate.now())
@@ -43,19 +40,6 @@ class CalendarViewModel @Inject constructor(
 
     private val _namesLessons = mutableStateOf<Set<String>>(emptySet())
     val namesLessons: MutableState<Set<String>> get() = _namesLessons
-
-
-
-    private val _groups = mutableStateOf<PaginatedResponse<PublicPartGroup>>(
-        PaginatedResponse(
-            count = 0,
-            next = null,
-            previous = null,
-            results = emptyList()
-        )
-    )
-
-    val groups: MutableState<PaginatedResponse<PublicPartGroup>> get() = _groups
 
 
     // кэш
@@ -99,9 +83,15 @@ class CalendarViewModel @Inject constructor(
         }
     }
 
+
     fun setSelectedDate(date: LocalDate) {
         _selectedDate.value = date
     }
+
+
+
+}
+
 
 //    fun addNamesLessonsForTasks(startOfWeek: LocalDate, endOfWeek: LocalDate) {
 //        viewModelScope.launch {
@@ -120,4 +110,3 @@ class CalendarViewModel @Inject constructor(
 //    }
 
 
-}

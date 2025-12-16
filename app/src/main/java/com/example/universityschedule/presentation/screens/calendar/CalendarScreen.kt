@@ -28,6 +28,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import com.example.universityschedule.data.workmanager.GroupsSyncWorker
+import com.example.universityschedule.domain.usecases.GetLessonsUseCase
 import com.example.universityschedule.presentation.screens.calendar.algsOfSun.nonSundayStepsBetween
 import com.example.universityschedule.presentation.screens.calendar.algsOfSun.pageToDate
 import com.example.universityschedule.presentation.screens.calendar.components.TitleDate
@@ -49,11 +50,12 @@ import java.time.LocalDate
 fun CalendarScreen(
     calendarViewModel: CalendarViewModel,
     searchViewModel: SearchViewModel = hiltViewModel(),
-    workManager: WorkManager = WorkManager.getInstance(LocalContext.current),
     taskViewModel: TaskViewModel,
     titleStyle: TextStyle = MaterialTheme.typography.titleMedium,
     titleFont: FontWeight = FontWeight.ExtraBold,
 ) {
+    val context = LocalContext.current
+    val workManager = remember { WorkManager.getInstance(context) }
 
     LaunchedEffect(Unit) {
         val request = OneTimeWorkRequestBuilder<GroupsSyncWorker>()
@@ -120,7 +122,7 @@ fun CalendarScreen(
                 titleStyle = titleStyle,
                 titleFont = titleFont,
                 calendarViewModel = calendarViewModel,
-                taskViewModel = taskViewModel
+                taskViewModel = taskViewModel,
             )
         }
     }

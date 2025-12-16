@@ -60,6 +60,10 @@ android {
 }
 
 dependencies {
+    //DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("androidx.datastore:datastore-core-okio:1.1.1")
+
     // WorkManager (Kotlin Coroutines support)
     implementation("androidx.work:work-runtime-ktx:2.9.0")
 

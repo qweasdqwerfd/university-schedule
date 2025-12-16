@@ -1,46 +1,74 @@
 package com.example.universityschedule.data.repository
 
 import android.util.Log
-import androidx.lifecycle.viewModelScope
+import com.example.universityschedule.data.local.datastore.UserPrefsRepository
 import com.example.universityschedule.data.remote.service.LessonsApiService
 import com.example.universityschedule.domain.model.Lesson
 import com.example.universityschedule.domain.repository.LessonsRepository
 import com.example.universityschedule.presentation.screens.calendar.components.enums.LessonType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.Month
 import javax.inject.Inject
 import kotlin.collections.forEach
 
 class LessonsRepositoryImpl @Inject constructor(
     private val api: LessonsApiService,
+    private val prefs: UserPrefsRepository
 ) : LessonsRepository {
 
     override suspend fun getLessons(start: LocalDate, end: LocalDate): List<Lesson> {
-        val resp = api.getLessonsByPartGroup(
-            startDate = start.toString(),
-            endDate = end.toString(),
-            semester = 0,
-            id = 969
-        )
+        try {
+            val groupId = prefs.getSelectedGroupId()
+            Log.d("LessonsRepo", "getLessons for groupId = $groupId, start=$start end=$end semester: ${detectNowSemester(start)}")
 
-        return resp.lessons.map { dto ->
-            Lesson(
-                id = dto.id,
-                subjectName = dto.subject_short_name,
-                startTime = dto.start_time,
-                endTime = dto.end_time,
-                type = mapType(dto.type),
-                dates = dto.dates?.map { LocalDate.parse(it) } ?: emptyList(),
-                location = dto.rooms,
-                teacher = dto.employees
+            if (groupId == null) {
+                Log.w("LessonsRepo", "groupId == null -> returning empty list")
+                return emptyList()
+            }
+
+            Log.d("DBG", "LessonsRepo: about to call API with groupId=$groupId")
+
+
+            val resp = api.getLessonsByPartGroup(
+                startDate = start.toString(),
+                endDate = end.toString(),
+                semester = detectNowSemester(start),
+                id = groupId //
             )
+
+            Log.d("LessonsRepo", "semestr: ${detectNowSemester(start)}, groupId: $groupId")
+
+            Log.d("LessonsRepo", "API success: lessonsCount=${resp.lessons.size}")
+
+            return resp.lessons.map { dto ->
+                val parsedDates = try {
+                    dto.dates?.map { LocalDate.parse(it) } ?: emptyList()
+                } catch (e: Exception) {
+                    Log.e("LessonsRepo", "Date parse error for dto.id=${dto.id}, rawDates=${dto.dates}", e)
+                    emptyList<LocalDate>()
+                }
+
+                Lesson(
+                    id = dto.id,
+                    subjectName = dto.subject_short_name,
+                    startTime = dto.start_time,
+                    endTime = dto.end_time,
+                    type = mapType(dto.type),
+                    dates = parsedDates,
+                    location = dto.rooms,
+                    teacher = dto.employees
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("LessonsRepo", "getLessons failed: ${e.message}", e)
+            return emptyList()
         }
     }
+
 
     override suspend fun fetchWeekIfNeeded(
         startOfWeek: LocalDate,
@@ -84,6 +112,18 @@ class LessonsRepositoryImpl @Inject constructor(
         }
 
     }
+}
+
+private fun detectNowSemester(date: LocalDate): Int {
+    return if (date.month in listOf(
+            Month.SEPTEMBER,
+            Month.OCTOBER,
+            Month.NOVEMBER,
+            Month.DECEMBER,
+            Month.JANUARY
+        )
+    ) 0 else 1
+
 }
 
 fun mapType(value: String?): LessonType {
