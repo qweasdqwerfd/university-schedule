@@ -11,7 +11,7 @@ interface LessonsApiService {
     suspend fun getLessonsByEmployee(
         @Query("start_date") startDate: String,
         @Query("end_date") endDate: String,
-        @Query("semester") semester: Semester? = null,
+        @Query("semester") semester: Int? = null,
         @Query("id") id: Int? = null,
         @Query("dekanat_id") dekanatId: Int? = null,
         @Query("uid") uid: String? = null
@@ -21,7 +21,7 @@ interface LessonsApiService {
     suspend fun getLessonsByGroup(
         @Query("start_date") startDate: String,
         @Query("end_date") endDate: String,
-        @Query("semester") semester: Semester? = null,
+        @Query("semester") semester: Int? = null,
         @Query("id") id: Int
     ): LessonsResponse
 
@@ -37,7 +37,7 @@ interface LessonsApiService {
     suspend fun getLessonsByRoom(
         @Query("start_date") startDate: String,
         @Query("end_date") endDate: String,
-        @Query("semester") semester: Semester? = null,
+        @Query("semester") semester: Int? = null,
         @Query("id") id: Int
     ): LessonsResponse
 

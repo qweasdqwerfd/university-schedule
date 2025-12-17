@@ -27,6 +27,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
+import com.example.universityschedule.data.local.datastore.UserPrefsRepository
 import com.example.universityschedule.data.workmanager.GroupsSyncWorker
 import com.example.universityschedule.domain.usecases.GetLessonsUseCase
 import com.example.universityschedule.presentation.screens.calendar.algsOfSun.nonSundayStepsBetween
@@ -69,8 +70,6 @@ fun CalendarScreen(
         )
     }
 
-
-
     val coroutineScope = rememberCoroutineScope()
     val selectedDate by calendarViewModel.selectedDate.collectAsState()
     val today = remember { LocalDate.now() }
@@ -81,12 +80,10 @@ fun CalendarScreen(
     val currentDate by remember {
         derivedStateOf { pageToDate(initialPage, pagerState.currentPage, baseDate) }
     }
-    // throttle обновления selectedDate
     LaunchedEffect(currentDate) {
-        snapshotFlow { currentDate }
-            .distinctUntilChanged()
-            .collect { calendarViewModel.setSelectedDate(it) }
+        calendarViewModel.setSelectedDate(currentDate)
     }
+
 
     val startOfWeek = remember(currentDate) { currentDate.with(DayOfWeek.MONDAY) }
     val daysOfWeek = remember(startOfWeek) { (0..5).map { startOfWeek.plusDays(it.toLong()) } }

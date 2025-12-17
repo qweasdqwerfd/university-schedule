@@ -69,10 +69,8 @@ class GroupsRepositoryImpl @Inject constructor(
                 }
             }
 
-            // лог для диагностики
             Log.d("GroupsRepository", "Fetched total entities = ${entities.size}")
 
-            // atomically replace cache (dao.insertAll должен быть onConflict = REPLACE)
             dao.insertAll(entities)
         } catch (e: Exception) {
             Log.w("GroupsRepository", "fetchAndCache failed: ${e.message}", e)

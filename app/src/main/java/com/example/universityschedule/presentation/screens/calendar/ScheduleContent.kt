@@ -58,24 +58,6 @@ fun ScheduleContent(
     calendarViewModel: CalendarViewModel,
 ) {
 
-    val context = LocalContext.current
-    val userPrefsRepository = remember {
-        UserPrefsRepository(context)
-    }
-
-    val selectedGroupId by userPrefsRepository.selectedGroupId.collectAsState(initial = null)
-
-
-
-    LaunchedEffect(date, selectedGroupId) {
-        Log.d("Calendar", "LaunchedEffect run: date=$date group=$selectedGroupId")
-        if (selectedGroupId == null) return@LaunchedEffect
-        calendarViewModel.onPageChanged(date)
-    }
-
-
-
-
 
     val isLoading by calendarViewModel.isLoadingCurrentWeek.collectAsState()
     val lessonsByDate by calendarViewModel.lessonsByDate.collectAsState()
