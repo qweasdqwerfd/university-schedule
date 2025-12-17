@@ -5,6 +5,9 @@ import androidx.annotation.RequiresApi
 import androidx.room.TypeConverter
 import com.example.universityschedule.presentation.common.dialog_controller.LessonChip
 import com.example.universityschedule.presentation.common.dialog_controller.Priority
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -46,4 +49,18 @@ class Converters {
             LocalDateTime.parse(it, formatter)
         }
     }
+
+    @TypeConverter
+    fun localDateToString(date: LocalDate): String = date.toString()
+
+    @TypeConverter
+    fun stringToLocalDate(value: String): LocalDate = LocalDate.parse(value)
+
+    @TypeConverter
+    fun listToJson(list: Any): String = Gson().toJson(list)
+
+    @TypeConverter
+    inline fun <reified T> jsonToList(json: String): T =
+        Gson().fromJson(json, object : TypeToken<T>() {}.type)
+
 }

@@ -9,6 +9,7 @@ import com.example.universityschedule.data.remote.dto.PublicPartGroup
 import com.example.universityschedule.data.remote.dto.PublicStaticLesson
 import com.example.universityschedule.data.remote.response.PaginatedResponse
 import com.example.universityschedule.domain.model.Lesson
+import com.example.universityschedule.domain.repository.LessonsRepository
 import com.example.universityschedule.domain.usecases.FetchWeekUseCase
 import com.example.universityschedule.domain.usecases.GetLessonsUseCase
 import com.example.universityschedule.presentation.common.dialog_controller.DialogController
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -28,8 +30,8 @@ import javax.inject.Inject
 class CalendarViewModel @Inject constructor(
     private val dialogController: DialogController,
     private val fetchWeekIfNeeded: FetchWeekUseCase,
-    private val uiManager: UIManager,
-    private val userPrefsRepository: UserPrefsRepository
+    private val prefs: UserPrefsRepository,
+    private val lessonsRepository: LessonsRepository,
 ) : ViewModel(), DialogController by dialogController {
 
     private val _selectedDate = MutableStateFlow(LocalDate.now())
@@ -46,29 +48,16 @@ class CalendarViewModel @Inject constructor(
     private var currentGroupId: Int? = null
     private var currentWeekStart: LocalDate? = null
 
-    init {
-        observeGroupChanges()
-    }
 
-    private fun observeGroupChanges() {
+    init {
         viewModelScope.launch {
-            userPrefsRepository.selectedGroupId
+            prefs.selectedGroupId
+                .filterNotNull()
                 .distinctUntilChanged()
-                .collect { groupId: Int? ->
-                    if (groupId != null && groupId != currentGroupId) {
-                        currentGroupId = groupId
-                        onGroupChangedInternal()
-                    }
+                .collect { newGroupId ->
+                    lessonsRepository.onGroupChanged(newGroupId)
                 }
         }
-    }
-
-    private fun onGroupChangedInternal() {
-        _lessonsByDate.value = emptyMap()
-        fetchingWeeks.clear()
-        currentWeekStart = null
-
-        loadWeek(_selectedDate.value.with(DayOfWeek.MONDAY))
     }
 
     fun setSelectedDate(date: LocalDate) {

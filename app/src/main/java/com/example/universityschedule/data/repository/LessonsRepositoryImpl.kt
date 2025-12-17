@@ -1,11 +1,17 @@
 package com.example.universityschedule.data.repository
 
 import android.util.Log
+import com.example.universityschedule.data.local.dao.LessonsDao
+import com.example.universityschedule.data.local.dao.LoadedWeeksDao
 import com.example.universityschedule.data.local.datastore.UserPrefsRepository
+import com.example.universityschedule.data.local.mapping.toDomain
 import com.example.universityschedule.data.remote.service.LessonsApiService
 import com.example.universityschedule.domain.model.Lesson
+import com.example.universityschedule.domain.model.LessonEntity
+import com.example.universityschedule.domain.model.LoadedWeekEntity
 import com.example.universityschedule.domain.repository.LessonsRepository
 import com.example.universityschedule.presentation.screens.calendar.components.enums.LessonType
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
@@ -17,56 +23,64 @@ import kotlin.collections.forEach
 
 class LessonsRepositoryImpl @Inject constructor(
     private val api: LessonsApiService,
-    private val prefs: UserPrefsRepository
+    private val prefs: UserPrefsRepository,
+    private val dao: LessonsDao,
+    private val loadedWeeksDao: LoadedWeeksDao
 ) : LessonsRepository {
 
-    override suspend fun getLessons(start: LocalDate, end: LocalDate): List<Lesson> {
-        try {
-            val groupId = prefs.getSelectedGroupId()
-            Log.d("LessonsRepo", "getLessons for groupId = $groupId, start=$start end=$end semester: ${detectNowSemester(start)}")
+    override suspend fun getLessons(
+        start: LocalDate,
+        end: LocalDate
+    ): List<Lesson> {
 
-            if (groupId == null) {
-                Log.w("LessonsRepo", "groupId == null -> returning empty list")
-                return emptyList()
-            }
+        val groupId = prefs.getSelectedGroupId() ?: return emptyList()
+        val startOfWeek = start // тут ты всегда передаёшь начало недели
 
-            Log.d("DBG", "LessonsRepo: about to call API with groupId=$groupId")
+        // ✅ 1. если неделя уже загружена — ТОЛЬКО Room
+        if (loadedWeeksDao.isWeekLoaded(groupId, startOfWeek)) {
+            Log.d("LessonsRepo", "Week $startOfWeek loaded -> Room only")
+            return dao.getLessons(groupId, start, end)
+                .map { it.toDomain() }
+        }
 
+        // 🌐 2. если не загружена — идём в сеть
+        Log.d("LessonsRepo", "Week $startOfWeek not loaded -> API")
 
-            val resp = api.getLessonsByPartGroup(
-                startDate = start.toString(),
-                endDate = end.toString(),
-                semester = detectNowSemester(start),
-                id = groupId //
-            )
+        val resp = api.getLessonsByPartGroup(
+            start.toString(),
+            end.toString(),
+            detectNowSemester(start),
+            groupId
+        )
 
-            Log.d("LessonsRepo", "semestr: ${detectNowSemester(start)}, groupId: $groupId")
-
-            Log.d("LessonsRepo", "API success: lessonsCount=${resp.lessons.size}")
-
-            return resp.lessons.map { dto ->
-                val parsedDates = try {
-                    dto.dates?.map { LocalDate.parse(it) } ?: emptyList()
-                } catch (e: Exception) {
-                    Log.e("LessonsRepo", "Date parse error for dto.id=${dto.id}, rawDates=${dto.dates}", e)
-                    emptyList<LocalDate>()
-                }
-
-                Lesson(
-                    id = dto.id,
-                    subjectName = dto.subject_short_name,
+        val entities = resp.lessons.flatMap { dto ->
+            dto.dates.orEmpty().map { date ->
+                LessonEntity(
+                    lessonId = dto.id!!,
+                    groupId = groupId,
+                    date = LocalDate.parse(date),
+                    subjectName = dto.subject_short_name!!,
                     startTime = dto.start_time,
                     endTime = dto.end_time,
                     type = mapType(dto.type),
-                    dates = parsedDates,
-                    location = dto.rooms,
-                    teacher = dto.employees
+                    locationJson = Gson().toJson(dto.rooms),
+                    teacherJson = Gson().toJson(dto.employees)
                 )
             }
-        } catch (e: Exception) {
-            Log.e("LessonsRepo", "getLessons failed: ${e.message}", e)
-            return emptyList()
         }
+
+        // 💾 3. сохраняем пары
+        dao.insertAll(entities)
+
+        // 🏁 4. помечаем неделю загруженной (ДАЖЕ если пар 0)
+        loadedWeeksDao.markWeekLoaded(
+            LoadedWeekEntity(
+                groupId = groupId,
+                weekStart = startOfWeek
+            )
+        )
+
+        return entities.map { it.toDomain() }
     }
 
 
@@ -79,9 +93,31 @@ class LessonsRepositoryImpl @Inject constructor(
     ) {
         if (fetchingWeeks.contains(startOfWeek)) return
 
-        val weekDates = (0..5).map { startOfWeek.plusDays(it.toLong()) } // Mon..Sat
-        if (weekDates.all { lessonsByDate.value.containsKey(it) }) return
+        val groupId = prefs.getSelectedGroupId() ?: return
 
+        // ✅ если неделя уже загружена — просто читаем из Room
+        if (loadedWeeksDao.isWeekLoaded(groupId, startOfWeek)) {
+            val endOfWeek = startOfWeek.plusDays(5)
+            val lessons = dao.getLessons(groupId, startOfWeek, endOfWeek)
+                .map { it.toDomain() }
+
+            val weekDates = (0..5).map { startOfWeek.plusDays(it.toLong()) }
+
+            val byDate = lessons
+                .flatMap { lesson ->
+                    lesson.dates.map { it to lesson }
+                }
+                .groupBy({ it.first }, { it.second })
+
+            val newMap = lessonsByDate.value.toMutableMap()
+            weekDates.forEach { d -> newMap[d] = byDate[d] ?: emptyList() }
+            lessonsByDate.value = newMap.toMap()
+
+            Log.d("CalendarVM", "Week $startOfWeek loaded from cache")
+            return
+        }
+
+        // ⬇️ если не загружена — обычная логика
         fetchingWeeks.add(startOfWeek)
 
         withContext(Dispatchers.IO) {
@@ -90,11 +126,11 @@ class LessonsRepositoryImpl @Inject constructor(
                 val endOfWeek = startOfWeek.plusDays(5)
                 val lessons = getLessons(startOfWeek, endOfWeek)
 
+                val weekDates = (0..5).map { startOfWeek.plusDays(it.toLong()) }
+
                 val byDate = lessons
                     .flatMap { lesson ->
-                        lesson.dates
-                            .filter { d -> d.dayOfWeek != DayOfWeek.SUNDAY && !d.isBefore(startOfWeek) && !d.isAfter(endOfWeek) }
-                            .map { date -> date to lesson }
+                        lesson.dates.map { it to lesson }
                     }
                     .groupBy({ it.first }, { it.second })
 
@@ -102,16 +138,24 @@ class LessonsRepositoryImpl @Inject constructor(
                 weekDates.forEach { d -> newMap[d] = byDate[d] ?: emptyList() }
                 lessonsByDate.value = newMap.toMap()
 
-                Log.d("CalendarVM", "Loaded week $startOfWeek -> ${byDate.values.sumBy { it.size }} lessons")
+                Log.d("CalendarVM", "Week $startOfWeek loaded from API")
             } catch (e: Exception) {
-                Log.e("CalendarVM", "Error loading week $startOfWeek: ${e.message}", e)
+                Log.e("CalendarVM", "Error loading week $startOfWeek", e)
             } finally {
                 if (markAsCurrent) isLoadingCurrentWeek.value = false
                 fetchingWeeks.remove(startOfWeek)
             }
         }
-
     }
+
+    override suspend fun onGroupChanged(newGroupId: Int) {
+        Log.d("LessonsRepo", "Group changed -> clearing cache for old groups")
+
+        dao.clearOtherGroups(newGroupId)
+        loadedWeeksDao.clearOtherGroups(newGroupId)
+    }
+
+
 }
 
 private fun detectNowSemester(date: LocalDate): Int {

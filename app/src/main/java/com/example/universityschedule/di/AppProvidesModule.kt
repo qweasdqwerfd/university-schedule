@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.work.WorkManager
 import com.example.universityschedule.data.local.dao.GroupDao
 import com.example.universityschedule.data.local.MainDB
+import com.example.universityschedule.data.local.dao.LessonsDao
 import com.example.universityschedule.data.local.datastore.UserPrefsRepository
 import com.example.universityschedule.data.repository.TaskRepositoryImpl
 import com.example.universityschedule.domain.repository.TaskRepository
@@ -46,6 +47,12 @@ object AppProvidesModule {
 
     @Provides
     fun provideGroupDao(db: MainDB): GroupDao = db.groupDao
+
+    @Provides
+    fun provideLessonsDao(db: MainDB): LessonsDao = db.lessonsDao
+
+    @Provides
+    fun provideLoadedWeeksDao(db: MainDB) = db.loadWeekDao
 
     @Provides
     @Singleton

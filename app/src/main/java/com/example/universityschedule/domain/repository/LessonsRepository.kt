@@ -14,4 +14,6 @@ interface LessonsRepository {
         fetchingWeeks: MutableSet<LocalDate>,
         isLoadingCurrentWeek: MutableStateFlow<Boolean>
     )
+
+    suspend fun onGroupChanged(newGroupId: Int)
 }
