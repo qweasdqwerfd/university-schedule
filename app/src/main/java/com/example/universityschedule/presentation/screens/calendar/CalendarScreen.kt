@@ -50,7 +50,6 @@ import java.time.LocalDate
 @Composable
 fun CalendarScreen(
     calendarViewModel: CalendarViewModel,
-    searchViewModel: SearchViewModel = hiltViewModel(),
     taskViewModel: TaskViewModel,
     titleStyle: TextStyle = MaterialTheme.typography.titleMedium,
     titleFont: FontWeight = FontWeight.ExtraBold,

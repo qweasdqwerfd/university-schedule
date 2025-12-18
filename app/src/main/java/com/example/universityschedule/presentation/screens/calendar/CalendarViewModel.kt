@@ -45,7 +45,6 @@ class CalendarViewModel @Inject constructor(
     private val _isLoadingCurrentWeek = MutableStateFlow(false)
     val isLoadingCurrentWeek = _isLoadingCurrentWeek.asStateFlow()
 
-    private var currentGroupId: Int? = null
     private var currentWeekStart: LocalDate? = null
 
 
@@ -55,10 +54,25 @@ class CalendarViewModel @Inject constructor(
                 .filterNotNull()
                 .distinctUntilChanged()
                 .collect { newGroupId ->
+
+                    // 1️⃣ чистим кэш в БД
                     lessonsRepository.onGroupChanged(newGroupId)
+
+                    // 2️⃣ чистим in-memory
+                    _lessonsByDate.value = emptyMap()
+                    fetchingWeeks.clear()
+
+                    // 3️⃣ сбрасываем маркер недели
+                    currentWeekStart = null
+
+                    // 4️⃣ ПРИНУДИТЕЛЬНО грузим текущую неделю
+                    val date = _selectedDate.value
+                    val startOfWeek = date.with(DayOfWeek.MONDAY)
+                    loadWeek(startOfWeek)
                 }
         }
     }
+
 
     fun setSelectedDate(date: LocalDate) {
         _selectedDate.value = date
@@ -69,6 +83,7 @@ class CalendarViewModel @Inject constructor(
         currentWeekStart = startOfWeek
         loadWeek(startOfWeek)
     }
+
 
     private fun loadWeek(startOfWeek: LocalDate) {
         viewModelScope.launch {
