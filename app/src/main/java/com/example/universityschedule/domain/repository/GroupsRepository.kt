@@ -18,6 +18,5 @@ interface GroupsRepository {
 
     fun observeSelectedGroup(id: Int): Flow<GroupEntity>
 
-    suspend fun refreshSelectedGroup(id: Int)
 
 }

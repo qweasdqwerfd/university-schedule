@@ -30,26 +30,6 @@ class GroupsRepositoryImpl @Inject constructor(
     override fun observeSelectedGroup(id: Int): Flow<GroupEntity> =
         dao.observeById(id)
 
-    override suspend fun refreshSelectedGroup(id: Int) {
-
-        prefs.selectedGroupId
-            .filterNotNull()
-            .distinctUntilChanged()
-            .onEach { groupId ->
-                val remote = api.getPartGroupsById(groupId)
-                dao.insert(
-                    GroupEntity(
-                        id = remote.id!!.toLong(),
-                        name = remote.name.orEmpty(),
-                        institute = remote.institute.short_name.orEmpty(),
-                        course = remote.group
-                    )
-                )
-            }
-    }
-
-
-
     override fun observeCachedGroups(): Flow<List<GroupEntity>> = dao.observeAll()
 
     override suspend fun fetchAndCacheAllGroups(
