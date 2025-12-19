@@ -1,5 +1,7 @@
 package com.example.universityschedule.domain.repository
 
+import com.example.universityschedule.data.remote.dto.GroupWithPartGroups
+import com.example.universityschedule.data.remote.dto.PublicPartGroup
 import com.example.universityschedule.domain.model.GroupEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -13,5 +15,9 @@ interface GroupsRepository {
         departmentId: String?
     )
     suspend fun clearCachedGroups()
+
+    fun observeSelectedGroup(id: Int): Flow<GroupEntity>
+
+    suspend fun refreshSelectedGroup(id: Int)
 
 }

@@ -60,6 +60,9 @@ android {
 }
 
 dependencies {
+
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+
     //DataStore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("androidx.datastore:datastore-core-okio:1.1.1")

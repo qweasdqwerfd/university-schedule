@@ -17,4 +17,11 @@ interface GroupDao {
 
     @Query("DELETE FROM groups_table")
     suspend fun clearAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(group: GroupEntity)
+
+    @Query("SELECT * FROM groups_table WHERE id = :groupId LIMIT 1")
+    fun observeById(groupId: Int): Flow<GroupEntity>
+
 }

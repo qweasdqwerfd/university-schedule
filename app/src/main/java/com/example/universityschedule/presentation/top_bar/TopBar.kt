@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.universityschedule.R
@@ -30,11 +31,14 @@ import com.example.universityschedule.presentation.common.components.DetailsButt
 import com.example.universityschedule.presentation.common.components.IconSpec
 import com.example.universityschedule.presentation.common.components.IconTopButton
 import com.example.universityschedule.presentation.navigation.Screen
+import com.example.universityschedule.presentation.screens.GroupViewModel
+import com.example.universityschedule.presentation.screens.calendar.CalendarViewModel
 import com.example.universityschedule.presentation.screens.search.SearchViewModel
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.screens.tasks.details.CRUDEvent
 import com.example.universityschedule.presentation.screens.tasks.details.TaskDetailsViewModel
 import com.example.universityschedule.presentation.util.dimens
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,8 +46,8 @@ fun TopBar(
     navController: NavHostController,
     taskViewModel: TaskViewModel = hiltViewModel(),
     taskDetailsViewModel: TaskDetailsViewModel = hiltViewModel(),
-//    calendarViewModel: CalendarViewModel = hiltViewModel(),
-    searchViewModel: SearchViewModel = hiltViewModel()
+    searchViewModel: SearchViewModel = hiltViewModel(),
+    groupViewModel: GroupViewModel = hiltViewModel()
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -57,7 +61,12 @@ fun TopBar(
         animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing)
     )
 
-//    val group = calendarDetailsViewModel.groups
+    val selectedGroup by groupViewModel
+        .selectedGroup
+        .collectAsStateWithLifecycle()
+
+
+
 
 
     Column {
@@ -67,7 +76,7 @@ fun TopBar(
             title = {
                 Text(
                     text = when (currentRoute) {
-                        Screen.CALENDAR.route -> "ИИТУС"
+                        Screen.CALENDAR.route -> selectedGroup?.institute.toString()
                         Screen.TASKS.route -> "Задачи"
                         Screen.ADD_TASK.route -> "Добавить задачу"
                         Screen.TASK_DETAILS.route -> "Детали задачи"
@@ -112,7 +121,10 @@ fun TopBar(
                 }
                 if (currentRoute == Screen.CALENDAR.route) {
                     DetailsButton(
-                        text = "ПВ-242",
+                        text = selectedGroup?.name
+                            ?.replace("(1)", "")
+                            ?.replace("(2)", "").toString()
+                        ,
                         color = colorResource(R.color.selectedBottom),
                         onClick = {
                             searchViewModel.onDialogEvent(DialogEvent.OnButtonClick)

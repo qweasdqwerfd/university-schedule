@@ -1,26 +1,23 @@
 package com.example.universityschedule.presentation.screens.calendar
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.universityschedule.data.local.datastore.UserPrefsRepository
-import com.example.universityschedule.data.remote.dto.PublicPartGroup
-import com.example.universityschedule.data.remote.dto.PublicStaticLesson
-import com.example.universityschedule.data.remote.response.PaginatedResponse
+import com.example.universityschedule.domain.model.GroupEntity
 import com.example.universityschedule.domain.model.Lesson
+import com.example.universityschedule.domain.repository.GroupsRepository
 import com.example.universityschedule.domain.repository.LessonsRepository
 import com.example.universityschedule.domain.usecases.FetchWeekUseCase
-import com.example.universityschedule.domain.usecases.GetLessonsUseCase
 import com.example.universityschedule.presentation.common.dialog_controller.DialogController
-import com.example.universityschedule.presentation.navigation.UIManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -32,6 +29,7 @@ class CalendarViewModel @Inject constructor(
     private val fetchWeekIfNeeded: FetchWeekUseCase,
     private val prefs: UserPrefsRepository,
     private val lessonsRepository: LessonsRepository,
+    private val groupsRepository: GroupsRepository
 ) : ViewModel(), DialogController by dialogController {
 
     private val _selectedDate = MutableStateFlow(LocalDate.now())
@@ -96,6 +94,9 @@ class CalendarViewModel @Inject constructor(
             )
         }
     }
+
+
+
 }
 
 //    private val _namesLessons = mutableStateOf<Set<String>>(emptySet())
