@@ -186,7 +186,8 @@ fun ModalBottomSheetDetails(
                     icon = null,
                     sizeIcon = null,
                     onClick = { viewModel.onCRUDEvent(CRUDEvent.OnCancel) },
-                    textColor = colorResource(R.color.selectedBottom)
+                    textColor = colorResource(R.color.selectedBottom),
+                    content = null
                 )
                 DetailsButton(
                     modifier = Modifier.weight(1f),
@@ -194,7 +195,8 @@ fun ModalBottomSheetDetails(
                     color = colorResource(R.color.selectedBottom),
                     icon = null,
                     sizeIcon = null,
-                    onClick = { viewModel.onCRUDEvent(CRUDEvent.OnConfirm) }
+                    onClick = { viewModel.onCRUDEvent(CRUDEvent.OnConfirm) },
+                    content = null
                 )
             }
 

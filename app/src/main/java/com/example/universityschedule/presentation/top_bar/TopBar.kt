@@ -6,9 +6,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -74,22 +76,24 @@ fun TopBar(
             modifier = Modifier.fillMaxWidth(),
 
             title = {
-                Text(
-                    text = when (currentRoute) {
-                        Screen.CALENDAR.route -> selectedGroup?.institute.toString()
-                        Screen.TASKS.route -> "Задачи"
-                        Screen.ADD_TASK.route -> "Добавить задачу"
-                        Screen.TASK_DETAILS.route -> "Детали задачи"
-                        Screen.SEARCH_SCHEDULE.route -> "Поиск"
-                        else -> "Пары"
-                    },
-                    modifier = when (currentRoute) {
-                        Screen.ADD_TASK.route -> Modifier.padding(start = MaterialTheme.dimens.space10)
-                        else -> Modifier
-                    },
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.titleLarge
-                )
+                when (currentRoute) {
+                    Screen.CALENDAR.route -> {
+                        if (selectedGroup?.institute == null) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                strokeWidth = 2.dp
+                            )
+                        } else {
+                            Text(text = selectedGroup?.institute.toString())
+                        }
+                    }
+
+                    Screen.TASKS.route -> Text("Задачи")
+                    Screen.ADD_TASK.route -> Text("Добавить задачу")
+                    Screen.TASK_DETAILS.route -> Text("Детали задачи")
+                    Screen.SEARCH_SCHEDULE.route -> Text("Поиск")
+                    else -> Text("Пары")
+                }
             },
             actions = {
                 if (currentRoute == Screen.TASKS.route) {
@@ -121,16 +125,27 @@ fun TopBar(
                 }
                 if (currentRoute == Screen.CALENDAR.route) {
                     DetailsButton(
-                        text = selectedGroup?.name
-                            ?.replace("(1)", "")
-                            ?.replace("(2)", "").toString()
-                        ,
+                        content = {
+                            if (selectedGroup?.name == null) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(20.dp),
+                                    strokeWidth = 2.dp
+                                )
+                            } else {
+                                Text(
+                                    text = selectedGroup?.name
+                                        ?.replace("(1)", "")
+                                        ?.replace("(2)", "").toString()
+                                )
+                            }
+                        },
                         color = colorResource(R.color.selectedBottom),
                         onClick = {
                             searchViewModel.onDialogEvent(DialogEvent.OnButtonClick)
                         },
                         icon = null,
-                        sizeIcon = null
+                        sizeIcon = null,
+                        text = null
                     )
                 }
             },

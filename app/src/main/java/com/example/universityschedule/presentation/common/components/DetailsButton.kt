@@ -27,7 +27,8 @@ import com.example.universityschedule.presentation.util.dimens
 @Composable
 fun DetailsButton(
     modifier: Modifier = Modifier,
-    text: String,
+    content: (@Composable () -> Unit)?,
+    text: String?,
     color: Color,
     icon: Int?,
     sizeIcon: Dp?,
@@ -68,11 +69,14 @@ fun DetailsButton(
                 }
                 Spacer(Modifier.width(MaterialTheme.dimens.widthSmallMinus))
             }
-            Text(
-                text = text,
-                style = textStyle,
-                color = textColor
-            )
+            content?.invoke()
+            text?.let {
+                Text(
+                    text = it,
+                    style = textStyle,
+                    color = textColor
+                )
+            }
         }
     }
 }

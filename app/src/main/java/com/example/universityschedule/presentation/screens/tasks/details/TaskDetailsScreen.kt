@@ -345,6 +345,7 @@ fun TaskDetailsScreen(
                 onClick = {
                     viewModel.onCRUDEvent(CRUDEvent.Edit)
                 },
+                content = null
             )
 
             DetailsButton(
@@ -355,7 +356,8 @@ fun TaskDetailsScreen(
                 sizeIcon = MaterialTheme.dimens.iconSizeSmallPlus,
                 onClick = {
                     viewModel.onCRUDEvent(CRUDEvent.Delete)
-                }
+                },
+                content = null
             )
 
         }
