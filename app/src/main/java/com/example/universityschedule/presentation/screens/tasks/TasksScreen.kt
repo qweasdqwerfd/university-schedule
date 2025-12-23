@@ -12,10 +12,7 @@ import com.example.universityschedule.presentation.screens.tasks.components.task
 import com.example.universityschedule.presentation.screens.tasks.components.tasks_tabs.TabRowPager
 
 @Composable
-fun TasksScreen(
-    viewModel: TaskViewModel,
-    navHostController: NavHostController
-) {
+fun TasksScreen(viewModel: TaskViewModel) {
 
 
     val itemsList = viewModel.sortedTasks.collectAsState()

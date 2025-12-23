@@ -6,7 +6,8 @@ import androidx.work.WorkManager
 import com.example.universityschedule.data.local.dao.GroupDao
 import com.example.universityschedule.data.local.MainDB
 import com.example.universityschedule.data.local.dao.LessonsDao
-import com.example.universityschedule.data.local.datastore.UserPrefsRepository
+import com.example.universityschedule.data.local.datastore.sync.SyncPrefsDataStore
+import com.example.universityschedule.data.local.datastore.user.UserPrefsDataStore
 import com.example.universityschedule.data.repository.TaskRepositoryImpl
 import com.example.universityschedule.domain.repository.TaskRepository
 import com.example.universityschedule.presentation.navigation.UIManager
@@ -43,7 +44,18 @@ object AppProvidesModule {
 
     @Provides
     @Singleton
-    fun provideUserPrefsRepository(@ApplicationContext context: Context) = UserPrefsRepository(context)
+    fun provideUserPrefsDataStore(
+        @ApplicationContext context: Context
+    ): UserPrefsDataStore {
+        return UserPrefsDataStore(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSyncPrefsDataStore(
+        @ApplicationContext context: Context
+    ): SyncPrefsDataStore =
+        SyncPrefsDataStore(context)
 
     @Provides
     fun provideGroupDao(db: MainDB): GroupDao = db.groupDao

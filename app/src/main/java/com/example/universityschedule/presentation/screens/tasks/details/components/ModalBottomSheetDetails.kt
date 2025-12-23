@@ -58,7 +58,7 @@ fun ModalBottomSheetDetails(
     viewModel: TaskDetailsViewModel
 ) {
 
-    ModalBottomSheet(onDismissRequest = { onDismiss }, sheetState = sheetState) {
+    ModalBottomSheet(onDismissRequest = { onDismiss() }, sheetState = sheetState) {
         Column(
             modifier = Modifier
                 .fillMaxSize()

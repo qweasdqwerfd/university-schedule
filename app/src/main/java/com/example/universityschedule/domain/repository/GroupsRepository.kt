@@ -18,5 +18,8 @@ interface GroupsRepository {
 
     fun observeSelectedGroup(id: Int): Flow<GroupEntity>
 
+    suspend fun isInitialSyncDone(): Boolean
+    suspend fun markInitialSyncDone()
+
 
 }

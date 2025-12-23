@@ -17,30 +17,20 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.OutOfQuotaPolicy
-import androidx.work.WorkManager
-import com.example.universityschedule.data.local.datastore.UserPrefsRepository
-import com.example.universityschedule.data.workmanager.GroupsSyncWorker
-import com.example.universityschedule.domain.usecases.GetLessonsUseCase
+import com.example.universityschedule.presentation.common.DialogEvent
+import com.example.universityschedule.presentation.custom_components.IconButton.FAB
 import com.example.universityschedule.presentation.screens.calendar.algsOfSun.nonSundayStepsBetween
 import com.example.universityschedule.presentation.screens.calendar.algsOfSun.pageToDate
 import com.example.universityschedule.presentation.screens.calendar.components.TitleDate
 import com.example.universityschedule.presentation.screens.calendar.header.WeekHeader
-import com.example.universityschedule.presentation.screens.search.SearchViewModel
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
 import com.example.universityschedule.presentation.util.dimens
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -54,20 +44,6 @@ fun CalendarScreen(
     titleStyle: TextStyle = MaterialTheme.typography.titleMedium,
     titleFont: FontWeight = FontWeight.ExtraBold,
 ) {
-    val context = LocalContext.current
-    val workManager = remember { WorkManager.getInstance(context) }
-
-    LaunchedEffect(Unit) {
-        val request = OneTimeWorkRequestBuilder<GroupsSyncWorker>()
-            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST) // быстрее
-            .build()
-
-        workManager.enqueueUniqueWork(
-            "load_all_groups",
-            ExistingWorkPolicy.KEEP, // предотвращает повторы
-            request
-        )
-    }
 
     val coroutineScope = rememberCoroutineScope()
     val selectedDate by calendarViewModel.selectedDate.collectAsState()
@@ -121,5 +97,8 @@ fun CalendarScreen(
                 taskViewModel = taskViewModel,
             )
         }
+    }
+    FAB {
+        taskViewModel.onDialogEvent(DialogEvent.OnFABClick)
     }
 }

@@ -33,7 +33,7 @@ import com.example.universityschedule.presentation.common.components.DetailsButt
 import com.example.universityschedule.presentation.common.components.IconSpec
 import com.example.universityschedule.presentation.common.components.IconTopButton
 import com.example.universityschedule.presentation.navigation.Screen
-import com.example.universityschedule.presentation.screens.GroupViewModel
+import com.example.universityschedule.presentation.groups.GroupViewModel
 import com.example.universityschedule.presentation.screens.calendar.CalendarViewModel
 import com.example.universityschedule.presentation.screens.search.SearchViewModel
 import com.example.universityschedule.presentation.screens.tasks.TaskViewModel
@@ -67,10 +67,6 @@ fun TopBar(
         .selectedGroup
         .collectAsStateWithLifecycle()
 
-
-
-
-
     Column {
         TopAppBar(
             modifier = Modifier.fillMaxWidth(),
@@ -79,10 +75,7 @@ fun TopBar(
                 when (currentRoute) {
                     Screen.CALENDAR.route -> {
                         if (selectedGroup?.institute == null) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(20.dp),
-                                strokeWidth = 2.dp
-                            )
+                            Text(text = "")
                         } else {
                             Text(text = selectedGroup?.institute.toString())
                         }

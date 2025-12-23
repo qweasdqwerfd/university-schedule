@@ -5,7 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.universityschedule.data.local.datastore.UserPrefsRepository
+import com.example.universityschedule.data.local.datastore.user.UserPrefsDataStore
 import com.example.universityschedule.domain.model.GroupEntity
 import com.example.universityschedule.domain.repository.GroupsRepository
 import com.example.universityschedule.domain.usecases.GetLessonsUseCase
@@ -24,7 +24,7 @@ class SearchViewModel @Inject constructor(
     private val uiManager: UIManager,
     private val dialogController: DialogController,
     private val getAllGroups: GroupsRepository,
-    private val prefs: UserPrefsRepository,
+    private val prefs: UserPrefsDataStore,
     private val getAllLessons: GetLessonsUseCase
 ) : ViewModel(), DialogController by dialogController {
 

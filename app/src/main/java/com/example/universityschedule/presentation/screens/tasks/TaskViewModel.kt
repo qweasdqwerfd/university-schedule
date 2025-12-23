@@ -7,13 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.universityschedule.domain.model.TaskItemEntity
 import com.example.universityschedule.domain.repository.TaskRepository
+import com.example.universityschedule.domain.usecases.FABUseCase
 import com.example.universityschedule.presentation.common.DialogEvent
+import com.example.universityschedule.presentation.common.dialog_controller.DialogController
+import com.example.universityschedule.presentation.common.dialog_controller.LessonChip
+import com.example.universityschedule.presentation.common.dialog_controller.Priority
 import com.example.universityschedule.presentation.common.snack_bar.SnackBarType
 import com.example.universityschedule.presentation.navigation.Screen
 import com.example.universityschedule.presentation.navigation.UIManager
-import com.example.universityschedule.presentation.common.dialog_controller.LessonChip
-import com.example.universityschedule.presentation.common.dialog_controller.Priority
-import com.example.universityschedule.presentation.common.dialog_controller.DialogController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,10 +31,12 @@ class TaskViewModel @Inject constructor(
     private val repository: TaskRepository,
     private val uiManager: UIManager,
     private val dialogController: DialogController,
+    private val fabUseCase: FABUseCase
 ) : ViewModel(), DialogController by dialogController {
 
     override var dialogTitle = mutableStateOf("")
     override var dialogDescription = mutableStateOf("")
+
     @SuppressLint("NewApi")
     override var dialogDueDate = mutableStateOf<LocalDateTime?>(null)
     override var dialogPriority = mutableStateOf(Priority.Medium)
@@ -63,7 +66,7 @@ class TaskViewModel @Inject constructor(
                 val description = dialogDescription.value.trim()
                 val dueDate = dialogDueDate.value
 
-                if (title.isEmpty() || description.isEmpty() || dialogDueDate.value == null) {
+                if (title.isEmpty() || dialogDueDate.value == null) {
                     viewModelScope.launch {
                         uiManager.sendSnackBar(
                             message = "Не все поля заполнены!",
@@ -73,19 +76,28 @@ class TaskViewModel @Inject constructor(
                     }
                     return
                 }
-
                 viewModelScope.launch {
-                    val task = TaskItemEntity(
-                        title = title,
-                        description = description,
-                        dueDate = dueDate!!,
-                        priority = dialogPriority.value,
-                        lessons = dialogRelatedLesson.value,
-                        check = false
-                    )
-
+                    val task = if (description.isEmpty()) {
+                        TaskItemEntity(
+                            title = title,
+                            description = "",
+                            dueDate = dueDate!!,
+                            priority = dialogPriority.value,
+                            lessons = dialogRelatedLesson.value,
+                            check = false
+                        )
+                    } else {
+                        TaskItemEntity(
+                            title = title,
+                            description = description,
+                            dueDate = dueDate!!,
+                            priority = dialogPriority.value,
+                            lessons = dialogRelatedLesson.value,
+                            check = false
+                        )
+                    }
                     repository.insert(task)
-                    uiManager.navigateTo(Screen.TASKS.route)
+                    uiManager.navigateBack()
 
                     dialogTitle.value = ""
                     dialogDescription.value = ""
@@ -95,9 +107,10 @@ class TaskViewModel @Inject constructor(
                 }
             }
 
+
             DialogEvent.OnCancel -> {
                 viewModelScope.launch {
-                    uiManager.navigateTo(Screen.TASKS.route)
+                    uiManager.navigateBack()
                 }
 
             }
@@ -110,7 +123,7 @@ class TaskViewModel @Inject constructor(
 
             is DialogEvent.OnFABClick -> {
                 viewModelScope.launch {
-                    uiManager.navigateTo(Screen.ADD_TASK.route)
+                    fabUseCase.invoke()
                 }
             }
 
@@ -122,6 +135,7 @@ class TaskViewModel @Inject constructor(
                     }
                 }
             }
+
             else -> {}
         }
     }

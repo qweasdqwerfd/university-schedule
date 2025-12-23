@@ -66,10 +66,7 @@ fun NavGraph(
         }
 
         composable(Screen.TASKS.route) {
-            TasksScreen(
-                viewModel = taskViewModel,
-                navHostController = navHostController,
-            )
+            TasksScreen(viewModel = taskViewModel)
         }
         composable(Screen.ADD_TASK.route) {
             NewTaskScreen(

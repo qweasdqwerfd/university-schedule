@@ -3,7 +3,7 @@ package com.example.universityschedule.data.repository
 import android.util.Log
 import com.example.universityschedule.data.local.dao.LessonsDao
 import com.example.universityschedule.data.local.dao.LoadedWeeksDao
-import com.example.universityschedule.data.local.datastore.UserPrefsRepository
+import com.example.universityschedule.data.local.datastore.user.UserPrefsDataStore
 import com.example.universityschedule.data.local.mapping.toDomain
 import com.example.universityschedule.data.remote.service.LessonsApiService
 import com.example.universityschedule.domain.model.Lesson
@@ -15,7 +15,6 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
 import javax.inject.Inject
@@ -23,7 +22,7 @@ import kotlin.collections.forEach
 
 class LessonsRepositoryImpl @Inject constructor(
     private val api: LessonsApiService,
-    private val prefs: UserPrefsRepository,
+    private val prefs: UserPrefsDataStore,
     private val dao: LessonsDao,
     private val loadedWeeksDao: LoadedWeeksDao
 ) : LessonsRepository {
